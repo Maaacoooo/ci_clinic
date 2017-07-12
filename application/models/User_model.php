@@ -98,7 +98,7 @@ Class User_model extends CI_Model
       
             $data = array(              
                 'username'  => $this->input->post('username'),  
-                'password'  => password_hash('STIDipolog', PASSWORD_DEFAULT),  //Default Password
+                'password'  => password_hash('ClinicUser', PASSWORD_DEFAULT),  //Default Password
                 'name'      => $this->input->post('name'),  
                 'usertype'  => $this->input->post('usertype'),                 
                 'img'       => $filename  
@@ -111,7 +111,7 @@ Class User_model extends CI_Model
     function reset_password($user) {
 
         $data = array(            
-                'password'  => password_hash('STIDipolog', PASSWORD_DEFAULT)  //Default Password
+                'password'  => password_hash('ClinicUser', PASSWORD_DEFAULT)  //Default Password
              );
             $this->db->where('username', $user);            
             

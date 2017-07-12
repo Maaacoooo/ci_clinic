@@ -123,7 +123,7 @@
                        <div class="card purple darken-4 white-text">
                          <div class="card-content">
                            <p><i class="mdi-action-info-outline tiny"></i> Every new user that is registered, a default password is set. <br/>
-                           The default password is <strong class="amber-text strong">STIDipolog</strong>.</p> <br />
+                           The default password is <strong class="amber-text strong">ClinicUser</strong>.</p> <br />
                            <p>Please advise your New User to change his password after logging in.</p>
                          </div><!-- /.card-content -->
                        </div><!-- /.card purple darken-4 white-text -->

@@ -182,7 +182,7 @@
                 <div class="modal-content green darken-2 white-text">
                     <p>Are you sure to reset to DEFAULT PASSWORD?</p>
                     <p>You <span class="strong">CANNOT UNDO</span> this action.</p>
-                    <p>The Default Password is <span class="strong amber-text">STIDipolog</span></p>
+                    <p>The Default Password is <span class="strong amber-text">ClinicUser</span></p>
                     <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['username'])?>" />
                   </div>
                   <div class="modal-footer grey darken-4">

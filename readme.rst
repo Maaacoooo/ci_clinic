@@ -1,8 +1,8 @@
 ###################
-STI Voting System Module
+CI Clinic
 ###################
 
-STI Voting System is a module of the upcoming **STI Student Portal**, a Student Management and Information System. This system is only intended for **STI Supreme Student Council Elections**
+This system only offers Patient Recording and Queuing.
 
 
 

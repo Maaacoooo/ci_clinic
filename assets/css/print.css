@@ -1,0 +1,139 @@
+@charset "utf-8";
+/* CSS Document */
+
+html {
+	font-family: sans-serif;
+  	-webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+table {
+	width: 100%;
+}
+
+th {
+	background-color:#F7F8E0;
+}
+
+.table, .table th, .table td {
+    border: 1px solid #999;
+    border-collapse: collapse;
+}
+
+td, th {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.line {
+	width: 180px;
+	border-bottom: 1px solid #000;
+}
+
+.tablespace {
+	width: 150px;
+}
+
+.strong, .bold {
+	font-weight: bold;
+}
+
+.center {
+	text-align: center;
+}
+
+.field {
+	width: 780px;
+}
+
+.header {
+	font-size: 22px;
+}
+
+.space {
+	height: 20px;
+}
+
+.right {
+	text-align: right;
+}
+
+.topalign {
+	vertical-align:top;
+}
+
+.italic {
+	font-style:italic;
+}
+
+.table-space {
+	margin: 30px 0px 30px 0px;
+}
+
+th {
+	padding: 7px 0px 7px 0px;
+}
+
+td {
+	padding: 3px 10px 3px 10px;
+}
+
+.signature {
+	border-bottom: 1px solid #000;
+	height: 60px;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.top-margin {
+	margin-top: 50px;
+}
+
+.progress-bar {
+	width: 100%;
+	border: 1px solid #000;
+}
+
+.progress {
+	height: 12px;
+	width: 0%;
+	background-color: #FC0;
+}
+
+.header-img {
+	max-width: 40%;
+	height: auto;
+	margin-left: 30%;
+	margin-right: 30%;
+}
+
+.imgcircle {
+	width: 80%;
+	max-width: 75px;
+	border-radius: 50%;
+	margin-left: 10%;
+	margin-right: 10%;
+
+}
+
+.text-right {
+	text-align: right;
+}
+
+.total {
+	border-top: 4px double #999 !important;
+}	
+
+td.success {
+	background: #EEE;
+}
+
+td.danger {
+	background: #F2DEDE;
+}
+
+
+.location {
+	padding-left: 10px !important;
+	text-align: left !important;
+	
+}

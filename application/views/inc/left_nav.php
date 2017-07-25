@@ -31,7 +31,7 @@
                   </div>
               </li>
               <li class="bold"><a href="<?=base_url('dashboard')?>" class="waves-effect waves-cyan"><i class="mdi-action-dashboard"></i> Dashboard</a></li>             
-              <?php if($user['usertype'] == 'Administrator'): ?>     
+              <?php if($user['usertype'] == 'Doctor'): ?>     
               <li class="li-hover"><div class="divider"></div></li>
               <li class="li-hover"><p class="ultra-small margin more-text">ADMIN OPTIONS</p></li>       
               <li class="bold"><a href="<?=base_url('users/')?>" class="waves-effect waves-cyan"><i class="mdi-action-account-child"></i> System Users</a></li>       

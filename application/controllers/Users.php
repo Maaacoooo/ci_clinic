@@ -57,22 +57,26 @@ class Users extends CI_Controller {
 			$this->form_validation->set_rules('usertype', 'Usertype', 'trim|required'); 
 			
 			
+			//Validate Usertype
+			if($data['user']['usertype'] == 'Doctor') {
 
-			if($this->form_validation->run() == FALSE)	{
-				$this->load->view('user/list', $data);
-			} else {	
-		
-				//Proceed saving user				
-				if($this->user_model->create_user()) {			
-				
-					$this->session->set_flashdata('success', 'Succes! User registered!');
-					redirect($_SERVER['HTTP_REFERER'], 'refresh');
-				} else {
-					//failure
-					$this->session->set_flashdata('error', 'Oops! Error occured!');
-					redirect($_SERVER['HTTP_REFERER'], 'refresh');
-				}			
-				
+				if($this->form_validation->run() == FALSE)	{
+					$this->load->view('user/list', $data);
+				} else {	
+			
+					//Proceed saving user				
+					if($this->user_model->create_user()) {			
+					
+						$this->session->set_flashdata('success', 'Succes! User registered!');
+						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					} else {
+						//failure
+						$this->session->set_flashdata('error', 'Oops! Error occured!');
+						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					}		
+				}
+			} else {
+				show_error('Oops! Your account does not have the privilege to view the content. Please Contact the Administrator', 403, 'Access Denied!');
 			}
 
 		} else {
@@ -108,24 +112,28 @@ class Users extends CI_Controller {
 			$this->form_validation->set_rules('name', 'Name', 'trim|required');  
 			$this->form_validation->set_rules('usertype', 'Usertype', 'trim|required'); 
 		
-
-			if($this->form_validation->run() == FALSE)	{
+			//Validate Usertype
+			if($data['user']['usertype'] == 'Doctor') {
+				if($this->form_validation->run() == FALSE)	{
 				$this->load->view('user/update', $data);
-			} else {			
+				} else {			
 
-				//Proceed saving candidate				
-				$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row
-				if($this->user_model->update_user($key_id)) {			
-				
-					$this->session->set_flashdata('success', 'Succes! User Updated!');
-					redirect($_SERVER['HTTP_REFERER'], 'refresh');
-				} else {
-					//failure
-					$this->session->set_flashdata('error', 'Oops! Error occured!');
-					redirect($_SERVER['HTTP_REFERER'], 'refresh');
-				}			
-				
-			}			
+					//Proceed saving candidate				
+					$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row
+					if($this->user_model->update_user($key_id)) {			
+					
+						$this->session->set_flashdata('success', 'Succes! User Updated!');
+						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					} else {
+						//failure
+						$this->session->set_flashdata('error', 'Oops! Error occured!');
+						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					}			
+					
+				}	
+			} else {
+				show_error('Oops! Your account does not have the privilege to view the content. Please Contact the Administrator', 403, 'Access Denied!');				
+			}		
 
 		} else {
 

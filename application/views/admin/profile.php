@@ -130,7 +130,7 @@
                             <input type="text" name="name" id="" class="validate" value="<?=$user['name']?>"  required/>
                             <label for="">Full Name</label>
                           </div><!-- /.input-field col s12 -->
-                          <div class="input-fielf col s12">
+                          <div class="input-field col s12">
                             <div class="right">
                               <input type="checkbox" id="resetpass" name="resetpass" onclick="enablereset()">
                               <label for="resetpass">Reset Password</label>

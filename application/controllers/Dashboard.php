@@ -20,8 +20,9 @@ class Dashboard extends CI_Controller {
 			$data['site_title'] = APP_NAME;
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 
+			$data['passwordverify'] = $this->user_model->check_user($userdata['username'], 'ClinicUser'); //boolean - returns false if default password
 
-			$this->load->view('admin/blank', $data);
+			$this->load->view('dashboard/dashboard', $data);
 
 		} else {
 

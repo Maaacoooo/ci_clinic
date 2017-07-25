@@ -78,7 +78,7 @@ class Users extends CI_Controller {
 		} else {
 
 			$this->session->set_flashdata('error', 'You need to login!');
-			redirect('sys/dashboard/login', 'refresh');
+			redirect('dashboard/login', 'refresh');
 		}
 
 	}

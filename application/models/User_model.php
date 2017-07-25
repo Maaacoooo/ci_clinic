@@ -225,5 +225,58 @@ Class User_model extends CI_Model
     }
 
 
+    function update_profile($user) { 
+
+            $filename = $this->userdetails($user)['img']; //gets the old data 
+
+            //Process Image Upload
+              if($_FILES['img']['name'] != NULL)  { 
+
+
+                //Deletes the old photo
+                if(!filexist($filename)) {
+                  unlink('./uploads/'.$filename); 
+                }
+
+                $config['upload_path'] = './uploads/';
+                $config['allowed_types'] = 'gif|jpg|png'; 
+                $config['encrypt_name'] = TRUE;                        
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);         
+                
+                $field_name = "img";
+                $this->upload->do_upload($field_name);
+                $data2 = array('upload_data' => $this->upload->data());
+                foreach ($data2 as $key => $value) {     
+                  $filename = $value['file_name'];
+                }
+                
+            }
+      
+            $data = array(           
+                'name'      => $this->input->post('name'),                
+                'img'       => $filename  
+             );
+            
+            $this->db->where('username', $user);
+            return $this->db->update('users', $data);          
+        
+    }
+
+    function update_profile_pass($user) { 
+
+           
+      
+            $data = array(           
+                'password'  => password_hash($this->input->post('newpass'), PASSWORD_DEFAULT)          
+             );
+            
+            $this->db->where('username', $user);
+            return $this->db->update('users', $data);          
+        
+    }
+
+
 
 }

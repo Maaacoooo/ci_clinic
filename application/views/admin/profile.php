@@ -90,7 +90,7 @@
             </div>
             
             <div class="row">
-            <?=form_open_multipart('sys/settings/profile')?>
+            <?=form_open_multipart('settings/profile')?>
               <div class="col s12 l8">
                 <div class="card-panel">
                   <div class="card-content">

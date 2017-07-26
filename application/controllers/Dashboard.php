@@ -7,6 +7,7 @@ class Dashboard extends CI_Controller {
 	public function __construct()	{
 		parent::__construct();		
        $this->load->model('user_model');
+       $this->load->model('patient_model');
 	}	
 
 
@@ -22,7 +23,53 @@ class Dashboard extends CI_Controller {
 
 			$data['passwordverify'] = $this->user_model->check_user($userdata['username'], 'ClinicUser'); //boolean - returns false if default password
 
-			$this->load->view('dashboard/dashboard', $data);
+			//FORM VALIDATION  /////////////////////////////////////////////////////////////////////
+			
+			if($this->input->post('newpatient')) {
+				$this->form_validation->set_rules('newpatient', '', 'trim');   
+				$this->form_validation->set_rules('lname', 'Last Name', 'trim|required');   
+				$this->form_validation->set_rules('mname', 'Middle Name', 'trim|required');   
+				$this->form_validation->set_rules('fname', 'Full Name', 'trim|required');   
+				$this->form_validation->set_rules('bplace', 'Birthplace', 'trim|required');   
+				$this->form_validation->set_rules('bdate', 'Birthdate', 'trim|required');   
+				$this->form_validation->set_rules('addr', 'Address', 'trim|required');   
+				$this->form_validation->set_rules('contactno', 'Contact Number', 'trim|required');   
+				$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');   
+				$this->form_validation->set_rules('remarks', 'Remarks', 'trim');   
+
+			} else {
+				$this->form_validation->set_rules('patient_id', 'Patient ID', 'trim|required');   
+				$this->form_validation->set_rules('weight', 'Weight', 'trim|required');   
+				$this->form_validation->set_rules('height', 'Height', 'trim|required');   
+				$this->form_validation->set_rules('title', 'Case Title', 'trim|required');   
+				$this->form_validation->set_rules('description', 'Case Description', 'trim|required');   
+			}	
+			
+			
+			if($this->form_validation->run() == FALSE)	{
+
+				$this->load->view('dashboard/dashboard', $data);
+
+			} else {
+
+				//SAVE DATA
+				
+				if($this->input->post('newpatient')) {
+					$this->patient_model->create_patient(); // Save New Patient
+					$patient_id = $this->db->insert_id(); //fetch user_id
+				} else {
+					$patient_id = $this->input->post('patient_id');
+				}
+
+				if($this->patient_model->create_case($patient_id)) {
+					$this->session->set_flashdata('success', 'Success! Case Submitted!');					
+				} else {
+					$this->session->set_flashdata('error', 'Oops! Error occured!');					
+				}
+
+					redirect('dashboard', 'refresh');
+
+			}
 
 		} else {
 
@@ -48,7 +95,7 @@ class Dashboard extends CI_Controller {
 		        redirect('dashboard', 'refresh');
 		} else {
 			
-				//FORM VALIDATION
+			//FORM VALIDATION
 			$this->form_validation->set_rules('username', 'Username', 'trim|required|callback_check_user');   
 			$this->form_validation->set_rules('password', 'Password', 'trim|required');
 			 

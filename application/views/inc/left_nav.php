@@ -31,12 +31,14 @@
                   </div>
               </li>
               <li class="bold"><a href="<?=base_url('dashboard')?>" class="waves-effect waves-cyan"><i class="mdi-action-dashboard"></i> Dashboard</a></li>             
-              <?php if($user['usertype'] == 'Doctor'): ?>     
               <li class="li-hover"><div class="divider"></div></li>
+              <?php if($user['usertype'] == 'Doctor'): ?>     
               <li class="li-hover"><p class="ultra-small margin more-text">ADMIN OPTIONS</p></li>       
-              <li class="bold"><a href="<?=base_url('users/')?>" class="waves-effect waves-cyan"><i class="mdi-action-account-child"></i> System Users</a></li>       
+              <li class="bold"><a href="<?=base_url('users/')?>" class="waves-effect waves-cyan"><i class="mdi-action-account-child"></i> System Users</a></li>  
+              <li class="li-hover"><div class="divider"></div></li>     
               <?php endif; ?> 
-
+              <li class="li-hover"><p class="ultra-small margin more-text">PATIENTS OPTIONS</p></li>       
+              <li class="bold"><a href="<?=base_url('patients/')?>" class="waves-effect waves-cyan"><i class="mdi-action-face-unlock"></i> Patients</a></li>  
               <li class="li-hover"><div class="divider"></div></li>
       
           </ul>         

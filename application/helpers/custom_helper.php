@@ -42,6 +42,19 @@
     }
 
 
+    /**
+     * This cleans a string to simply get the INT id 
+     * @param  String   $str    the string starting with # . e.g  "#000143-- John Jones Smith"
+     * @return int              the int ID. e.g     "143"
+     */
+    function cleanId($str) {
+
+        sscanf($str,"#%d",$id);
+
+        return $id;
+    }
+
+
   
 
 

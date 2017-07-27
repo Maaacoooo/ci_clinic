@@ -32,8 +32,8 @@ Class Patient_model extends CI_Model
                 'fullname'      => $this->input->post('fname'),  
                 'middlename'    => $this->input->post('mname'),  
                 'lastname'      => $this->input->post('lname'),                 
-                'birthdate'     => $this->input->post('bplace'),   
-                'birthplace'    => $this->input->post('bdate'),                 
+                'birthdate'     => $this->input->post('bdate'),   
+                'birthplace'    => $this->input->post('bplace'),                 
                 'address'       => $this->input->post('addr'),                 
                 'contact_no'    => $this->input->post('contactno'),                 
                 'email'         => $this->input->post('email'),                 
@@ -133,11 +133,11 @@ Class Patient_model extends CI_Model
      * @param  int      $id         the Page ID of the request. 
      * @return Array        The array of returned rows 
      */
-    function fetch_users($limit, $id) {
+    function fetch_patients($limit, $id) {
 
             $this->db->limit($limit, (($id-1)*$limit));
 
-            $query = $this->db->get("users");
+            $query = $this->db->get("patients");
 
             if ($query->num_rows() > 0) {
                 return $query->result_array();
@@ -150,8 +150,8 @@ Class Patient_model extends CI_Model
      * Returns the total number of rows of users
      * @return int       the total rows
      */
-    function count_users() {
-        return $this->db->count_all("users");
+    function count_patients() {
+        return $this->db->count_all("patients");
     }
 
   

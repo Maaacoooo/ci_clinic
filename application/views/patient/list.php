@@ -101,7 +101,7 @@
                         <span class="badge-label blue">Male</span>  
                       <?php endif ?>
                     </td>
-                    <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['birthdate']?></a></td>
+                    <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=getAge($row['birthdate'], time())?></a></td>
                     <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['address']?></a></td>
                     <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['contact_no']?></a></td>
                     <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['id']?></a></td>

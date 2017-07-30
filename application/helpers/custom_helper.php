@@ -57,11 +57,12 @@
     /**
      * Returns the age. This is stupidly coded for some reasons
      * @param  String   $date   a MySQL Date format str
+     * @param  String   $range  the range to be calculated
      * @return int              the Age
      */
-    function getAge($date) {
+    function getAge($age_sql, $range) {
 
-        $str = "#".timespan(mysql_to_unix($date . '00:00:00'), time(), 1);
+        $str = "#".timespan(mysql_to_unix($age_sql . '00:00:00'), $range, 1);
 
         sscanf($str,"#%d",$age);
 

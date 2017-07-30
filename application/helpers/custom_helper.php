@@ -54,6 +54,20 @@
         return $id;
     }
 
+    /**
+     * Returns the age. This is stupidly coded for some reasons
+     * @param  String   $date   a MySQL Date format str
+     * @return int              the Age
+     */
+    function getAge($date) {
+
+        $str = "#".timespan(mysql_to_unix($date . '00:00:00'), time(), 1);
+
+        sscanf($str,"#%d",$age);
+
+        return $age;
+    }
+
 
   
 

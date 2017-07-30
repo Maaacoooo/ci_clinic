@@ -59,6 +59,73 @@ class Patients extends CI_Controller {
 
 	}
 
+	public function create()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+
+			$data['title'] = 'Register Patient';
+			$data['site_title'] = APP_NAME;
+			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
+		
+
+			//Form Validation			  
+			$this->form_validation->set_rules('lname', 'Last Name', 'trim|required');   
+			$this->form_validation->set_rules('mname', 'Middle Name', 'trim|required');   
+			$this->form_validation->set_rules('fname', 'Full Name', 'trim|required');   
+			$this->form_validation->set_rules('bplace', 'Birthplace', 'trim|required');   
+			$this->form_validation->set_rules('sex', 'Sex', 'trim|required');   
+			$this->form_validation->set_rules('bdate', 'Birthdate', 'trim|required');   
+			$this->form_validation->set_rules('addr', 'Address', 'trim|required');   
+			$this->form_validation->set_rules('contactno', 'Contact Number', 'trim|required');   
+			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');   
+			$this->form_validation->set_rules('remarks', 'Remarks', 'trim');   		
+
+				if($this->form_validation->run() == FALSE)	{
+					$this->load->view('patient/create', $data);
+				} else {	
+
+					//Proceed saving				
+					if($this->patient_model->create_patient()) {			
+					
+						$this->session->set_flashdata('success', 'Succes! Patient Registered!');
+						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					} else {
+						//failure
+						$this->session->set_flashdata('error', 'Oops! Error occured!');
+						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					}			
+					
+				}		
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+	public function view($id) {
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+
+			$data['title'] = 'Patient - ' ;
+			$data['site_title'] = APP_NAME;
+			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
+		
+
+			$this->load->view('patient/view', $data);	
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+	}
+
 	public function update($id)		{
 
 		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
@@ -136,39 +203,6 @@ class Patients extends CI_Controller {
 
 				if($this->user_model->delete_user($key_id)) {
 					$this->session->set_flashdata('success', 'User Deleted!');
-					redirect($_SERVER['HTTP_REFERER'], 'refresh');
-				}
-			}
-
-		} else {
-
-			$this->session->set_flashdata('error', 'You need to login!');
-			redirect('dashboard/login', 'refresh');
-		}
-
-	}
-
-
-	public function resetpassword()		{
-
-		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
-
-		if($userdata)	{
-			
-			//FORM VALIDATION
-			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
-		 
-		   if($this->form_validation->run() == FALSE)	{
-
-				$this->session->set_flashdata('error', 'An Error has Occured!');
-				redirect($_SERVER['HTTP_REFERER'], 'refresh');
-
-			} else {
-
-				$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row				
-
-				if($this->user_model->reset_password($key_id)) {
-					$this->session->set_flashdata('success', 'Password Resetted to Default!');
 					redirect($_SERVER['HTTP_REFERER'], 'refresh');
 				}
 			}

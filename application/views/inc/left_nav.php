@@ -38,9 +38,19 @@
               <li class="li-hover"><div class="divider"></div></li>     
               <?php endif; ?> 
               <li class="li-hover"><p class="ultra-small margin more-text">PATIENTS OPTIONS</p></li>       
-              <li class="bold"><a href="<?=base_url('patients/')?>" class="waves-effect waves-cyan"><i class="mdi-action-face-unlock"></i> Patients</a></li>  
-              <li class="li-hover"><div class="divider"></div></li>
-      
+              <li class="no-padding">
+                  <ul class="collapsible collapsible-accordion">
+                      <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-face-unlock"></i> Patients</a>
+                          <div class="collapsible-body" style="">
+                              <ul>
+                                  <li><a href="<?=base_url('patients/')?>">Patient List</a></li>                                                                
+                                  <li><a href="<?=base_url('patients/create')?>">Register New Patient</a></li>                                                                
+                              </ul>
+                          </div>
+                      </li>                     
+                  </ul>
+              </li>  
+              <li class="li-hover"><div class="divider"></div></li>             
           </ul>         
           <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only grey darken-4"><i class="mdi-navigation-menu" ></i></a>
       </aside> 

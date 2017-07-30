@@ -7,6 +7,7 @@
 
  */
 	define('APP_NAME', 'Demontaño Clinic');
+	date_default_timezone_set('Asia/Manila');
 
 /*
  *--------------------------------------------------------------------------

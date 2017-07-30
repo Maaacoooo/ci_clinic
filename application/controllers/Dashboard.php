@@ -31,6 +31,7 @@ class Dashboard extends CI_Controller {
 				$this->form_validation->set_rules('mname', 'Middle Name', 'trim|required');   
 				$this->form_validation->set_rules('fname', 'Full Name', 'trim|required');   
 				$this->form_validation->set_rules('bplace', 'Birthplace', 'trim|required');   
+				$this->form_validation->set_rules('sex', 'Sex', 'trim|required');   
 				$this->form_validation->set_rules('bdate', 'Birthdate', 'trim|required');   
 				$this->form_validation->set_rules('addr', 'Address', 'trim|required');   
 				$this->form_validation->set_rules('contactno', 'Contact Number', 'trim|required');   

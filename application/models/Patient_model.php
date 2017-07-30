@@ -34,6 +34,7 @@ Class Patient_model extends CI_Model
                 'lastname'      => $this->input->post('lname'),                 
                 'birthdate'     => $this->input->post('bdate'),   
                 'birthplace'    => $this->input->post('bplace'),                 
+                'sex'           => $this->input->post('sex'),                 
                 'address'       => $this->input->post('addr'),                 
                 'contact_no'    => $this->input->post('contactno'),                 
                 'email'         => $this->input->post('email'),                 

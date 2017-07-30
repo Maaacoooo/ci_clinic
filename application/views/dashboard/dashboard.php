@@ -20,6 +20,7 @@
           document.getElementById("fname").disabled = false;
           document.getElementById("mname").disabled = false;
           document.getElementById("bplace").disabled = false;
+          document.getElementById("sex").disabled = false;
           document.getElementById("bdate").disabled = false;
           document.getElementById("addr").disabled = false;
           document.getElementById("contactno").disabled = false;
@@ -35,6 +36,7 @@
           document.getElementById("fname").disabled = true;
           document.getElementById("mname").disabled = true;
           document.getElementById("bplace").disabled = true;
+          document.getElementById("sex").disabled = true;
           document.getElementById("bdate").disabled = true;
           document.getElementById("addr").disabled = true;
           document.getElementById("contactno").disabled = true;
@@ -205,9 +207,16 @@
                      </div><!-- /.input-field col s4 l4 -->
                    </div><!-- /.row -->
                    <div class="row">
-                     <div class="input-field col s8">
+                     <div class="input-field col s6">
                         <input type="text" name="bplace" id="bplace" class="validate" value="<?=set_value('bplace')?>" required disabled/>
                         <label for="bplace">Birthplace</label>
+                     </div><!-- /.input-field col s6 -->
+                     <div class="input-field col s2">
+                        <select class="browser-default" name="sex" id="sex" required disabled>
+                          <option value="" disabled="" selected="">Sex</option>
+                          <option value="1">Male</option>
+                          <option value="0">Female</option>                       
+                        </select>
                      </div><!-- /.input-field col s8 -->
                      <div class="input-field col s4">
                         <input type="date" name="bdate" id="bdate" value="<?=set_value('bdate')?>" required disabled/>                        

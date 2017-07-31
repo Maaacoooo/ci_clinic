@@ -62,6 +62,52 @@ Class Patient_model extends CI_Model
     }
 
 
+    /**
+     * Returns the cases of a specific patient
+     * @param  int     $patient_id     the ID of the patient
+     * @return String Array            the result of rows
+     */
+    function fetch_patient_case($patient_id) {
+
+            $this->db->where('patient_id', $patient_id);
+            $this->db->order_by('created_at', 'DESC');
+            $query = $this->db->get("cases");
+
+            return $query->result_array();
+          
+    }
+
+
+    function view_patient($id) {
+
+            $this->db->select('*');        
+            $this->db->where('id', $id);          
+            $this->db->limit(1);
+
+            $query = $this->db->get('patients');
+
+            return $query->row_array();
+    }
+
+    /**
+     * Returns the row of a `case`
+     * @param  [type] $id         [description]
+     * @param  [type] $patient_id [description]
+     * @return [type]             [description]
+     */
+    function view_case($id, $patient_id) {
+
+            $this->db->select('*');        
+            $this->db->where('id', $id);
+            $this->db->where('patient_id', $patient_id);          
+            $this->db->limit(1);
+
+            $query = $this->db->get('cases');
+
+            return $query->row_array();
+    }
+
+
 
     /**
      * Updates a user record
@@ -137,7 +183,20 @@ Class Patient_model extends CI_Model
     function fetch_patients($limit, $id) {
 
             $this->db->limit($limit, (($id-1)*$limit));
-
+            $this->db->where('patients.is_deleted', 0);
+            $this->db->join('cases', 'cases.patient_id = patients.id', 'left');
+            $this->db->group_by('patients.id');
+            $this->db->select('
+              patients.id,
+              patients.fullname,
+              patients.middlename,
+              patients.lastname,
+              patients.sex,
+              patients.birthdate,
+              patients.address,
+              patients.contact_no,
+              count(cases.id) as cases
+              ');
             $query = $this->db->get("patients");
 
             if ($query->num_rows() > 0) {
@@ -152,7 +211,17 @@ Class Patient_model extends CI_Model
      * @return int       the total rows
      */
     function count_patients() {
-        return $this->db->count_all("patients");
+        $this->db->where('is_deleted', 0);
+        return $this->db->count_all_results("patients");
+    }
+
+    /**
+     * Returns the total number of rows of users
+     * @return int       the total rows
+     */
+    function count_cases($patient_id) {
+        $this->db->where('patient_id', $patient_id);
+        return $this->db->count_all_results("cases");
     }
 
   

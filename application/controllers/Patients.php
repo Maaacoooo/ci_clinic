@@ -107,17 +107,46 @@ class Patients extends CI_Controller {
 
 	}
 
-	public function view($id) {
+	public function view($patient_id) {
 		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
 
 		if($userdata)	{
-
-			$data['title'] = 'Patient - ' ;
+			
 			$data['site_title'] = APP_NAME;
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
-		
+			
+			$data['info'] = $this->patient_model->view_patient($patient_id);
+			$data['total_cases'] = $this->patient_model->count_cases($patient_id);
 
-			$this->load->view('patient/view', $data);	
+
+			//check if it is partially deleted
+			if((!$data['info']['is_deleted']) && $data['info'] && $patient_id) {
+								
+				$case_id = $this->uri->segment(5); //case ID segment 
+				//check url
+				if($case_id) {
+					//Case Information - case information view
+					$data['case'] = $this->patient_model->view_case($case_id, $patient_id);
+					$data['title'] =  $data['case']['title'];	//Page title
+
+					//check validity 
+					if ($data['case']) {
+						$this->load->view('case/view', $data);	
+					} else {
+						show_404();
+					}
+
+				} else {
+					//Load default patient information view
+					$data['title'] = $data['info']['fullname'] . ' ' . $data['info']['lastname'];	//Page title
+					$data['cases'] = $this->patient_model->fetch_patient_case($patient_id);				
+					$this->load->view('patient/view', $data);	
+				}
+
+			} else {
+				show_404();
+			}
+			
 
 		} else {
 
@@ -214,6 +243,9 @@ class Patients extends CI_Controller {
 		}
 
 	}
+
+
+
 
 
 

@@ -104,7 +104,7 @@
                     <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=getAge($row['birthdate'], time())?></a></td>
                     <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['address']?></a></td>
                     <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['contact_no']?></a></td>
-                    <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['id']?></a></td>
+                    <td><a href="<?=base_url('patients/view/'.$row['id'])?>"><?=$row['cases']?></a></td>
                   </tr>
                   <?php endforeach; ?>
                   <?php endif; ?>

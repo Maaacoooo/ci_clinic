@@ -39,7 +39,7 @@ class Dashboard extends CI_Controller {
 				$this->form_validation->set_rules('remarks', 'Remarks', 'trim');   
 
 			} else {
-				$this->form_validation->set_rules('patient_id', 'Patient ID', 'trim|required');   
+				$this->form_validation->set_rules('patient_id', 'Patient ID', 'trim|required|callback_check_patient');   
 				$this->form_validation->set_rules('weight', 'Weight', 'trim|required');   
 				$this->form_validation->set_rules('height', 'Height', 'trim|required');   
 				$this->form_validation->set_rules('title', 'Case Title', 'trim|required');   
@@ -59,7 +59,7 @@ class Dashboard extends CI_Controller {
 					$this->patient_model->create_patient(); // Save New Patient
 					$patient_id = $this->db->insert_id(); //fetch user_id
 				} else {
-					$patient_id = $this->input->post('patient_id');
+					$patient_id = cleanId($this->input->post('patient_id'));
 				}
 
 				if($this->patient_model->create_case($patient_id)) {
@@ -78,6 +78,22 @@ class Dashboard extends CI_Controller {
 			redirect('dashboard/login', 'refresh');
 		}
 
+	}
+
+
+	public function check_patient($patient) {
+
+		$patient_id = cleanId($patient);
+
+		$result = $this->patient_model->view_patient($patient_id);
+
+		if($result) {
+			
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('check_patient', 'No Patient Record Found!');			
+			return FALSE;
+		}
 	}
 
 
@@ -136,4 +152,26 @@ class Dashboard extends CI_Controller {
 		$this->session->unset_userdata('admin_logged_in');		  
 		redirect('dashboard/login', 'refresh');
 	}
+
+
+	/**
+	 * This function is used for Patient Autocomplete
+	 * @return JSON 	the array of results
+	 */
+	public function autocomplete(){
+	    
+	    if (isset($_GET['term'])){
+	      $q = strtolower($_GET['term']);
+	      $result = $this->patient_model->search_patients($q);
+
+	      foreach($result as $row) {
+	      	$new_row['label']=htmlentities(stripslashes($row['lastname'] . ', ' . $row['fullname'] . ' ' . $row['middlename']));
+            $new_row['value']=htmlentities(stripslashes('#'. prettyID($row['id']) . ' -- ' . $row['lastname'] . ', ' . $row['fullname'] . ' ' . $row['middlename']));
+            $row_set[] = $new_row; //build an array
+          }
+          echo json_encode($row_set); //format the array into json data     
+
+	    }
+	    
+	  }
 }

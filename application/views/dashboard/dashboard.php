@@ -8,7 +8,9 @@
     <title><?=$title?> &middot; <?=$site_title?></title>
 
     <?php $this->load->view('inc/css'); ?>
-    
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.theme.min.css" rel="stylesheet">
+
     <script type="text/javascript">
       function enablenewpatient() {
         if(document.getElementById("newpatient").checked == true) {
@@ -278,6 +280,15 @@
     <?php $this->load->view('inc/footer'); ?>
 
     <?php $this->load->view('inc/js'); ?>
+    <script src="<?php echo base_url();?>assets/js/jquery-ui.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+    
+    <script type="text/javascript">
+      $(function(){
+      $("#patient_id").autocomplete({    
+        source: "<?php echo base_url('index.php/dashboard/autocomplete');?>" // path to the get_birds method
+      });
+    });
+    </script>
    
 </body>
 </html>

@@ -89,6 +89,16 @@ Class Patient_model extends CI_Model
             return $query->row_array();
     }
 
+    function search_patients($q){
+      
+            $this->db->like('fullname', $q);
+            $this->db->or_like('lastname', $q);
+            $this->db->limit(15);
+            $query = $this->db->get('patients');
+            
+            return $query->result_array();
+  }
+
     /**
      * Returns the paginated array of rows 
      * @param  int      $limit      The limit of the results; defined at the controller
@@ -197,9 +207,5 @@ Class Patient_model extends CI_Model
         $this->db->where('patient_id', $patient_id);
         return $this->db->count_all_results("cases");
     }
-
-  
-
-
 
 }

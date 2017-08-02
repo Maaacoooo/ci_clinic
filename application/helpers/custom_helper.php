@@ -70,6 +70,16 @@
     }
 
 
+    /**
+     * Returns a pretty ID. 
+     * @param  int       $str   the String to be prettified
+     * @return Double           returns 000001 
+     */
+    function prettyID($str) {
+        return str_pad($str,5,"0",STR_PAD_LEFT);
+    }
+
+
   
 
 

@@ -135,7 +135,7 @@
                   <?php if ($info['created_at'] != $info['updated_at']): ?>
                   <tr>
                     <td>Last Update:</td>
-                    <td><em><?=$info['updated_at']?></em></td>
+                    <td><em><?=timespan(mysql_to_unix($info['updated_at']), time())?> ago <small><?=$info['updated_at']?></small></em></td>
                   </tr>
                   <?php endif ?>                  
                 </table><!-- /.striped -->
@@ -152,10 +152,12 @@
                           <tr>
                             <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>">
                                 <?=$cse['title']?>                              
-                                <?php if ($cse['status']): ?>
-                                  <span class="badge-label green darken-3">Served</span>     
-                                <?php else: ?>
-                                  <span class="badge-label red darken-3">Pending</span>  
+                                <?php if ($cse['status'] == 3): ?>
+                                  <span class="badge-label grey darken-3">Cancelled</span>     
+                                <?php elseif($cse['status'] == 1): ?>
+                                  <span class="badge-label green darken-3">Served</span>                                   
+                                <?php else: ?> 
+                                  <span class="badge-label red darken-3">Pending</span> 
                                 <?php endif ?>
                             </a></td>
                             <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>"><?=nice_date(($cse['created_at']), 'M. d, Y')?></a></td>
@@ -179,10 +181,10 @@
                           <h6 class="header strong">Options</h6><!-- /.header -->
                           <table class="centered">
                             <tr>
-                              <td><a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-action-cached left"></i></a></td>
+                              <td><a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-av-my-library-books left"></i></a></td>
                             </tr>
                             <tr>
-                              <td><a href="#deleteModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-action-delete left"></i></a></td>
+                              <td><a href="#UpdateModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-editor-border-color left"></i></a></td>
                             </tr>
                             <tr>
                               <td><a href="#deleteModal" class="modal-trigger btn waves-effect red">Delete<i class="mdi-action-delete left"></i></a></td>
@@ -245,6 +247,88 @@
                   </div>
               <?=form_close()?>
             </div>
+
+
+            <div id="UpdateModal" class="modal modal-fixed-footer">
+              <?=form_open('patients/update')?>              
+                  <div class="modal-content">    
+                   <h5 class="header">Update: <?=$info['fullname'] . ' ' . $info['lastname']?></h5><!-- /.header black-text -->              
+                    <div class="row">
+                     <div class="input-field col s4 l4">
+                        <input type="text" name="lname" id="lname" class="validate" value="<?=$info['lastname']?>" required/>
+                        <label for="lname">Last Name</label>
+                     </div><!-- /.input-field col s4 l4 -->                   
+                     <div class="input-field col s4 l4">
+                        <input type="text" name="fname" id="fname" class="validate" value="<?=$info['fullname']?>" required/>
+                        <label for="fname">Full Name</label>
+                     </div><!-- /.input-field col s4 l4 -->                   
+                     <div class="input-field col s4 l4">
+                        <input type="text" name="mname" id="mname" class="validate" value="<?=$info['middlename']?>" required/>
+                        <label for="mname">Middle Name</label>
+                     </div><!-- /.input-field col s4 l4 -->
+                   </div><!-- /.row -->
+                   <div class="row">
+                     <div class="input-field col s6">
+                        <input type="text" name="bplace" id="bplace" class="validate" value="<?=$info['birthplace']?>" required/>
+                        <label for="bplace">Birthplace</label>
+                     </div><!-- /.input-field col s6 -->
+                     <div class="input-field col s2">
+                        <select class="browser-default" name="sex" id="sex" required>                          
+                          <option value="1" <?php if($info['sex'])echo'selected';?>>Male</option>
+                          <option value="0" <?php if(!$info['sex'])echo'selected';?>>Female</option>                       
+                        </select>
+                     </div><!-- /.input-field col s8 -->
+                     <div class="input-field col s4">
+                        <input type="date" name="bdate" id="bdate" value="<?=$info['birthdate']?>" required/>                        
+                     </div><!-- /.input-field col s4 -->
+                   </div><!-- /.row -->             
+                   <div class="row">
+                     <div class="input-field col s12">
+                       <input type="text" name="addr" id="addr" class="validate" value="<?=$info['address']?>" required/>
+                       <label for="addr">Present Address</label>
+                     </div><!-- /.input-field col s12 -->
+                   </div><!-- /.row -->
+                   <div class="row">
+                     <div class="input-field col s6">
+                       <input type="text" name="contactno" id="contactno" class="validate" value="<?=$info['contact_no']?>" required/>
+                       <label for="contactno">Contact Number</label>
+                     </div><!-- /.input-field col s6 -->
+                     <div class="input-field col s6">
+                       <input type="text" name="email" id="email" class="validate" value="<?=$info['email']?>" required/>
+                       <label for="email">Email Address</label>
+                     </div><!-- /.input-field col s6 -->
+                   </div><!-- /.row -->
+                   <div class="row">
+                     <div class="input-field col s12">
+                       <textarea id="remarks" name="remarks" class="materialize-textarea" length="120"><?=$info['remarks']?></textarea>
+                       <label for="remarks">Remarks</label>
+                     </div><!-- /.input-field col s12 -->
+                   </div><!-- /.row -->
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                  </div>
+                  <div class="modal-footer yellow lighten-4">
+                    <a href="#" class="waves-effect waves-green btn-flat red-text modal-action modal-close">Cancel</a>
+                    <button type="submit" class="waves-effect waves-amber btn amber modal-action">Update</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+
+            <div id="deleteModal" class="modal">
+              <?=form_open('patients/delete')?>
+                <div class="modal-content red darken-4 white-text">
+                    <p>Are you sure to move the record of <span class="strong"><?=$info['fullname'] . ' ' . $info['lastname']?></span> to <strong>TRASH?</strong>?</p>
+                    <p>You <span class="strong">CANNOT UNDO</span> this action.</p>
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
+                    <button type="submit" class="waves-effect waves-red btn red modal-action">Move to Trash</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+
         <!-- End Modals -->
 
 

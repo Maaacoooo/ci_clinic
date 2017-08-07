@@ -43,8 +43,8 @@
                       <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-face-unlock"></i> Patients</a>
                           <div class="collapsible-body" style="">
                               <ul>
-                                  <li><a href="<?=base_url('patients/')?>">Patient List</a></li>                                                                
-                                  <li><a href="<?=base_url('patients/create')?>">Register New Patient</a></li>                                                                
+                                  <li><a href="<?=base_url('patients/create')?>">Register New Patient</a></li>
+                                  <li><a href="<?=base_url('patients/')?>">Patient List</a></li>
                               </ul>
                           </div>
                       </li>                     

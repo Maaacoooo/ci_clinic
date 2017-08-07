@@ -8,6 +8,7 @@ class Dashboard extends CI_Controller {
 		parent::__construct();		
        $this->load->model('user_model');
        $this->load->model('patient_model');
+       $this->load->model('case_model');
 	}	
 
 
@@ -62,7 +63,7 @@ class Dashboard extends CI_Controller {
 					$patient_id = cleanId($this->input->post('patient_id'));
 				}
 
-				if($this->patient_model->create_case($patient_id)) {
+				if($this->case_model->create_case($patient_id)) {
 					$this->session->set_flashdata('success', 'Success! Case Submitted!');					
 				} else {
 					$this->session->set_flashdata('error', 'Oops! Error occured!');					

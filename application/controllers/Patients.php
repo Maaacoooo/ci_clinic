@@ -8,6 +8,7 @@ class Patients extends CI_Controller {
 		parent::__construct();		
        $this->load->model('user_model');
        $this->load->model('patient_model');
+       $this->load->model('case_model');
 	}	
 
 
@@ -116,7 +117,7 @@ class Patients extends CI_Controller {
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 			
 			$data['info'] = $this->patient_model->view_patient($patient_id);
-			$data['total_cases'] = $this->patient_model->count_cases($patient_id);
+			$data['total_cases'] = $this->case_model->count_cases($patient_id);
 
 
 			//check if it is partially deleted
@@ -126,7 +127,7 @@ class Patients extends CI_Controller {
 				//check url
 				if($case_id) {
 					//Case Information - case information view
-					$data['case'] = $this->patient_model->view_case($case_id, $patient_id);
+					$data['case'] = $this->case_model->view_case($case_id, $patient_id);
 					$data['title'] =  $data['case']['title'];	//Page title
 
 					//check validity 
@@ -139,7 +140,7 @@ class Patients extends CI_Controller {
 				} else {
 					//Load default patient information view
 					$data['title'] = $data['info']['fullname'] . ' ' . $data['info']['lastname'];	//Page title
-					$data['cases'] = $this->patient_model->fetch_patient_case($patient_id);				
+					$data['cases'] = $this->case_model->fetch_patient_case($patient_id);				
 					$this->load->view('patient/view', $data);	
 				}
 

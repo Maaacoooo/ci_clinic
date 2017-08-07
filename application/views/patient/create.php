@@ -92,7 +92,7 @@
                      </div><!-- /.input-field col s4 l4 -->                   
                      <div class="input-field col s4 l4">
                         <input type="text" name="fname" id="fname" class="validate" value="<?=set_value('fname')?>" required/>
-                        <label for="fname">Full Name</label>
+                        <label for="fname">First Name</label>
                      </div><!-- /.input-field col s4 l4 -->                   
                      <div class="input-field col s4 l4">
                         <input type="text" name="mname" id="mname" class="validate" value="<?=set_value('mname')?>" required/>

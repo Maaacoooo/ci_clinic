@@ -87,7 +87,7 @@
                     <td width="80%"><?=$info['lastname']?></td>
                   </tr>
                   <tr>
-                    <th>Fullname:</th>
+                    <th>Firstname:</th>
                     <td><?=$info['fullname']?></td>
                   </tr>
                   <tr>

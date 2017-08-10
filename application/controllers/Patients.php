@@ -89,6 +89,15 @@ class Patients extends CI_Controller {
 
 					//Proceed saving				
 					if($this->patient_model->create_patient()) {			
+						
+						// Save Log Data ///////////////////
+						$log_user 	= $data['user']['username'];
+						$log_tag 	= 'patient';	
+						$log_tagID 	= $this->db->insert_id();	
+						$log_action	= 'Patient Registered';		
+
+						$this->logs_model->create_log($log_user, $log_tag, $log_tagID, $log_action);					
+						////////////////////////////////////
 					
 						$this->session->set_flashdata('success', 'Succes! Patient Registered!');
 						redirect($_SERVER['HTTP_REFERER'], 'refresh');
@@ -117,36 +126,79 @@ class Patients extends CI_Controller {
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 			
 			$data['info'] = $this->patient_model->view_patient($patient_id);
-			$data['total_cases'] = $this->case_model->count_cases($patient_id);
-
 
 			//check if it is partially deleted
 			if((!$data['info']['is_deleted']) && $data['info'] && $patient_id) {
 								
-				$case_id = $this->uri->segment(5); //case ID segment 
-				//check url
-				if($case_id) {
-					//Case Information - case information view
-					$data['case'] = $this->case_model->view_case($case_id, $patient_id);
-					$data['title'] =  $data['case']['title'];	//Page title
+				
+				//check url for CASES
+				if($this->uri->segment(4) == 'case') {
 
-					//check validity 
-					if ($data['case']) {
-						$this->load->view('case/view', $data);	
+					$case_id = $this->uri->segment(5); //case ID segment 
+
+					//Case Information
+					$data['case'] = $this->case_model->view_case($case_id, $patient_id);
+					//check validity of the CASE Row
+					if ($data['case']) {						
+
+						//check the prescription request
+						if($this->uri->segment(6) == 'prescription') {
+							//check the prescription request
+							if($this->uri->segment(7) == 'create') {
+
+								//load prescription/create
+								$data['title'] =  'New Prescription';	//Page title								
+								$this->load->view('prescription/create', $data);
+
+							} elseif($this->uri->segment(7) == 'view') {
+								$prescription_id = $this->uri->segment(8);
+								//prescription								
+								if($prescription_id) {
+									echo $prescription_id;
+								} else {
+									show_404();
+								}
+
+							} else {
+								show_404();
+							}
+
+						} elseif(!$this->uri->segment(6)) {
+							//load CASE View
+							$data['title'] =  $data['case']['title'];	//Page title							
+							$this->load->view('case/view', $data);	
+						} else {
+							show_404();
+						}
+
 					} else {
 						show_404();
 					}
 
-				} else {
+				} elseif(!$this->uri->segment(4)) {
 					//Load default patient information view
 					$data['title'] = $data['info']['fullname'] . ' ' . $data['info']['lastname'];	//Page title
 					$data['cases'] = $this->case_model->fetch_patient_case($patient_id);				
+
+					$data['total_cases'] = $this->case_model->count_cases($patient_id);
+					$data['logs']	= $this->logs_model->fetch_logs('patient', $patient_id, 10);
+
 					$this->load->view('patient/view', $data);	
+
+				} elseif($this->uri->segment(4) == 'logs') {
+					//Show Logs
+					$data['title'] = 'Logs: ' . $data['info']['fullname'] . ' ' . $data['info']['lastname'];	//Page title
+					$data['logs']	= $this->logs_model->fetch_logs('patient', $patient_id, 0);
+					
+					$this->load->view('patient/logs', $data);	
+					
+				} else {
+					show_404();
 				}
 
 			} else {
 				show_404();
-			}
+			}			
 			
 
 		} else {
@@ -188,6 +240,16 @@ class Patients extends CI_Controller {
 				$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row				
 
 				if($this->patient_model->update_patient($key_id)) {
+
+					// Save Log Data ///////////////////
+					$log_user 	= $userdata['username'];
+					$log_tag 	= 'patient';	
+					$log_tagID 	= $key_id;	
+					$log_action	= 'Updated Patient Record';		
+
+					$this->logs_model->create_log($log_user, $log_tag, $log_tagID, $log_action);			
+					////////////////////////////////////
+						
 					$this->session->set_flashdata('success', 'Patient Updated!');
 					redirect($_SERVER['HTTP_REFERER'], 'refresh');
 				}
@@ -218,7 +280,16 @@ class Patients extends CI_Controller {
 
 			} else {
 
-				$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row				
+				$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row		
+
+				// Save Log Data ///////////////////
+				$log_user 	= $userdata['username'];
+				$log_tag 	= 'patient';	
+				$log_tagID 	= $key_id;	
+				$log_action	= 'Moved to Trash';		
+
+				$this->logs_model->create_log($log_user, $log_tag, $log_tagID, $log_action);			
+				////////////////////////////////////		
 
 				if($this->patient_model->delete_patient($key_id)) {
 					$this->session->set_flashdata('success', 'Patient Moved to Trash!');

@@ -139,59 +139,78 @@
                   </tr>
                   <?php endif ?>                  
                 </table><!-- /.striped -->
+                <br />
+                  <div class="right">
+                    <a href="#UpdateModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-editor-border-color left"></i></a>
+                    <a href="#deleteModal" class="modal-trigger btn waves-effect red">Trash<i class="mdi-action-delete left"></i></a>
+                  </div><!-- /.right -->
               </div><!-- /.col s12 l8 -->
               <div class="col s12 l4">
+
                 <div class="row">
                   <div class="col s12">
                     <div class="card">
                       <div class="card-content">
-                        <h5 class="header">Cases <span class="right">(<?=$total_cases?>)</span></h5><!-- /.header -->
+                        <div class="row">
+                          <div class="col s12">
+                            <h5 class="header">Cases <span class="right">(<?=$total_cases?>)</span></h5><!-- /.header -->
+                            <table class="bordered">
+                            <?php if ($cases): ?>
+                            <?php foreach ($cases as $cse): ?>
+                              <tr>
+                                <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>">
+                                    <?=$cse['title']?>                              
+                                    <?php if ($cse['status'] == 3): ?>
+                                      <span class="badge-label grey darken-3">Cancelled</span>     
+                                    <?php elseif($cse['status'] == 1): ?>
+                                      <span class="badge-label green darken-3">Served</span>                                   
+                                    <?php else: ?> 
+                                      <span class="badge-label red darken-3">Pending</span> 
+                                    <?php endif ?>
+                                </a></td>
+                                <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>"><?=nice_date(($cse['created_at']), 'M. d, Y')?></a></td>
+                              </tr>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td>No Case Found!</td>
+                              </tr>
+                            <?php endif; ?>                      
+                            </table><!-- /.bordered -->
+                            <br />
+                            <div class="right">
+                              <a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-av-my-library-books left"></i></a>
+                            </div><!-- /.right -->
+                          </div><!-- /.col s12 -->
+                        </div><!-- /.row -->
+                      </div><!-- /.card-content -->
+                    </div><!-- /.card -->
+                  </div><!-- /.col s12 -->
+                </div><!-- /.row -->               
+
+                <div class="row">
+                  <div class="col s12">
+                    <div class="card">
+                      <div class="card-content">
+                        <h6 class="header"><span class="strong">Patient Logs</span> <small><em><a href="<?=base_url('patients/view/'.$info['id'].'/logs')?>" class="right">[ View All Logs ]</a></em></small></h6><!-- /.header -->
                         <table class="bordered">
-                        <?php if ($cases): ?>
-                        <?php foreach ($cases as $cse): ?>
+                        <?php if ($logs): ?>
+                        <?php foreach ($logs as $log): ?>
                           <tr>
-                            <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>">
-                                <?=$cse['title']?>                              
-                                <?php if ($cse['status'] == 3): ?>
-                                  <span class="badge-label grey darken-3">Cancelled</span>     
-                                <?php elseif($cse['status'] == 1): ?>
-                                  <span class="badge-label green darken-3">Served</span>                                   
-                                <?php else: ?> 
-                                  <span class="badge-label red darken-3">Pending</span> 
-                                <?php endif ?>
-                            </a></td>
-                            <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>"><?=nice_date(($cse['created_at']), 'M. d, Y')?></a></td>
+                            <td><span class="badge-label pink darken-1"><?=$log['user']?></span></td>
+                            <td><?=$log['action']?></td>
+                            <td><small><?=$log['date_time']?></small></td>
                           </tr>
                         <?php endforeach; ?>
                         <?php else: ?>
                           <tr>
-                            <td>No Case Found!</td>
+                            <td>No Logs Found!</td>
                           </tr>
                         <?php endif; ?>                      
                         </table><!-- /.bordered -->
+
                       </div><!-- /.card-content -->
                     </div><!-- /.card -->
-                  </div><!-- /.col s12 -->
-                </div><!-- /.row -->
-
-                <div class="row">
-                  <div class="col s12">                                                 
-                     <div class="card">
-                       <div class="card-content">
-                          <h6 class="header strong">Options</h6><!-- /.header -->
-                          <table class="centered">
-                            <tr>
-                              <td><a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-av-my-library-books left"></i></a></td>
-                            </tr>
-                            <tr>
-                              <td><a href="#UpdateModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-editor-border-color left"></i></a></td>
-                            </tr>
-                            <tr>
-                              <td><a href="#deleteModal" class="modal-trigger btn waves-effect red">Delete<i class="mdi-action-delete left"></i></a></td>
-                            </tr>
-                          </table>                           
-                       </div><!-- /.card-content -->
-                      </div><!-- /.card -->                         
                   </div><!-- /.col s12 -->
                 </div><!-- /.row -->
 

@@ -36,11 +36,12 @@
           <div class="container">
             <div class="row">
               <div class="col s12 m12 l12">
+                <h5 class="breadcrumbs-title"><?=$title?></h5>
                 <ol class="breadcrumb">
                     <li><a href="<?=base_url()?>">Dashboard</a></li>
                     <li><a href="<?=base_url('patients')?>">Patients</a></li>
                     <li><a href="<?=base_url('patients/view/'.$info['id'])?>"><?=$info['fullname'] . ' ' . $info['lastname']?></a></li>
-                    <li class="active"><?=$title?></li>
+                    <li class="active">Logs</li>
                 </ol>
               </div>
             </div>
@@ -79,79 +80,30 @@
               </div>
             </div>
             
-            <div class="row">
-               <div class="col s12 l8">
-                 <h5 class="header">Case Information : <?=$case['title']?></h5><!-- /.header -->
-                 <table class="bordered striped">
-                   <tr>
-                     <th width="20%">Patient Name:</th>
-                     <td><?=$info['fullname'] . ' ' . $info['lastname']?></td>
-                   </tr>
-                   <tr>
-                     <th>Date of Entry:</th>
-                     <td><?=nice_date($case['created_at'], 'M. d, Y')?></td>
-                   </tr>
-                   <tr>
-                     <th>Age of Entry:</th>
-                     <td><?=getAge($info['birthdate'], mysql_to_unix($case['created_at']))?></td>
-                   </tr>
-                   <tr>
-                     <th>Weight (kg):</th>
-                     <td><?=$case['weight']?></td>
-                   </tr>
-                   <tr>
-                     <th>Height (cm):</th>
-                     <td><?=$case['height']?></td>
-                   </tr>
-                   <tr>
-                     <th colspan="2">Description:</th>
-                   </tr>
-                   <tr>
-                     <td colspan="2"><?=$case['description']?></td>
-                   </tr>
-                 </table><!-- /.bordered striped -->    
-                 <p>
-                  <small>
-                    <em>
-                      Registered: <?=$case['created_at']?>
-                      <?php if ($case['created_at'] != $case['updated_at']): ?>
-                        <span class="right">Updated: <?=$case['updated_at']?></span>
-                      <?php endif ?>
-                    </em>
-                  </small>
-                  </p>    
-               </div><!-- /.col s12 l8 -->
-               <div class="col s12 l4">
-                 <div class="card">
-                   <div class="card-content">
-                      <h6 class="header strong">Options</h6><!-- /.header -->
-                      <div class="row">
-                        <a href="#deleteModal" class="modal-trigger btn waves-effect green col s8 offset-s2">Add Prescription</a>  
-                      </div><!-- /.row -->    
-                      <br/>    
-                      <div class="row">
-                        <a href="#deleteModal" class="modal-trigger btn waves-effect amber col s8 offset-s2">Change Status</a>   
-                      </div><!-- /.row -->        
-                   </div><!-- /.card-content -->
-                 </div><!-- /.card -->
-
-                 <table class="bordered card">
-                    <thead>
-                      <tr>
-                        <th>Prescriptions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><a href="#">asdasdasd</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">asdasdasd</a></td>
-                      </tr>
-                    </tbody>
-                 </table><!-- /.striped bordered -->
-               </div><!-- /.col s12 l4 -->
-             </div><!-- /.row --> 
+            <table class="bordered striped">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Action</th>
+                  <th>Date Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if ($logs): ?>
+                  <?php foreach ($logs as $log): ?>
+                    <tr>
+                      <td><span class="badge-label pink darken-1"><?=$log['user']?></span></td>
+                      <td><?=$log['action']?></td>
+                      <td><?=$log['date_time']?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                  <?php else: ?>
+                    <tr>
+                      <td>No Logs Found!</td>
+                    </tr>
+                  <?php endif; ?>  
+              </tbody>
+            </table><!-- /.bordered striped -->
          
           </div>
         </div>

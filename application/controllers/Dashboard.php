@@ -59,11 +59,43 @@ class Dashboard extends CI_Controller {
 				if($this->input->post('newpatient')) {
 					$this->patient_model->create_patient(); // Save New Patient
 					$patient_id = $this->db->insert_id(); //fetch user_id
+
+					//Log Data Array
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'patient',
+						'tag_id'	=> 	$patient_id,
+						'action' 	=> 	'Patient Registered'
+						);
+					///////////
 				} else {
 					$patient_id = cleanId($this->input->post('patient_id'));
 				}
 
 				if($this->case_model->create_case($patient_id)) {
+
+					$case_id = $this->db->insert_id(); //fetch last insert case Row ID
+
+					// Save Log Data ///////////////////			
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'case',
+						'tag_id'	=> 	$case_id,
+						'action' 	=> 	'Case Added'
+						);
+
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'patient',
+						'tag_id'	=> 	$patient_id,
+						'action' 	=> 	'Added New Case : `'.$this->input->post('title').'`'						
+						);
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
 					$this->session->set_flashdata('success', 'Success! Case Submitted!');					
 				} else {
 					$this->session->set_flashdata('error', 'Oops! Error occured!');					

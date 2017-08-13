@@ -7,7 +7,7 @@ class Cases extends CI_Controller {
 	public function __construct()	{
 		parent::__construct();		
        $this->load->model('user_model');
-       $this->load->model('patient_model');
+       $this->load->model('case_model');
 	}	
 
 
@@ -35,7 +35,32 @@ class Cases extends CI_Controller {
 
 				$patient_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row				
 
-				if($this->patient_model->create_case($patient_id)) {
+				if($this->case_model->create_case($patient_id)) {
+
+					$case_id = $this->db->insert_id(); //fetch last insert case Row ID
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'patient',
+						'tag_id'	=> 	$patient_id,
+						'action' 	=> 	'Added New Case : `'.$this->input->post('title').'`'
+						);
+
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'case',
+						'tag_id'	=> 	$case_id,
+						'action' 	=> 	'Case Added'
+						);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
 					$this->session->set_flashdata('success', 'Case Created!');
 					redirect($_SERVER['HTTP_REFERER'], 'refresh');
 				}
@@ -48,10 +73,6 @@ class Cases extends CI_Controller {
 		}
 
 	}
-
-
-
-
 
 
 }

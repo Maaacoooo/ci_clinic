@@ -165,7 +165,9 @@ class Patients extends CI_Controller {
 
 						} elseif(!$this->uri->segment(6)) {
 							//load CASE View
-							$data['title'] =  $data['case']['title'];	//Page title							
+							$data['title'] =  $data['case']['title'];	//Page title		
+							$data['logs']	= $this->logs_model->fetch_logs('case', $case_id, 0);
+
 							$this->load->view('case/view', $data);	
 						} else {
 							show_404();

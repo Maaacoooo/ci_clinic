@@ -9,6 +9,7 @@ class Patients extends CI_Controller {
        $this->load->model('user_model');
        $this->load->model('patient_model');
        $this->load->model('case_model');
+       $this->load->model('prescription_model');
 	}	
 
 
@@ -152,9 +153,16 @@ class Patients extends CI_Controller {
 
 							} elseif($this->uri->segment(7) == 'view') {
 								$prescription_id = $this->uri->segment(8);
+
+								$data['prescription'] = $this->prescription_model->view_prescription($prescription_id, $case_id);
 								//prescription								
-								if($prescription_id) {
-									echo $prescription_id;
+								if($data['prescription']) {								
+
+									//load prescription/create
+									$data['title'] =  'Prescription: ' . $data['prescription']['title'];	//Page title		
+									$data['items'] = $this->prescription_model->fetch_prescription_items($prescription_id);						
+									$this->load->view('prescription/create', $data);
+
 								} else {
 									show_404();
 								}
@@ -166,6 +174,7 @@ class Patients extends CI_Controller {
 						} elseif(!$this->uri->segment(6)) {
 							//load CASE View
 							$data['title'] =  $data['case']['title'];	//Page title		
+							$data['prescriptions'] = $this->prescription_model->fetch_case_prescription($case_id);
 							$data['logs']	= $this->logs_model->fetch_logs('case', $case_id, 0);
 
 							$this->load->view('case/view', $data);	

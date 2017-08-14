@@ -150,12 +150,17 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td><a href="#">asdasdasd</a></td>
-                          </tr>
-                          <tr>
-                            <td><a href="#">asdasdasd</a></td>
-                          </tr>
+                          <?php if ($prescriptions): ?>
+                            <?php foreach ($prescriptions as $pres): ?>
+                              <tr>
+                                <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$case['id'].'/prescription/view/'.$pres['id'])?>"><?=$pres['title'].' - '.$pres['created_at']?></a></td>
+                              </tr>
+                            <?php endforeach ?>   
+                          <?php else: ?>
+                              <tr>
+                                <td>No Prescriptions Found!</td>
+                              </tr>                         
+                          <?php endif ?>
                         </tbody>
                      </table><!-- /.striped bordered -->
                    </div><!-- /.col s12 -->
@@ -204,16 +209,28 @@
 
 
   <!-- Modals -->
-            <div id="addPrescription" class="modal">
-              <?=form_open('patients/delete')?>
-                <div class="modal-content red darken-4 white-text">
-                    <p>Are you sure to move the record of <span class="strong"><?=$info['fullname'] . ' ' . $info['lastname']?></span> to <strong>TRASH?</strong>?</p>
-                    <p>You <span class="strong">CANNOT UNDO</span> this action.</p>
-                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['id'])?>" />
+            <div id="addPrescription" class="modal modal-fixed-footer">
+              <?=form_open('prescription/create')?>
+                <div class="modal-content">
+                    <div class="row">
+                      <div class="col s12">
+                        <h5 class="header">Add Prescription</h5><!-- /.header -->
+                        <p>When adding a prescription, please input the title(optional) and the description of the prescription.</p>
+                      </div><!-- /.col s12 -->
+                      <div class="input-field col s12">
+                        <input type="text" name="title" id="title" class="validate" placeholder="(Optional)" />
+                        <label for="title">Title</label>
+                      </div><!-- /.input-field col s12 -->
+                      <div class="input-field col s12">
+                        <textarea name="description" id="" cols="30" rows="10" class="ckeditor"></textarea>
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($case['id'])?>" />
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
                   </div>
                   <div class="modal-footer grey darken-4">
                     <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
-                    <button type="submit" class="waves-effect waves-red btn red modal-action">Move to Trash</button>
+                    <button type="submit" class="waves-effect waves-red btn green modal-action">Add Prescription</button>
                   </div>
               <?=form_close()?>
             </div>
@@ -225,6 +242,8 @@
     <?php $this->load->view('inc/footer'); ?>
 
     <?php $this->load->view('inc/js'); ?>
+    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
+    
    
 </body>
 </html>

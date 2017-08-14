@@ -8,6 +8,8 @@
     <title><?=$title?> &middot; <?=$site_title?></title>
 
     <?php $this->load->view('inc/css'); ?>
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.theme.min.css" rel="stylesheet">
 
 
 </head>
@@ -80,6 +82,24 @@
               <?php } ?> 
               </div>
             </div>
+
+            <div class="row">
+              <div class="col s12">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" name="title" id="title" class="validate" value="<?=$prescription['title']?>" />
+                        <label for="title">Title</label>
+                      </div><!-- /.input-field col s12 -->
+                      <div class="input-field col s12">
+                        <textarea name="description" id="" cols="30" rows="10" class="ckeditor"><?=$prescription['description']?></textarea>
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                  </div><!-- /.card-content -->
+                </div><!-- /.card -->
+              </div><!-- /.col s12 -->
+            </div><!-- /.row -->
             
             <div class="row">
               <div class="col s12">
@@ -87,7 +107,7 @@
                   <div class="card-content">
                       <div class="row">
                         <div class="input-field col s10">
-                          <input type="text" name="" id="" class="validate" />
+                          <input type="text" name="" id="item" class="validate" />
                           <label for="">Item</label>
                         </div><!-- /.input-field -->
                         <div class="input-field col s2">
@@ -100,19 +120,36 @@
                           <table class="bordered striped">
                             <thead>
                               <tr>
+                                <th width="5"></th>
                                 <th>Item Name</th>
-                                <th width="5%">Qty</th>
+                                <th width="15%">Qty</th>
                                 <th>Remarks</th>
                                 <th></th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>Maco</td>
-                                <td>10</td>
-                                <td>10 times a week</td>
-                                <td></td>
-                              </tr>
+                              <?php if ($items): $x=1; ?>
+                                <?php foreach ($items as $item): ?>
+                                  <tr>
+                                    <td><?=$x++?>.</td>
+                                    <td>
+                                      <input type="text" name="itemname[]" id="" class="validate" value="<?=$item['item']?>"/>
+                                    </td>
+                                    <td>
+                                      <input type="number" name="qty[]" id="" class="validate" value="<?=$item['qty']?>"/>
+                                    </td>
+                                    <td>
+                                      <input type="text" name="remark[]" id="" class="validate" value="<?=$item['remark']?>"/>
+                                    </td>
+                                    <td>                                    
+                                    </td>
+                                  </tr>
+                                <?php endforeach ?>
+                              <?php else: ?>
+                                <tr>
+                                  <td colspan="4">No items found!</td>
+                                </tr>
+                              <?php endif ?>
                             </tbody>
                           </table><!-- /.bordered striped -->
                         </div><!-- /.col s12 -->
@@ -141,6 +178,16 @@
     <?php $this->load->view('inc/footer'); ?>
 
     <?php $this->load->view('inc/js'); ?>
+    <script src="<?php echo base_url();?>assets/js/jquery-ui.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
+    <script type="text/javascript">
+      $(function(){
+      $("#item").autocomplete({    
+        source: "<?php echo base_url('index.php/prescription/autocomplete');?>" // path to the get_birds method
+      });
+    });
+    </script>
+
    
 </body>
 </html>

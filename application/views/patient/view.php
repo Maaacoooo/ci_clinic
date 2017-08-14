@@ -357,6 +357,8 @@
     <?php $this->load->view('inc/footer'); ?>
 
     <?php $this->load->view('inc/js'); ?>
+    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
+    
    
 </body>
 </html>

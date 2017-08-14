@@ -15,4 +15,3 @@
     <link href="<?=base_url('assets/js/plugins/jvectormap/jquery-jvectormap.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="<?=base_url('assets/js/plugins/chartist-js/chartist.min.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
 
-    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>

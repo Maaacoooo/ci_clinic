@@ -88,6 +88,8 @@
                 <div class="card">
                   <div class="card-content">
                     <div class="row">
+                      <?=form_open('prescription/update')?>
+                      <h5 class="header">Prescription</h5><!-- /.header -->
                       <div class="input-field col s12">
                         <input type="text" name="title" id="title" class="validate" value="<?=$prescription['title']?>" />
                         <label for="title">Title</label>
@@ -95,6 +97,11 @@
                       <div class="input-field col s12">
                         <textarea name="description" id="" cols="30" rows="10" class="ckeditor"><?=$prescription['description']?></textarea>
                       </div><!-- /.input-field col s12 -->
+                      <div class="input-field col s12">
+                        <button type="submit" class="btn waves-effect amber right">Update Prescription</button>
+                      </div><!-- /.input-field col s12 -->
+                        <input type="hidden" name="id" value="<?=$this->encryption->encrypt($prescription['id'])?>" />                      
+                      <?=form_close()?>
                     </div><!-- /.row -->
                   </div><!-- /.card-content -->
                 </div><!-- /.card -->
@@ -106,13 +113,17 @@
                 <div class="card">
                   <div class="card-content">
                       <div class="row">
+                        <p>To remove an item, set the quantity to 0.</p>
+                        <?=form_open('prescription/add_item')?>
                         <div class="input-field col s10">
-                          <input type="text" name="" id="item" class="validate" />
+                          <input type="text" name="item" id="item" class="validate" />
                           <label for="">Item</label>
                         </div><!-- /.input-field -->
+                        <input type="hidden" name="id" value="<?=$this->encryption->encrypt($prescription['id'])?>" />
                         <div class="input-field col s2">
                           <button type="submit" class="btn waves-effect green">Add item</button>
                         </div><!-- /.input-field -->
+                        <?=form_close()?>
                       </div><!-- /.row -->
                       <div class="divider"></div><!-- /.divider -->
                       <div class="row">
@@ -123,28 +134,29 @@
                                 <th width="5"></th>
                                 <th>Item Name</th>
                                 <th width="15%">Qty</th>
-                                <th>Remarks</th>
-                                <th></th>
+                                <th>Remarks</th>                                
                               </tr>
                             </thead>
                             <tbody>
                               <?php if ($items): $x=1; ?>
+                                <?=form_open('prescription/update_items')?>
                                 <?php foreach ($items as $item): ?>
                                   <tr>
                                     <td><?=$x++?>.</td>
                                     <td>
-                                      <input type="text" name="itemname[]" id="" class="validate" value="<?=$item['item']?>"/>
+                                      <input type="text" name="item[]" id="" class="validate" value="<?=$item['item']?>"/>
                                     </td>
                                     <td>
                                       <input type="number" name="qty[]" id="" class="validate" value="<?=$item['qty']?>"/>
                                     </td>
                                     <td>
                                       <input type="text" name="remark[]" id="" class="validate" value="<?=$item['remark']?>"/>
-                                    </td>
-                                    <td>                                    
-                                    </td>
-                                  </tr>
+                                    </td>                                    
+                                  </tr>                                  
                                 <?php endforeach ?>
+                                <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($prescription['id'])?>" />
+                                <button type="submit" class="hide">submit</button>
+                                <?=form_close()?>
                               <?php else: ?>
                                 <tr>
                                   <td colspan="4">No items found!</td>

@@ -170,7 +170,12 @@
                 </div><!-- /.card -->
               </div><!-- /.col s12 -->
             </div><!-- /.row -->
-         
+            
+            <div class="row">
+              <div class="col s12">
+                <a href="<?=current_url()?>/print" class="btn-flat waves-effect light-blue white-text right" target="_blank"><i class="mdi-communication-comment left"></i> Print Prescription</a>
+              </div><!-- /.col s12 -->
+            </div><!-- /.row -->
           </div>
         </div>
         <!--end container-->

@@ -160,8 +160,19 @@ class Patients extends CI_Controller {
 
 									//load prescription/create
 									$data['title'] =  'Prescription: ' . $data['prescription']['title'];	//Page title		
-									$data['items'] = $this->prescription_model->fetch_prescription_items($prescription_id);						
-									$this->load->view('prescription/create', $data);
+									$data['items'] = $this->prescription_model->fetch_prescription_items($prescription_id);			
+
+									if($this->uri->segment(9) == 'print') {
+										$this->load->view('prescription/print', $data);										
+									} else {
+										//Prescription View Restriction
+										if($data['prescription']['created_by'] == $data['user']['username']) {
+											$this->load->view('prescription/create', $data);
+										} else {
+											$this->load->view('prescription/view', $data);										
+										}	
+									}	
+									
 
 								} else {
 									show_404();

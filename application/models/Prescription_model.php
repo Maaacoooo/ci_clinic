@@ -138,9 +138,19 @@ Class Prescription_model extends CI_Model
      */
     function view_prescription($id, $case_id) {
 
-            $this->db->select('*');        
-            $this->db->where('id', $id);
-            $this->db->where('case_id', $case_id);          
+            $this->db->select('
+            users.name as issuer,
+            prescription.id,
+            prescription.title,
+            prescription.description,
+            prescription.remarks,            
+            prescription.created_by,
+            prescription.created_at,
+            prescription.updated_at            
+                '); 
+            $this->db->join('users', 'users.username = prescription.created_by', 'left');       
+            $this->db->where('prescription.id', $id);
+            $this->db->where('prescription.case_id', $case_id);          
             $this->db->limit(1);
 
             $query = $this->db->get('prescription');

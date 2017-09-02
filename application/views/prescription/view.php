@@ -36,10 +36,12 @@
           <div class="container">
             <div class="row">
               <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title"><?=$title?></h5>
+                <h5 class="title">Prescription</h5><!-- /.title -->
                 <ol class="breadcrumb">
                     <li><a href="<?=base_url()?>">Dashboard</a></li>
-                    <li><a href="<?=base_url()?>">Pages</a></li>
+                    <li><a href="<?=base_url('patients')?>">Patients</a></li>
+                    <li><a href="<?=base_url('patients/view/'.$info['id'])?>"><?=$info['fullname'] . ' ' . $info['lastname']?></a></li>
+                    <li><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$case['id'])?>"><?=$case['title']?></a></li>
                     <li class="active"><?=$title?></li>
                 </ol>
               </div>
@@ -77,12 +79,89 @@
                     </div>
               <?php } ?> 
               </div>
-            </div>
-            
-            <p class="caption">A Simple Blank Page to use it for your custome design and elements.</p>
-            <div class="divider"></div>   
-         
+            </div>         
           </div>
+
+          <div class="section">
+            <div class="row">
+              <div class="col s12">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" name="title" id="title" value="<?=$prescription['title']?>" class="validate" readonly="" />
+                        <label for="title">Prescription Title</label>
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <textarea name="description" id="description" readonly="" cols="30" rows="10" class="materialize-textarea"><?=strip_tags($prescription['description'])?></textarea>
+                        <label for="description">Description / Notes</label>
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                      <div class="col s12">
+                        <table class="card striped bordered">
+                          <thead>                            
+                            <tr>
+                              <th width="1%"></th>
+                              <th>Item Name</th>
+                              <th width="10%">QTY</th>
+                              <th>Remarks</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              <?php if ($items): $x=1; ?>
+                                <?=form_open('prescription/update_items')?>
+                                <?php foreach ($items as $item): ?>
+                                  <tr>
+                                    <td><?=$x++?>.</td>
+                                    <td>
+                                  <?=$item['item']?>
+                                    </td>
+                                    <td>
+                                      <?=$item['qty']?>
+                                    </td>
+                                    <td>
+                                     <?=$item['remark']?>
+                                    </td>                                    
+                                  </tr>                                  
+                                <?php endforeach ?>                               
+                                <?=form_close()?>
+                              <?php else: ?>
+                                <tr>
+                                  <td colspan="4">No items found!</td>
+                                </tr>
+                              <?php endif ?>
+                            </tbody>
+                        </table><!-- /.striped bordered -->
+                      </div><!-- /.col s12 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                      <div class="col s12 input-field">
+                        <input type="text" name="issue" id="issue" value="<?=$prescription['issuer']?>" class="validate" readonly="" />
+                        <label for="issue">Issued by</label>
+                      </div><!-- /.col s12 input-field -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                      <div class="col s12">
+                        <span class="badge-label green darken-3">Registered: <?=$prescription['created_at']?></span>
+                        <?php if ($prescription['updated_at']): ?>
+                        <span class="badge-label grey darken-3 right">Last Updated: <?=$prescription['updated_at']?></span>                          
+                        <?php endif ?>
+                      </div><!-- /.col s12 -->
+                    </div><!-- /.row -->
+                  </div><!-- /.card-content -->
+                </div><!-- /.card -->
+              </div><!-- /.col s12 -->
+            </div><!-- /.row -->
+
+            <div class="row">
+              <div class="col s12">
+                <a href="<?=current_url()?>/print" class="btn-flat waves-effect light-blue white-text right" target="_blank"><i class="mdi-communication-comment left"></i> Print</a>
+              </div><!-- /.col s12 -->
+            </div><!-- /.row -->
+          </div><!-- /.section -->
         </div>
         <!--end container-->
       </section>

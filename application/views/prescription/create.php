@@ -144,6 +144,7 @@
                                   <tr>
                                     <td><?=$x++?>.</td>
                                     <td>
+                                      <input type="hidden" name="id[]" id="" class="validate" value="<?=$this->encryption->encrypt($item['id'])?>"/>                                    
                                       <input type="text" name="item[]" id="" class="validate" value="<?=$item['item']?>"/>
                                     </td>
                                     <td>

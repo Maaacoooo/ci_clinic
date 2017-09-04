@@ -64,7 +64,13 @@ class Dashboard extends CI_Controller {
 			
 			if($this->form_validation->run() == FALSE)	{
 
-				$this->load->view('dashboard/dashboard', $data);
+				if($data['user']['usertype'] == 'Doctor') {
+					//Load Doctor view
+					$this->load->view('dashboard/doctor_dashboard', $data);					
+				} else {
+					//Load Assistant View
+					$this->load->view('dashboard/assistant_dashboard', $data);
+				}
 
 			} else {
 

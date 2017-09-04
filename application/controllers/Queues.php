@@ -11,6 +11,28 @@ class Queues extends CI_Controller {
 	}	
 
 
+	public function index() {
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			$data['title'] = 'Queues';
+			$data['site_title'] = APP_NAME;
+			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
+
+			$data['serving'] = $this->queue_model->fetch_queues(1);
+			$data['queue'] = $this->queue_model->fetch_queues(0);
+
+			$this->load->view('queue/queue_page', $data);
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
 
 
 	public function next_queue() {
@@ -72,7 +94,6 @@ class Queues extends CI_Controller {
 
 			}
 			
-		
 
 		} else {
 

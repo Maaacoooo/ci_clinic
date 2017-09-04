@@ -50,6 +50,7 @@
                       </li>                     
                   </ul>
               </li>  
+              <li class="bold"><a href="<?=base_url('queues')?>" class="waves-effect waves-cyan" target="_blank"><i class="mdi-action-label"></i> Queues</a></li> 
               <li class="li-hover"><div class="divider"></div></li>             
           </ul>         
           <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only grey darken-4"><i class="mdi-navigation-menu" ></i></a>

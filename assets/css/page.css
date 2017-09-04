@@ -245,3 +245,13 @@ span.badge-label {
 	width: 60px;
 	max-height: 60px;
 }
+
+
+h5.badge-label {
+	color: #fff;
+	display: inline;
+	font-weight: 400;
+	padding: 2px 10px 2px 10px;
+	border-radius: 3px;
+	margin-right: 30px;
+}

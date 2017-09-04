@@ -89,6 +89,12 @@
                   <div class="card-content">
                     <div class="row">
                       <div class="input-field col s12">
+                        <input type="text" name="case" id="case" value="#<?=prettyID($case['id'])?>- <?=$case['title']?>" class="validate" readonly="" />
+                        <label for="case">Case</label>
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                      <div class="input-field col s12">
                         <input type="text" name="title" id="title" value="<?=$prescription['title']?>" class="validate" readonly="" />
                         <label for="title">Prescription Title</label>
                       </div><!-- /.input-field col s12 -->

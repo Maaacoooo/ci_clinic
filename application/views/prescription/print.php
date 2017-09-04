@@ -2,88 +2,21 @@
 <html>
 <head>
 	<title><?=$title?> &middot; <?=$site_title?></title>
-	<style type="text/css">
-		
-		html {
-			display: block;
-		}
-		body {
-			font-family: Arial;
-		}
-
-		.content {
-			width: 100%;
-			display: block;
-			border-bottom: 1px #cecece solid;
-			padding: 10px;
-		}
-
-		.content-title {
-			font-weight: bold;
-		}
-
-		table.items {
-			width: 100%;
-			border: 1px #cecece solid;
-			border-collapse: collapse;
-		}
-
-		table.items th, table.items td {
-			border: 1px #cecece solid;	
-			padding: 2px 10px 2px 10px;		
-		}
-
-		table.items th {
-			background: #eeeeee;
-		}
-
-		.text-center {
-			text-align: center;
-		}
-		
-		
-		.signature-container {
-			width: 100%;
-			display: block;
-		}
-
-		.signature {
-			margin-top: 50px;
-			margin-left: 50px;
-			margin-right: 80px;
-			display: inline-block;
-		}
-
-		.signee {
-			display: block;
-			width: 100%;
-			padding: 5px 25% 5px 25%;
-			border-bottom: 1px #212121 solid;
-			text-align: center;
-		}
-
-		.signee-title {
-			text-align: center;
-			width: 100%;
-			padding: 5px 25% 5px 25%;
-			display: block;
-		}
-
-		.print-stamp {
-			width: 100%;
-			display: block;
-			text-align: right;
-		}
-	</style>
+	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
 </head>
 <body>
 	
-	<div class="container">
+	<?php $this->load->view('inc/print_header');?>
 
-		<h3>Prescription: <?=prettyID($prescription['id'])?></h3>
+	<div class="container">
+		<h3>Prescription: #<?=prettyID($prescription['id'])?></h3>
 		<div class="content">
 			<span class="content-title">Patient Name: </span>
 			<span class="content-detail"><?=$info['fullname'] . ' ' . $info['lastname']?></span>
+		</div><!-- /.content -->
+		<div class="content">
+			<span class="content-title">Case: </span>
+			<span class="content-detail">Case #<?=prettyID($case['id'])?></span>
 		</div><!-- /.content -->
 		<div class="content">
 			<span class="content-title">Prescription Title: </span>

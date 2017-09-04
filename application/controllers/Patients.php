@@ -76,13 +76,26 @@ class Patients extends CI_Controller {
 			$this->form_validation->set_rules('lname', 'Last Name', 'trim|required');   
 			$this->form_validation->set_rules('mname', 'Middle Name', 'trim|required');   
 			$this->form_validation->set_rules('fname', 'Full Name', 'trim|required');   
-			$this->form_validation->set_rules('bplace', 'Birthplace', 'trim|required');   
-			$this->form_validation->set_rules('sex', 'Sex', 'trim|required');   
-			$this->form_validation->set_rules('bdate', 'Birthdate', 'trim|required');   
-			$this->form_validation->set_rules('addr', 'Address', 'trim|required');   
+			$this->form_validation->set_rules('sex', 'Sex', 'trim|required');    
 			$this->form_validation->set_rules('contactno', 'Contact Number', 'trim|required');   
-			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');   
-			$this->form_validation->set_rules('remarks', 'Remarks', 'trim');   		
+			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');    		
+
+			$this->form_validation->set_rules('bplace_bldg', 'Birthplace Bldg', 'trim');   
+			$this->form_validation->set_rules('bplace_strt', 'Birthplace Street', 'trim');   
+			$this->form_validation->set_rules('bplace_brgy', 'Birthplace Barangay', 'trim');   
+			$this->form_validation->set_rules('bplace_city', 'Birthplace City', 'trim|required');   
+			$this->form_validation->set_rules('bplace_prov', 'Birthplace Province', 'trim|required');   
+			$this->form_validation->set_rules('bplace_zip', 'Birthplace ZIP', 'trim|required');   
+			$this->form_validation->set_rules('bplace_country', 'Birthplace Country', 'trim|required');   
+
+			$this->form_validation->set_rules('addr_bldg', 'Present Address Bldg', 'trim|required');   
+			$this->form_validation->set_rules('addr_strt', 'Present Address Street', 'trim|required');   
+			$this->form_validation->set_rules('addr_brgy', 'Present Address Barangay', 'trim|required');   
+			$this->form_validation->set_rules('addr_city', 'Present Address City', 'trim|required');   
+			$this->form_validation->set_rules('addr_prov', 'Present Address Province', 'trim|required');   
+			$this->form_validation->set_rules('addr_zip', 'Present Address ZIP', 'trim|required');   
+			$this->form_validation->set_rules('addr_country', 'Present Address Country', 'trim|required');   
+
 
 				if($this->form_validation->run() == FALSE)	{
 					$this->load->view('patient/create', $data);
@@ -91,17 +104,53 @@ class Patients extends CI_Controller {
 					//Proceed saving				
 					if($this->patient_model->create_patient()) {			
 						
+						$patient_id = $this->db->insert_id(); // get patient ID
+
 						// Save Log Data ///////////////////
 						$log_user 	= $data['user']['username'];
 						$log_tag 	= 'patient';	
-						$log_tagID 	= $this->db->insert_id();	
+						$log_tagID 	= $patient_id;	
 						$log_action	= 'Patient Registered';		
 
 						$this->logs_model->create_log($log_user, $log_tag, $log_tagID, $log_action);					
 						////////////////////////////////////
+						
+						// Insert Address Data /////////////////////
+						// birthplace
+						$this->patient_model->create_address(
+							$patient_id,
+							0,
+							$this->input->post('bplace_bldg'),
+							$this->input->post('bplace_strt'),
+							$this->input->post('bplace_brgy'),
+							$this->input->post('bplace_city'),
+							$this->input->post('bplace_prov'),
+							$this->input->post('bplace_zip'),
+							$this->input->post('bplace_country')
+						);
+						//address
+						$this->patient_model->create_address(
+							$patient_id,
+							1,
+							$this->input->post('addr_bldg'),
+							$this->input->post('addr_strt'),
+							$this->input->post('addr_brgy'),
+							$this->input->post('addr_city'),
+							$this->input->post('addr_prov'),
+							$this->input->post('addr_zip'),
+							$this->input->post('addr_country')
+						);
+
+
+						// Insert Contacts Data ///////////////////////
+						//email						
+						$this->patient_model->create_contacts($patient_id, 1, $this->input->post('email'));
+						//mobile						
+						$this->patient_model->create_contacts($patient_id, 0, $this->input->post('contactno'));
 					
 						$this->session->set_flashdata('success', 'Succes! Patient Registered!');
 						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
 					} else {
 						//failure
 						$this->session->set_flashdata('error', 'Oops! Error occured!');
@@ -127,6 +176,12 @@ class Patients extends CI_Controller {
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 			
 			$data['info'] = $this->patient_model->view_patient($patient_id);
+			$data['bplace'] = $this->patient_model->fetch_address($patient_id, 0);
+			$data['addr'] = $this->patient_model->fetch_address($patient_id, 1);
+
+			$data['email'] = $this->patient_model->fetch_contacts($patient_id, 1);
+			$data['mobile'] = $this->patient_model->fetch_contacts($patient_id, 0);
+
 
 			//check if it is partially deleted
 			if((!$data['info']['is_deleted']) && $data['info'] && $patient_id) {
@@ -243,13 +298,9 @@ class Patients extends CI_Controller {
 			$this->form_validation->set_rules('id', 'ID', 'trim|required');   		  
 			$this->form_validation->set_rules('lname', 'Last Name', 'trim|required');   
 			$this->form_validation->set_rules('mname', 'Middle Name', 'trim|required');   
-			$this->form_validation->set_rules('fname', 'Full Name', 'trim|required');   
-			$this->form_validation->set_rules('bplace', 'Birthplace', 'trim|required');   
+			$this->form_validation->set_rules('fname', 'Full Name', 'trim|required');     
 			$this->form_validation->set_rules('sex', 'Sex', 'trim|required');   
-			$this->form_validation->set_rules('bdate', 'Birthdate', 'trim|required');   
-			$this->form_validation->set_rules('addr', 'Address', 'trim|required');   
-			$this->form_validation->set_rules('contactno', 'Contact Number', 'trim|required');   
-			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');   
+			$this->form_validation->set_rules('bdate', 'Birthdate', 'trim|required');    
 			$this->form_validation->set_rules('remarks', 'Remarks', 'trim');
 		 
 		   if($this->form_validation->run() == FALSE)	{
@@ -324,6 +375,184 @@ class Patients extends CI_Controller {
 			$this->session->set_flashdata('error', 'You need to login!');
 			redirect('dashboard/login', 'refresh');
 		}
+
+	}
+
+
+	public function delete_contact()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row		
+				$patient_id = $this->encryption->decrypt($this->input->post('pid')); //ID of the patient		
+				$tag = $this->encryption->decrypt($this->input->post('tag'));	
+
+
+				// Save Log Data ///////////////////
+				$log_user 	= $userdata['username'];
+				$log_tag 	= 'patient';	
+				$log_tagID 	= $patient_id;	
+				if($tag) {
+					$log_action	= 'Removed Email';	
+				} else {
+					$log_action	= 'Removed Contact Number';	
+				}	
+
+				$this->logs_model->create_log($log_user, $log_tag, $log_tagID, $log_action);	
+				//UPDATE lastupdate record 
+				$this->patient_model->last_update($patient_id);			
+				////////////////////////////////////		
+
+				if($this->patient_model->delete_contact($key_id)) {					
+					if($tag) {
+						$this->session->set_flashdata('success', 'Success! Email Removed!');
+					} else {
+						$this->session->set_flashdata('success', 'Success! Contact Number Removed!');
+					}
+
+					//redirect
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');					
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+
+	}
+
+
+	public function create_contact()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('pid', 'Patient ID', 'trim|required');   
+			$this->form_validation->set_rules('tag', 'TAG', 'trim|required');   
+			$this->form_validation->set_rules('details', 'Detail', 'trim|required');   
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$patient_id = $this->encryption->decrypt($this->input->post('pid')); //ID of the patient		
+				$tag = $this->encryption->decrypt($this->input->post('tag'));	
+
+
+				// Save Log Data ///////////////////
+				$log_user 	= $userdata['username'];
+				$log_tag 	= 'patient';	
+				$log_tagID 	= $patient_id;	
+				if($tag) {
+					$log_action	= 'Added Email';	
+				} else {
+					$log_action	= 'Added Contact Number';	
+				}	
+
+				$this->logs_model->create_log($log_user, $log_tag, $log_tagID, $log_action);		
+
+				//UPDATE lastupdate record 
+				$this->patient_model->last_update($patient_id);	
+				////////////////////////////////////		
+
+				if($this->patient_model->create_contacts($patient_id, $tag, $this->input->post('details'))) {					
+					if($tag) {
+						$this->session->set_flashdata('success', 'Success! Email Added!');
+					} else {
+						$this->session->set_flashdata('success', 'Success! Contact Number Added!');
+					}
+
+					//redirect
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');					
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+
+	public function update_address()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+			$this->form_validation->set_rules('pid', 'Patient ID', 'trim|required');   
+			$this->form_validation->set_rules('tag', 'TAG', 'trim|required');   
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$key_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row		
+				$patient_id = $this->encryption->decrypt($this->input->post('pid')); //ID of the patient		
+				$tag = $this->encryption->decrypt($this->input->post('tag'));	
+
+
+				// Save Log Data ///////////////////
+				$log_user 	= $userdata['username'];
+				$log_tag 	= 'patient';	
+				$log_tagID 	= $patient_id;	
+				if($tag) {
+					$log_action	= 'Updated Present Address';	
+				} else {
+					$log_action	= 'Updated Birthplace';	
+				}	
+
+				$this->logs_model->create_log($log_user, $log_tag, $log_tagID, $log_action);	
+				//UPDATE lastupdate record 
+				$this->patient_model->last_update($patient_id);			
+				////////////////////////////////////		
+
+				if($this->patient_model->update_address($key_id)) {					
+					if($tag) {
+						$this->session->set_flashdata('success', 'Success! Updated Present Address!');
+					} else {
+						$this->session->set_flashdata('success', 'Success! Updated Birthplace!');
+					}
+
+					//redirect
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');					
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
 
 	}
 

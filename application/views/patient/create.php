@@ -99,12 +99,8 @@
                         <label for="mname">Middle Name</label>
                      </div><!-- /.input-field col s4 l4 -->
                    </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s6">
-                        <input type="text" name="bplace" id="bplace" class="validate" value="<?=set_value('bplace')?>" required/>
-                        <label for="bplace">Birthplace</label>
-                     </div><!-- /.input-field col s6 -->
-                     <div class="input-field col s2">
+                   <div class="row">                     
+                     <div class="input-field col s4">
                         <select class="browser-default" name="sex" id="sex" required>
                           <option value="" disabled="" selected="">Sex</option>
                           <option value="1">Male</option>
@@ -112,14 +108,75 @@
                         </select>
                      </div><!-- /.input-field col s8 -->
                      <div class="input-field col s4">
-                        <input type="date" name="bdate" id="bdate" value="<?=set_value('bdate')?>" required/>                        
+                        <small>Birthdate</small>
+                        <input type="date" name="bdate" id="bdate" value="<?=set_value('bdate')?>" required/>    
                      </div><!-- /.input-field col s4 -->
-                   </div><!-- /.row -->             
-                   <div class="row">
-                     <div class="input-field col s12">
-                       <input type="text" name="addr" id="addr" class="validate" value="<?=set_value('addr')?>" required/>
-                       <label for="addr">Present Address</label>
-                     </div><!-- /.input-field col s12 -->
+                   </div><!-- /.row -->   
+                   <div class="row">                     
+                     <fieldset class="blue lighten-5">
+                        <legend class="strong">Birthplace</legend>
+                          <div class="input-field col s12 l5">
+                           <input type="text" name="bplace_bldg" id="bplace_bldg" class="validate" value="<?=set_value('bplace_bldg')?>" />
+                           <label for="bplace_bldg">Building / Block / House</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="bplace_strt" id="bplace_strt" class="validate" value="<?=set_value('bplace_strt')?>" />
+                           <label for="bplace_strt">Street</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="bplace_brgy" id="bplace_brgy" class="validate" value="<?=set_value('bplace_brgy')?>" />
+                           <label for="bplace_brgy">Barangay</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="bplace_city" id="bplace_city" class="validate" value="<?=set_value('bplace_city')?>" required/>
+                           <label for="bplace_city">City / Municipality</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="bplace_prov" id="bplace_prov" class="validate" value="<?=set_value('bplace_prov')?>" required/>
+                           <label for="bplace_prov">Province / Region</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l2">
+                           <input type="text" name="bplace_zip" id="bplace_zip" class="validate" value="<?=set_value('bplace_zip')?>" required/>
+                           <label for="bplace_zip">ZIP Code</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="bplace_country" id="bplace_country" class="validate" value="<?php if(set_value('bplace_country'))echo set_value('bplace_country'); else echo 'Philippines';?>" required/>
+                           <label for="bplace_country">Country</label>
+                         </div><!-- /.input-field col s12 -->
+                     </fieldset>
+                   </div><!-- /.row -->          
+                   <div class="row">                     
+                     <fieldset class=" green lighten-5">
+                        <legend class="strong">Present Address</legend>
+                          <div class="input-field col s12 l5">
+                           <input type="text" name="addr_bldg" id="addr_bldg" class="validate" value="<?=set_value('addr_bldg')?>" required/>
+                           <label for="addr_bldg">Building / Block / House</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="addr_strt" id="addr_strt" class="validate" value="<?=set_value('addr_strt')?>" required/>
+                           <label for="addr_strt">Street</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="addr_brgy" id="addr_brgy" class="validate" value="<?=set_value('addr_brgy')?>" required/>
+                           <label for="addr_brgy">Barangay</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="addr_city" id="addr_city" class="validate" value="<?=set_value('addr_city')?>" required/>
+                           <label for="addr_city">City / Municipality</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="addr_prov" id="addr_prov" class="validate" value="<?=set_value('addr_prov')?>" required/>
+                           <label for="addr_prov">Province / Region</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l2">
+                           <input type="text" name="addr_zip" id="addr_zip" class="validate" value="<?=set_value('addr_zip')?>" required/>
+                           <label for="addr_zip">ZIP Code</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="addr_country" id="addr_country" class="validate" value="<?php if(set_value('addr_country'))echo set_value('addr_country'); else echo 'Philippines';?>" required/>
+                           <label for="addr_country">Country</label>
+                         </div><!-- /.input-field col s12 -->
+                     </fieldset>
                    </div><!-- /.row -->
                    <div class="row">
                      <div class="input-field col s6">
@@ -130,13 +187,7 @@
                        <input type="text" name="email" id="email" class="validate" value="<?=set_value('email')?>" required/>
                        <label for="email">Email Address</label>
                      </div><!-- /.input-field col s6 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s12">
-                       <textarea id="remarks" name="remarks" class="materialize-textarea" length="120"><?=set_value('remarks')?></textarea>
-                       <label for="remarks">Remarks</label>
-                     </div><!-- /.input-field col s12 -->
-                   </div><!-- /.row -->
+                   </div><!-- /.row -->>
                    <div class="row" id="submit_patient">
                      <div class="input-field col s12">
                         <button type="submit" class="btn waves-effect green right">Register New Patient</button>                       

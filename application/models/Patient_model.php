@@ -32,18 +32,15 @@ Class Patient_model extends CI_Model
                 'fullname'      => $this->input->post('fname'),  
                 'middlename'    => $this->input->post('mname'),  
                 'lastname'      => $this->input->post('lname'),                 
-                'birthdate'     => $this->input->post('bdate'),   
-                'birthplace'    => $this->input->post('bplace'),                 
-                'sex'           => $this->input->post('sex'),                 
-                'address'       => $this->input->post('addr'),                 
-                'contact_no'    => $this->input->post('contactno'),                 
-                'email'         => $this->input->post('email'),                 
-                'remarks'       => $this->input->post('remarks')               
+                'birthdate'     => $this->input->post('bdate'),             
+                'sex'           => $this->input->post('sex')             
              );
        
             return $this->db->insert('patients', $data);      
 
     }
+
+
 
     function update_patient($id) {
 
@@ -52,13 +49,25 @@ Class Patient_model extends CI_Model
                 'fullname'      => $this->input->post('fname'),  
                 'middlename'    => $this->input->post('mname'),  
                 'lastname'      => $this->input->post('lname'),                 
-                'birthdate'     => $this->input->post('bdate'),   
-                'birthplace'    => $this->input->post('bplace'),                 
-                'sex'           => $this->input->post('sex'),                 
-                'address'       => $this->input->post('addr'),                 
-                'contact_no'    => $this->input->post('contactno'),                 
-                'email'         => $this->input->post('email'),                 
-                'remarks'       => $this->input->post('remarks')               
+                'birthdate'     => $this->input->post('bdate'),  
+                'sex'           => $this->input->post('sex')          
+             );
+            
+            $this->db->where('id', $id);
+            return $this->db->update('patients', $data);      
+
+    }
+
+    /**
+     * Updates the UPDATED_AT stamp
+     * @param  int $id    patient ID
+     * @return [type]     [description]
+     */
+    function last_update($id) {
+
+      
+            $data = array(              
+                'updated_at'      => unix_to_human(now(), TRUE, 'eu')      
              );
             
             $this->db->where('id', $id);
@@ -76,6 +85,7 @@ Class Patient_model extends CI_Model
             return $this->db->update('patients', $data);      
 
     }
+
 
 
     function view_patient($id) {
@@ -110,6 +120,7 @@ Class Patient_model extends CI_Model
             $this->db->limit($limit, (($id-1)*$limit));
             $this->db->where('patients.is_deleted', 0);
             $this->db->join('cases', 'cases.patient_id = patients.id', 'left');
+            $this->db->join('patients_address', 'patients_address.patient_id = patients.id', 'left');
             $this->db->group_by('patients.id');
             $this->db->select('
               patients.id,
@@ -118,8 +129,7 @@ Class Patient_model extends CI_Model
               patients.lastname,
               patients.sex,
               patients.birthdate,
-              patients.address,
-              patients.contact_no,
+              CONCAT(patients_address.city, ", ", patients_address.province) AS address,
               count(cases.id) as cases
               ');
             $query = $this->db->get("patients");
@@ -138,6 +148,107 @@ Class Patient_model extends CI_Model
     function count_patients() {
         $this->db->where('is_deleted', 0);
         return $this->db->count_all_results("patients");
+    }
+
+
+
+
+    ///////////////////////////////////////////////
+    /// CONTACTS AND ADDRESS
+    //////////////////////////////////////////////
+    
+
+    /**
+     * Inserts a Patient Address Record
+     * @param  int        $patient_id     
+     * @param  String     $tag        
+     * @param  String     $bldg       
+     * @param  String     $street     
+     * @param  String     $brgy       
+     * @param  String     $city       
+     * @param  String     $prov       
+     * @param  String     $zip        
+     * @param  String     $ctry       
+     * @return Boolean                returns TRUE if success
+     */
+    function create_address($patient_id, $tag, $bldg, $street, $brgy, $city, $prov, $zip, $ctry) {
+
+          $data = array(
+            'patient_id' => $patient_id,
+            'tag'        => $tag,
+            'building'   => $bldg,
+            'street'     => $street,
+            'barangay'   => $brgy,
+            'city'       => $city,
+            'province'   => $prov,
+            'zip'        => $zip,
+            'country'    => $ctry
+            );
+
+          return $this->db->insert('patients_address', $data);
+
+    }
+
+
+    function update_address($id) {
+
+          $data = array(
+            'building'   => $this->input->post('bldg'),
+            'street'     => $this->input->post('strt'),
+            'barangay'   => $this->input->post('brgy'),
+            'city'       => $this->input->post('city'),
+            'province'   => $this->input->post('province'),
+            'zip'        => $this->input->post('zip'),
+            'country'    => $this->input->post('country')
+            );
+
+          $this->db->where('id', $id);
+          return $this->db->update('patients_address', $data);
+
+    }
+
+
+    function create_contacts($patient_id, $tag, $details) {
+
+      $data = array(
+            'patient_id' => $patient_id,
+            'tag'        => $tag,
+            'details'   => $details           
+            );
+
+          return $this->db->insert('patients_contacts', $data);
+
+    }
+
+    function fetch_address($patient_id, $tag) {
+
+            $this->db->select('*');        
+            $this->db->where('patient_id', $patient_id);          
+            $this->db->where('tag', $tag);          
+            
+            $query = $this->db->get('patients_address');
+
+            return $query->row_array();
+    }
+
+
+    function fetch_contacts($patient_id, $tag) {
+
+            $this->db->select('*');        
+            $this->db->where('patient_id', $patient_id);          
+            $this->db->where('tag', $tag);          
+            
+            $query = $this->db->get('patients_contacts');
+
+            return $query->result_array();
+    }
+
+
+    function delete_contact($id) {
+           
+            $this->db->where('id', $id);
+            return $this->db->delete('patients_contacts');      
+
     }
 
 

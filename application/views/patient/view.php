@@ -110,23 +110,87 @@
                   </tr>
                   <tr>
                     <th>Birthplace:</th>
-                    <td><?=$info['birthplace']?></td>
+                    <td>
+                      <?php 
+                      if($bplace['building']) {
+                        echo $bplace['building'] . ', ';
+                      } 
+                      if($bplace['street']) {
+                        echo $bplace['street'] . ', ';
+                      }
+                      if($bplace['barangay']) {
+                        echo $bplace['barangay'] . ', ';
+                      }
+                      if($bplace['city']) {
+                        echo $bplace['city'] . ', ';
+                      }
+                      if($bplace['province']) {
+                        echo $bplace['province'] . ', ';
+                      }
+                      if($bplace['zip']) {
+                        echo $bplace['zip'] . ', ';
+                      }
+                      if($bplace['country']) {
+                        echo $bplace['country'];
+                      }
+                      ?>
+                      <a href="#updateBplace" class="modal-trigger"><i class="mdi-editor-mode-edit tiny"></i></a>                      
+                    </td>
                   </tr>
                   <tr>
                     <th>Address:</th>
-                    <td><?=$info['address']?></td>
+                    <td>
+                    <?php 
+                      if($addr['building']) {
+                        echo $addr['building'] . ', ';
+                      } 
+                      if($addr['street']) {
+                        echo $addr['street'] . ', ';
+                      }
+                      if($addr['barangay']) {
+                        echo $addr['barangay'] . ', ';
+                      }
+                      if($addr['city']) {
+                        echo $addr['city'] . ', ';
+                      }
+                      if($addr['province']) {
+                        echo $addr['province'] . ', ';
+                      }
+                      if($addr['zip']) {
+                        echo $addr['zip'] . ', ';
+                      }
+                      if($addr['country']) {
+                        echo $addr['country'];
+                      }
+                      ?>
+                      <a href="#updateAddr" class="modal-trigger"><i class="mdi-editor-mode-edit tiny"></i></a>
+                    </td>
                   </tr>
                   <tr>
                     <th>Contact Number:</th>
-                    <td><?=$info['contact_no']?></td>
+                    <td>
+                      <ul>
+                        <?php if ($mobile): ?>
+                        <?php foreach ($mobile as $con): ?>
+                          <li><?=$con['details']?> <a href="#delCon<?=$con['id']?>" class="modal-trigger"><i class="mdi-content-remove-circle-outline tiny"></i></a> </li>
+                        <?php endforeach ?>  
+                        <?php endif ?>
+                        <li><small><a href="#createContact" class="modal-trigger"><em>[ New Contact... ]</em></a></small></li>
+                      </ul>
+                    </td>
                   </tr>
                   <tr>
                     <th>Email:</th>
-                    <td><?=$info['email']?></td>
-                  </tr>
-                  <tr>
-                    <th>Remarks:</th>
-                    <td><?=$info['remarks']?></td>
+                    <td>
+                      <ul>
+                        <?php if ($email): ?>
+                        <?php foreach ($email as $mail): ?>
+                          <li><?=$mail['details']?> <a href="#delEmail<?=$mail['id']?>" class="modal-trigger"><i class="mdi-content-remove-circle-outline tiny"></i></a> </li>
+                        <?php endforeach ?>  
+                        <?php endif ?>
+                        <li><small><a href="#createEmail" class="modal-trigger"><em>[ New Email... ]</em></a></small></li>
+                      </ul>
+                    </td>
                   </tr>
                   <tr>
                     <td>Date Registered:</td>
@@ -142,7 +206,7 @@
                 <br />
                   <div class="right">
                     <a href="#UpdateModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-editor-border-color left"></i></a>
-                    <a href="#deleteModal" class="modal-trigger btn waves-effect red">Trash<i class="mdi-action-delete left"></i></a>
+                    <a href="#deleteModal" class="modal-trigger btn waves-effect red">Archive<i class="mdi-action-delete left"></i></a>
                   </div><!-- /.right -->
               </div><!-- /.col s12 l8 -->
               <div class="col s12 l4">
@@ -273,55 +337,30 @@
                   <div class="modal-content">    
                    <h5 class="header">Update: <?=$info['fullname'] . ' ' . $info['lastname']?></h5><!-- /.header black-text -->              
                     <div class="row">
-                     <div class="input-field col s4 l4">
+                     <div class="input-field col s12">
                         <input type="text" name="lname" id="lname" class="validate" value="<?=$info['lastname']?>" required/>
                         <label for="lname">Last Name</label>
                      </div><!-- /.input-field col s4 l4 -->                   
-                     <div class="input-field col s4 l4">
+                     <div class="input-field col s12">
                         <input type="text" name="fname" id="fname" class="validate" value="<?=$info['fullname']?>" required/>
                         <label for="fname">Full Name</label>
                      </div><!-- /.input-field col s4 l4 -->                   
-                     <div class="input-field col s4 l4">
+                     <div class="input-field col s12">
                         <input type="text" name="mname" id="mname" class="validate" value="<?=$info['middlename']?>" required/>
                         <label for="mname">Middle Name</label>
-                     </div><!-- /.input-field col s4 l4 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s6">
-                        <input type="text" name="bplace" id="bplace" class="validate" value="<?=$info['birthplace']?>" required/>
-                        <label for="bplace">Birthplace</label>
-                     </div><!-- /.input-field col s6 -->
-                     <div class="input-field col s2">
+                     </div><!-- /.input-field col s12 -->         
+                     <div class="input-field col s12">
+                        <small>Sex</small>
                         <select class="browser-default" name="sex" id="sex" required>                          
                           <option value="1" <?php if($info['sex'])echo'selected';?>>Male</option>
                           <option value="0" <?php if(!$info['sex'])echo'selected';?>>Female</option>                       
                         </select>
                      </div><!-- /.input-field col s8 -->
-                     <div class="input-field col s4">
+                     <div class="input-field col s12">
+                     <small>Birthdate</small>
                         <input type="date" name="bdate" id="bdate" value="<?=$info['birthdate']?>" required/>                        
                      </div><!-- /.input-field col s4 -->
-                   </div><!-- /.row -->             
-                   <div class="row">
-                     <div class="input-field col s12">
-                       <input type="text" name="addr" id="addr" class="validate" value="<?=$info['address']?>" required/>
-                       <label for="addr">Present Address</label>
-                     </div><!-- /.input-field col s12 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s6">
-                       <input type="text" name="contactno" id="contactno" class="validate" value="<?=$info['contact_no']?>" required/>
-                       <label for="contactno">Contact Number</label>
-                     </div><!-- /.input-field col s6 -->
-                     <div class="input-field col s6">
-                       <input type="text" name="email" id="email" class="validate" value="<?=$info['email']?>" required/>
-                       <label for="email">Email Address</label>
-                     </div><!-- /.input-field col s6 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s12">
-                       <textarea id="remarks" name="remarks" class="materialize-textarea" length="120"><?=$info['remarks']?></textarea>
-                       <label for="remarks">Remarks</label>
-                     </div><!-- /.input-field col s12 -->
+                 
                    </div><!-- /.row -->
                     <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['id'])?>" />
                   </div>
@@ -343,6 +382,183 @@
                   <div class="modal-footer grey darken-4">
                     <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
                     <button type="submit" class="waves-effect waves-red btn red modal-action">Move to Trash</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+
+            <?php if ($email): ?>
+            <?php foreach ($email as $mail): ?>
+            <div id="delEmail<?=$mail['id']?>" class="modal">
+              <?=form_open('patients/delete_contact')?>
+                <div class="modal-content red darken-4 white-text">
+                    <p>Are you sure to delete this Email Address - <?=$mail['details']?>? </p>
+                    <p>You <span class="strong">CANNOT UNDO</span> this action.</p>
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($mail['id'])?>" />
+                    <input type="hidden" name="tag" value="<?=$this->encryption->encrypt($mail['tag'])?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
+                    <button type="submit" class="waves-effect waves-red btn red modal-action">Delete Email</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+            <?php endforeach ?>
+            <?php endif ?>
+
+            <?php if ($mobile): ?>
+            <?php foreach ($mobile as $con): ?>
+            <div id="delCon<?=$con['id']?>" class="modal">
+              <?=form_open('patients/delete_contact')?>
+                <div class="modal-content red darken-4 white-text">
+                    <p>Are you sure to delete this Contact Number- <?=$con['details']?>? </p>
+                    <p>You <span class="strong">CANNOT UNDO</span> this action.</p>
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($con['id'])?>" />
+                    <input type="hidden" name="tag" value="<?=$this->encryption->encrypt($con['tag'])?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
+                    <button type="submit" class="waves-effect waves-red btn red modal-action">Delete Email</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+            <?php endforeach ?>
+            <?php endif ?>
+    
+
+            <div id="createContact" class="modal">
+              <?=form_open('patients/create_contact')?>
+                <div class="modal-content blue lighten-5">                    
+                    <h5 class="header">Add Contact</h5><!-- /.header -->
+                    <div class="input-field col s12">
+                      <input type="text" name="details" id="details" class="validate" />
+                      <label for="details">Mobile / Telephone / Fax No.</label>
+                    </div><!-- /.input-field col s12 -->
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                    <input type="hidden" name="tag" value="<?=$this->encryption->encrypt(0)?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <button type="submit" class="waves-effect waves-red btn blue modal-action">New Contact</button>                  
+                    <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+
+            <div id="createEmail" class="modal">
+              <?=form_open('patients/create_contact')?>
+                <div class="modal-content amber lighten-5">                    
+                    <h5 class="header">Add Email Address</h5><!-- /.header -->
+                    <div class="input-field col s12">
+                      <input type="email" name="details" id="details" class="validate" />
+                      <label for="details">Email Address</label>
+                    </div><!-- /.input-field col s12 -->
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                    <input type="hidden" name="tag" value="<?=$this->encryption->encrypt(1)?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <button type="submit" class="waves-effect waves-red btn amber modal-action">New Email</button>                  
+                    <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+
+            <div id="updateAddr" class="modal">
+              <?=form_open('patients/update_address')?>
+                <div class="modal-content blue lighten-5">                    
+                    <h5 class="header">Update Present Address</h5><!-- /.header -->
+                    <div class="row">                     
+                     <fieldset class=" green lighten-5">
+                        <legend class="strong">Present Address</legend>
+                          <div class="input-field col s12 l5">
+                           <input type="text" name="bldg" id="bldg" class="validate" value="<?=$addr['building']?>" required/>
+                           <label for="bldg">Building / Block / House</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="strt" id="strt" class="validate" value="<?=$addr['street']?>" required/>
+                           <label for="strt">Street</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="brgy" id="brgy" class="validate" value="<?=$addr['barangay']?>" required/>
+                           <label for="brgy">Barangay</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="city" id="city" class="validate" value="<?=$addr['city']?>" required/>
+                           <label for="city">City / Municipality</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="province" id="province" class="validate" value="<?=$addr['province']?>" required/>
+                           <label for="province">Province / Region</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l2">
+                           <input type="text" name="zip" id="zip" class="validate" value="<?=$addr['zip']?>" required/>
+                           <label for="zip">ZIP Code</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="country" id="country" class="validate" value="<?=$addr['country']?>" required/>
+                           <label for="country">Country</label>
+                         </div><!-- /.input-field col s12 -->
+                     </fieldset>
+                   </div><!-- /.row -->                   
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($addr['id'])?>" />
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                    <input type="hidden" name="tag" value="<?=$this->encryption->encrypt(1)?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <button type="submit" class="waves-effect waves-red btn blue modal-action">Update Address</button>                  
+                    <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+
+            <div id="updateBplace" class="modal">
+              <?=form_open('patients/update_address')?>
+                <div class="modal-content green lighten-5">                    
+                    <h5 class="header">Update Birthplace</h5><!-- /.header -->
+                    <div class="row">                     
+                     <fieldset class=" green lighten-5">
+                        <legend class="strong">Birthplace</legend>
+                          <div class="input-field col s12 l5">
+                           <input type="text" name="bldg" id="bldg" class="validate" value="<?=$bplace['building']?>"/>
+                           <label for="bldg">Building / Block / House</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="strt" id="strt" class="validate" value="<?=$bplace['street']?>"/>
+                           <label for="strt">Street</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="brgy" id="brgy" class="validate" value="<?=$bplace['barangay']?>"/>
+                           <label for="brgy">Barangay</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="city" id="city" class="validate" value="<?=$bplace['city']?>" required/>
+                           <label for="city">City / Municipality</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l3">
+                           <input type="text" name="province" id="province" class="validate" value="<?=$bplace['province']?>" required/>
+                           <label for="province">Province / Region</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l2">
+                           <input type="text" name="zip" id="zip" class="validate" value="<?=$bplace['zip']?>" required/>
+                           <label for="zip">ZIP Code</label>
+                         </div><!-- /.input-field col s12 -->
+                         <div class="input-field col s12 l4">
+                           <input type="text" name="country" id="country" class="validate" value="<?=$bplace['country']?>" required/>
+                           <label for="country">Country</label>
+                         </div><!-- /.input-field col s12 -->
+                     </fieldset>
+                   </div><!-- /.row -->                   
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($bplace['id'])?>" />
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                    <input type="hidden" name="tag" value="<?=$this->encryption->encrypt(0)?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <button type="submit" class="waves-effect waves-red btn green modal-action">Update Birthplace</button>                  
+                    <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
                   </div>
               <?=form_close()?>
             </div>

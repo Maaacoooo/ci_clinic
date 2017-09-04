@@ -31,21 +31,35 @@ class Dashboard extends CI_Controller {
 				$this->form_validation->set_rules('lname', 'Last Name', 'trim|required');   
 				$this->form_validation->set_rules('mname', 'Middle Name', 'trim|required');   
 				$this->form_validation->set_rules('fname', 'Full Name', 'trim|required');   
-				$this->form_validation->set_rules('bplace', 'Birthplace', 'trim|required');   
 				$this->form_validation->set_rules('sex', 'Sex', 'trim|required');   
-				$this->form_validation->set_rules('bdate', 'Birthdate', 'trim|required');   
-				$this->form_validation->set_rules('addr', 'Address', 'trim|required');   
 				$this->form_validation->set_rules('contactno', 'Contact Number', 'trim|required');   
 				$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');   
-				$this->form_validation->set_rules('remarks', 'Remarks', 'trim');   
+
+				$this->form_validation->set_rules('bplace_bldg', 'Birthplace Bldg', 'trim');   
+				$this->form_validation->set_rules('bplace_strt', 'Birthplace Street', 'trim');   
+				$this->form_validation->set_rules('bplace_brgy', 'Birthplace Barangay', 'trim');   
+				$this->form_validation->set_rules('bplace_city', 'Birthplace City', 'trim|required');   
+				$this->form_validation->set_rules('bplace_prov', 'Birthplace Province', 'trim|required');   
+				$this->form_validation->set_rules('bplace_zip', 'Birthplace ZIP', 'trim|required');   
+				$this->form_validation->set_rules('bplace_country', 'Birthplace Country', 'trim|required');   
+
+				$this->form_validation->set_rules('addr_bldg', 'Present Address Bldg', 'trim|required');   
+				$this->form_validation->set_rules('addr_strt', 'Present Address Street', 'trim|required');   
+				$this->form_validation->set_rules('addr_brgy', 'Present Address Barangay', 'trim|required');   
+				$this->form_validation->set_rules('addr_city', 'Present Address City', 'trim|required');   
+				$this->form_validation->set_rules('addr_prov', 'Present Address Province', 'trim|required');   
+				$this->form_validation->set_rules('addr_zip', 'Present Address ZIP', 'trim|required');   
+				$this->form_validation->set_rules('addr_country', 'Present Address Country', 'trim|required');   
 
 			} else {
 				$this->form_validation->set_rules('patient_id', 'Patient ID', 'trim|required|callback_check_patient');   
+
+			}
 				$this->form_validation->set_rules('weight', 'Weight', 'trim|required');   
 				$this->form_validation->set_rules('height', 'Height', 'trim|required');   
 				$this->form_validation->set_rules('title', 'Case Title', 'trim|required');   
 				$this->form_validation->set_rules('description', 'Case Description', 'trim|required');   
-			}	
+				
 			
 			
 			if($this->form_validation->run() == FALSE)	{
@@ -72,9 +86,47 @@ class Dashboard extends CI_Controller {
 					$patient_id = cleanId($this->input->post('patient_id'));
 				}
 
+
+				// Insert Address Data /////////////////////
+						// birthplace
+						$this->patient_model->create_address(
+							$patient_id,
+							0,
+							$this->input->post('bplace_bldg'),
+							$this->input->post('bplace_strt'),
+							$this->input->post('bplace_brgy'),
+							$this->input->post('bplace_city'),
+							$this->input->post('bplace_prov'),
+							$this->input->post('bplace_zip'),
+							$this->input->post('bplace_country')
+						);
+						//address
+						$this->patient_model->create_address(
+							$patient_id,
+							1,
+							$this->input->post('addr_bldg'),
+							$this->input->post('addr_strt'),
+							$this->input->post('addr_brgy'),
+							$this->input->post('addr_city'),
+							$this->input->post('addr_prov'),
+							$this->input->post('addr_zip'),
+							$this->input->post('addr_country')
+						);
+
+
+				// Insert Contacts Data ///////////////////////
+						//email						
+						$this->patient_model->create_contacts($patient_id, 1, $this->input->post('email'));
+						//mobile						
+						$this->patient_model->create_contacts($patient_id, 0, $this->input->post('contactno'));
+
+
+				// Insert Case Data
 				if($this->case_model->create_case($patient_id)) {
 
 					$case_id = $this->db->insert_id(); //fetch last insert case Row ID
+
+
 
 					// Save Log Data ///////////////////			
 					$log[] = array(
@@ -95,7 +147,7 @@ class Dashboard extends CI_Controller {
 						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
 					}		
 					////////////////////////////////////
-
+					
 					$this->session->set_flashdata('success', 'Success! Case Submitted!');					
 				} else {
 					$this->session->set_flashdata('error', 'Oops! Error occured!');					

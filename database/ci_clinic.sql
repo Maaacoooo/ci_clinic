@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 04, 2017 at 10:43 AM
+-- Generation Time: Sep 04, 2017 at 06:16 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 7.1.1
 
@@ -37,13 +37,6 @@ CREATE TABLE `cases` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `cases`
---
-
-INSERT INTO `cases` (`id`, `patient_id`, `title`, `description`, `weight`, `height`, `status`, `created_at`, `updated_at`) VALUES
-(2, 9, 'Fever', '<p>Very Highfever</p>', 65, 164, 0, '2017-09-04 16:41:56', '2017-09-04 08:41:56');
 
 -- --------------------------------------------------------
 
@@ -83,15 +76,6 @@ CREATE TABLE `logs` (
   `date_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `logs`
---
-
-INSERT INTO `logs` (`id`, `user`, `tag`, `tag_id`, `action`, `date_time`) VALUES
-(1, 'maco', 'patient', '9', 'Patient Registered', '2017-09-04 08:41:56'),
-(2, 'maco', 'case', '2', 'Case Added', '2017-09-04 08:41:56'),
-(3, 'maco', 'patient', '9', 'Added New Case : `Fever`', '2017-09-04 08:41:56');
-
 -- --------------------------------------------------------
 
 --
@@ -109,13 +93,6 @@ CREATE TABLE `patients` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_deleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `patients`
---
-
-INSERT INTO `patients` (`id`, `fullname`, `middlename`, `lastname`, `sex`, `birthdate`, `created_at`, `updated_at`, `is_deleted`) VALUES
-(9, 'Maco', 'Gallemit', 'Cortes', 1, '1995-02-21', '2017-09-04 08:41:56', '2017-09-04 16:41:56', 0);
 
 -- --------------------------------------------------------
 
@@ -136,14 +113,6 @@ CREATE TABLE `patients_address` (
   `country` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `patients_address`
---
-
-INSERT INTO `patients_address` (`id`, `patient_id`, `tag`, `building`, `street`, `barangay`, `city`, `province`, `zip`, `country`) VALUES
-(1, 9, 0, 'Amaro Bldg.', 'Tets', 'Ipil Heights', 'Ipil', 'Zamboanga Sibugay', '7001', 'Philippines'),
-(2, 9, 1, 'Cortes Residence', 'Prk. Linda', 'Lingasad', 'Polanco', 'Zamboanga del Norte', '7101', 'Philippines');
-
 -- --------------------------------------------------------
 
 --
@@ -156,14 +125,6 @@ CREATE TABLE `patients_contacts` (
   `tag` int(11) NOT NULL COMMENT '0 = mobile; 1 = email',
   `details` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `patients_contacts`
---
-
-INSERT INTO `patients_contacts` (`id`, `patient_id`, `tag`, `details`) VALUES
-(1, 9, 1, 'maco.techdepot@gmail.com'),
-(2, 9, 0, '09058208455');
 
 -- --------------------------------------------------------
 
@@ -205,7 +166,9 @@ CREATE TABLE `prescription_items` (
 CREATE TABLE `queues` (
   `id` int(11) NOT NULL,
   `case_id` int(11) DEFAULT NULL,
-  `status` int(11) DEFAULT NULL
+  `status` int(11) DEFAULT '0' COMMENT '0 = pending; 1 = serving; ',
+  `date_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `department` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -230,7 +193,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`username`, `password`, `name`, `usertype`, `img`, `created_at`, `updated_at`) VALUES
 ('assist', '$2y$10$qdPaxVMYsUbpAMRe0WSLD.iGGxyUYrE7sVrPsHjGAjgl2xCb5igma', 'Prototype', 'Assistant', '', '2017-07-25 21:41:16', '2017-07-25 13:41:16'),
-('maco', '$2y$10$eU26l3XWhzGhoo.lTfc93ubmrgxCFHptum4mn1rZWLf14/beyBrj2', 'Maco Cortes', 'Doctor', '4be6e3777d7ec3f425bfe66bb0c68647.jpg', '2017-07-25 21:44:44', '2017-07-25 13:44:44'),
+('maco', '$2y$10$eU26l3XWhzGhoo.lTfc93ubmrgxCFHptum4mn1rZWLf14/beyBrj2', 'Maco Cortes', 'Doctor', '4be6e3777d7ec3f425bfe66bb0c68647.jpg', '2017-09-05 00:10:57', '2017-09-04 16:10:57'),
 ('test', '$2y$10$fYvnXMjlg.XuGyzHpmY5LOkFgcfDiJ7TaLfb/DcCbXu6AJXbPmWbW', 'Testing Assistant', 'Assistant', 'eeb6cd52081de995740457192ca9a4db.jpg', '2017-08-07 20:45:30', '2017-08-07 12:45:30');
 
 -- --------------------------------------------------------
@@ -341,37 +304,42 @@ ALTER TABLE `usertypes`
 -- AUTO_INCREMENT for table `cases`
 --
 ALTER TABLE `cases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `patients_address`
 --
 ALTER TABLE `patients_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `patients_contacts`
 --
 ALTER TABLE `patients_contacts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `prescription`
 --
 ALTER TABLE `prescription`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `prescription_items`
 --
 ALTER TABLE `prescription_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `queues`
+--
+ALTER TABLE `queues`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- Constraints for dumped tables
 --

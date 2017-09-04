@@ -221,7 +221,7 @@ class Patients extends CI_Controller {
 										$this->load->view('prescription/print', $data);										
 									} else {
 										//Prescription View Restriction
-										if($data['prescription']['created_by'] == $data['user']['username']) {
+										if($data['prescription']['created_by'] == $data['user']['username'] && $data['user']['usertype'] == 'Doctor') {
 											$this->load->view('prescription/create', $data);
 										} else {
 											$this->load->view('prescription/view', $data);										

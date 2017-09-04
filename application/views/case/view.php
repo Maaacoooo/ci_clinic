@@ -157,8 +157,10 @@
 
 
                <div class="col s12 l4">
-                 <div class="row">
+                 
+                  <div class="row">
                    <div class="col s12">
+                    <?php if ($user['usertype'] == 'Doctor'): ?>
                      <div class="card">
                        <div class="card-content">
                           <h6 class="header strong">Options</h6><!-- /.header -->
@@ -171,7 +173,8 @@
                           </div><!-- /.row -->        
                        </div><!-- /.card-content -->
                      </div><!-- /.card -->
-
+                     <?php endif ?> 
+                                         
                      <table class="bordered card">
                         <thead>
                           <tr>
@@ -194,6 +197,7 @@
                      </table><!-- /.striped bordered -->
                    </div><!-- /.col s12 -->
                  </div><!-- /.row -->
+
                  <div class="row">
                   <div class="col s12">
                     <div class="card">
@@ -238,6 +242,8 @@
 
 
   <!-- Modals -->
+            <?php if ($user['usertype'] == 'Doctor'): ?>
+
             <div id="addPrescription" class="modal modal-fixed-footer">
               <?=form_open('prescription/create')?>
                 <div class="modal-content">
@@ -311,6 +317,8 @@
                   </div>
               <?=form_close()?>
             </div>
+              
+            <?php endif ?>
 
 
 

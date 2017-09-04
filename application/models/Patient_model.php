@@ -116,12 +116,6 @@ Class Patient_model extends CI_Model
      * @return Array        The array of returned rows 
      */
     function fetch_patients($limit, $id) {
-
-            $this->db->limit($limit, (($id-1)*$limit));
-            $this->db->where('patients.is_deleted', 0);
-            $this->db->join('cases', 'cases.patient_id = patients.id', 'left');
-            $this->db->join('patients_address', 'patients_address.patient_id = patients.id', 'left');
-            $this->db->group_by('patients.id');
             $this->db->select('
               patients.id,
               patients.fullname,
@@ -132,11 +126,19 @@ Class Patient_model extends CI_Model
               CONCAT(patients_address.city, ", ", patients_address.province) AS address,
               count(cases.id) as cases
               ');
+            $this->db->where('patients.is_deleted', 0);
+            $this->db->join('cases', 'cases.patient_id = patients.id', 'left');
+            $this->db->join('patients_address', 'patients_address.patient_id = patients.id', 'left');
+            $this->db->limit($limit, (($id-1)*$limit));            
+            $this->db->group_by('patients.id');
+            
             $query = $this->db->get("patients");
 
             if ($query->num_rows() > 0) {
                 return $query->result_array();
             }
+
+
             return false;
 
     }

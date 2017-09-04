@@ -9,6 +9,7 @@ class Dashboard extends CI_Controller {
        $this->load->model('user_model');
        $this->load->model('patient_model');
        $this->load->model('case_model');
+       $this->load->model('queue_model');
 	}	
 
 
@@ -23,6 +24,9 @@ class Dashboard extends CI_Controller {
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 
 			$data['passwordverify'] = $this->user_model->check_user($userdata['username'], 'ClinicUser'); //boolean - returns false if default password
+
+			$data['serving'] = $this->queue_model->fetch_queues(1);
+			$data['queue'] = $this->queue_model->fetch_queues(0);
 
 			//FORM VALIDATION  /////////////////////////////////////////////////////////////////////
 			
@@ -88,12 +92,8 @@ class Dashboard extends CI_Controller {
 						'action' 	=> 	'Patient Registered'
 						);
 					///////////
-				} else {
-					$patient_id = cleanId($this->input->post('patient_id'));
-				}
-
-
-				// Insert Address Data /////////////////////
+					
+					// Insert Address Data /////////////////////
 						// birthplace
 						$this->patient_model->create_address(
 							$patient_id,
@@ -125,6 +125,10 @@ class Dashboard extends CI_Controller {
 						$this->patient_model->create_contacts($patient_id, 1, $this->input->post('email'));
 						//mobile						
 						$this->patient_model->create_contacts($patient_id, 0, $this->input->post('contactno'));
+					
+				} else {
+					$patient_id = cleanId($this->input->post('patient_id'));
+				}			
 
 
 				// Insert Case Data
@@ -132,6 +136,10 @@ class Dashboard extends CI_Controller {
 
 					$case_id = $this->db->insert_id(); //fetch last insert case Row ID
 
+					//Generate Queue
+					if($this->input->post('generateQueue')) {
+						$this->queue_model->generate_queue($case_id);
+					}
 
 
 					// Save Log Data ///////////////////			

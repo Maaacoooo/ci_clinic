@@ -8,6 +8,7 @@ class Cases extends CI_Controller {
 		parent::__construct();		
        $this->load->model('user_model');
        $this->load->model('case_model');
+       $this->load->model('queue_model');
 	}	
 
 
@@ -63,6 +64,90 @@ class Cases extends CI_Controller {
 
 					$this->session->set_flashdata('success', 'Case Created!');
 					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+	public function change_status()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+			$this->form_validation->set_rules('pid', 'Patient ID', 'trim|required');   
+			$this->form_validation->set_rules('status', 'Status', 'trim|required');   
+ 
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$patient_id = $this->encryption->decrypt($this->input->post('pid')); //ID of the patient				
+				$case_id = $this->encryption->decrypt($this->input->post('id')); //ID of the case
+
+				$status = $this->encryption->decrypt($this->input->post('status')); 		
+
+
+				//advanced options action
+				
+				if($this->input->post('clearqueue'))	{
+					//clear queues in the table
+					$this->queue_model->clear_queue($case_id);
+				}
+
+				if($this->input->post('generatequeue'))	{
+					//generate queue
+					$this->queue_model->generate_queue($case_id);
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'case',
+						'tag_id'	=> 	$case_id,
+						'action' 	=> 	'Generated new Queue'
+						);
+				}
+
+				//proceed action
+				if($this->case_model->update_status($case_id, $status)) {
+
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'case',
+						'tag_id'	=> 	$case_id,
+						'action' 	=> 	'Updated the Case Status'
+						);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+					//redirect to the next queue
+					if($this->input->post('nextqueue')) {
+						$this->session->set_flashdata('success', 'Case Status Updated!');
+						redirect('queues/next_queue', 'refresh');
+					} else {
+						$this->session->set_flashdata('success', 'Case Status Updated!');
+						redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					}
+					
 				}
 			}
 

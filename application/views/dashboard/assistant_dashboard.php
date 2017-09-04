@@ -26,6 +26,23 @@
           document.getElementById("contactno").disabled = false;
           document.getElementById("email").disabled = false;
 
+          document.getElementById("addr_bldg").disabled = false;
+          document.getElementById("addr_strt").disabled = false;
+          document.getElementById("addr_brgy").disabled = false;
+          document.getElementById("addr_city").disabled = false;
+          document.getElementById("addr_prov").disabled = false;
+          document.getElementById("addr_zip").disabled = false;
+          document.getElementById("addr_country").disabled = false;
+
+          document.getElementById("bplace_bldg").disabled = false;
+          document.getElementById("bplace_strt").disabled = false;
+          document.getElementById("bplace_brgy").disabled = false;
+          document.getElementById("bplace_city").disabled = false;
+          document.getElementById("bplace_prov").disabled = false;
+          document.getElementById("bplace_zip").disabled = false;
+          document.getElementById("bplace_country").disabled = false;
+
+
         } else {
           document.getElementById("field_newpatient").setAttribute("class", "row hide");     
           document.getElementById("submit_case").setAttribute("class", "row");           
@@ -38,6 +55,23 @@
           document.getElementById("bdate").disabled = true;
           document.getElementById("contactno").disabled = true;
           document.getElementById("email").disabled = true;
+
+
+          document.getElementById("addr_bldg").disabled = true;
+          document.getElementById("addr_strt").disabled = true;
+          document.getElementById("addr_brgy").disabled = true;
+          document.getElementById("addr_city").disabled = true;
+          document.getElementById("addr_prov").disabled = true;
+          document.getElementById("addr_zip").disabled = true;
+          document.getElementById("addr_country").disabled = true;
+
+          document.getElementById("bplace_bldg").disabled = true;
+          document.getElementById("bplace_strt").disabled = true;
+          document.getElementById("bplace_brgy").disabled = true;
+          document.getElementById("bplace_city").disabled = true;
+          document.getElementById("bplace_prov").disabled = true;
+          document.getElementById("bplace_zip").disabled = true;
+          document.getElementById("bplace_country").disabled = true;
         }
 
 
@@ -175,8 +209,17 @@
                    </div><!-- /.row -->
                    <div class="row" id="submit_case">
                      <div class="input-field col s12">
-                        <button type="submit" class="btn waves-effect amber right">Submit Case</button>                       
-                     </div><!-- /.input-field col s12 -->
+                          <div class="right">
+                            <div class="col">
+                              <input type="checkbox" id="generateQueue" name="generateQueue" <?php if(set_value('generateQueue'))echo'checked';?>>
+                              <label for="generateQueue">Generate Queue</label> 
+                            </div><!-- /.col -->
+                            <div class="col">
+                              <button type="submit" class="btn waves-effect amber">Submit Case</button>                            
+                            </div><!-- /.col -->
+                          </div><!-- /.right -->   
+                     </div><!-- /.input-field col s12 -->    
+
                    </div><!-- /.row -->
                  </div><!-- /.card-content -->
                </div><!-- /.card -->
@@ -220,31 +263,31 @@
                      <fieldset class="blue lighten-5">
                         <legend class="strong">Birthplace</legend>
                           <div class="input-field col s12 l5">
-                           <input type="text" name="bplace_bldg" id="bplace_bldg" class="validate" value="<?=set_value('bplace_bldg')?>" />
+                           <input type="text" name="bplace_bldg" id="bplace_bldg" class="validate" value="<?=set_value('bplace_bldg')?>" disabled />
                            <label for="bplace_bldg">Building / Block / House</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l4">
-                           <input type="text" name="bplace_strt" id="bplace_strt" class="validate" value="<?=set_value('bplace_strt')?>" />
+                           <input type="text" name="bplace_strt" id="bplace_strt" class="validate" value="<?=set_value('bplace_strt')?>" disabled />
                            <label for="bplace_strt">Street</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
-                           <input type="text" name="bplace_brgy" id="bplace_brgy" class="validate" value="<?=set_value('bplace_brgy')?>" />
+                           <input type="text" name="bplace_brgy" id="bplace_brgy" class="validate" value="<?=set_value('bplace_brgy')?>" disabled />
                            <label for="bplace_brgy">Barangay</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
-                           <input type="text" name="bplace_city" id="bplace_city" class="validate" value="<?=set_value('bplace_city')?>" required/>
+                           <input type="text" name="bplace_city" id="bplace_city" class="validate" value="<?=set_value('bplace_city')?>" required disabled/>
                            <label for="bplace_city">City / Municipality</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
-                           <input type="text" name="bplace_prov" id="bplace_prov" class="validate" value="<?=set_value('bplace_prov')?>" required/>
+                           <input type="text" name="bplace_prov" id="bplace_prov" class="validate" value="<?=set_value('bplace_prov')?>" required disabled/>
                            <label for="bplace_prov">Province / Region</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l2">
-                           <input type="text" name="bplace_zip" id="bplace_zip" class="validate" value="<?=set_value('bplace_zip')?>" required/>
+                           <input type="text" name="bplace_zip" id="bplace_zip" class="validate" value="<?=set_value('bplace_zip')?>" required disabled/>
                            <label for="bplace_zip">ZIP Code</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l4">
-                           <input type="text" name="bplace_country" id="bplace_country" class="validate" value="<?php if(set_value('bplace_country'))echo set_value('bplace_country'); else echo 'Philippines';?>" required/>
+                           <input type="text" name="bplace_country" id="bplace_country" class="validate" value="<?php if(set_value('bplace_country'))echo set_value('bplace_country'); else echo 'Philippines';?>" required disabled/>
                            <label for="bplace_country">Country</label>
                          </div><!-- /.input-field col s12 -->
                      </fieldset>
@@ -253,31 +296,31 @@
                      <fieldset class=" green lighten-5">
                         <legend class="strong">Present Address</legend>
                           <div class="input-field col s12 l5">
-                           <input type="text" name="addr_bldg" id="addr_bldg" class="validate" value="<?=set_value('addr_bldg')?>" required/>
+                           <input type="text" name="addr_bldg" id="addr_bldg" class="validate" value="<?=set_value('addr_bldg')?>" required disabled/>
                            <label for="addr_bldg">Building / Block / House</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l4">
-                           <input type="text" name="addr_strt" id="addr_strt" class="validate" value="<?=set_value('addr_strt')?>" required/>
+                           <input type="text" name="addr_strt" id="addr_strt" class="validate" value="<?=set_value('addr_strt')?>" required disabled/>
                            <label for="addr_strt">Street</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
-                           <input type="text" name="addr_brgy" id="addr_brgy" class="validate" value="<?=set_value('addr_brgy')?>" required/>
+                           <input type="text" name="addr_brgy" id="addr_brgy" class="validate" value="<?=set_value('addr_brgy')?>" required disabled/>
                            <label for="addr_brgy">Barangay</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
-                           <input type="text" name="addr_city" id="addr_city" class="validate" value="<?=set_value('addr_city')?>" required/>
+                           <input type="text" name="addr_city" id="addr_city" class="validate" value="<?=set_value('addr_city')?>" required disabled/>
                            <label for="addr_city">City / Municipality</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
-                           <input type="text" name="addr_prov" id="addr_prov" class="validate" value="<?=set_value('addr_prov')?>" required/>
+                           <input type="text" name="addr_prov" id="addr_prov" class="validate" value="<?=set_value('addr_prov')?>" required disabled/>
                            <label for="addr_prov">Province / Region</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l2">
-                           <input type="text" name="addr_zip" id="addr_zip" class="validate" value="<?=set_value('addr_zip')?>" required/>
+                           <input type="text" name="addr_zip" id="addr_zip" class="validate" value="<?=set_value('addr_zip')?>" required disabled/>
                            <label for="addr_zip">ZIP Code</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l4">
-                           <input type="text" name="addr_country" id="addr_country" class="validate" value="<?php if(set_value('addr_country'))echo set_value('addr_country'); else echo 'Philippines';?>" required/>
+                           <input type="text" name="addr_country" id="addr_country" class="validate" value="<?php if(set_value('addr_country'))echo set_value('addr_country'); else echo 'Philippines';?>" required disabled/>
                            <label for="addr_country">Country</label>
                          </div><!-- /.input-field col s12 -->
                      </fieldset>
@@ -294,7 +337,15 @@
                    </div><!-- /.row -->    
                    <div class="row" id="submit_patient">
                      <div class="input-field col s12">
-                        <button type="submit" class="btn waves-effect green right">Register New Patient & Submit Case</button>                       
+                          <div class="right">
+                            <div class="col">
+                              <input type="checkbox" id="generateQueues" name="generateQueue" <?php if(set_value('generateQueue'))echo'checked';?>>
+                              <label for="generateQueues">Generate Queue</label> 
+                            </div><!-- /.col -->
+                            <div class="col">
+                              <button type="submit" class="btn waves-effect green right">Register New Patient & Submit Case</button>                      
+                            </div><!-- /.col -->
+                          </div><!-- /.right -->
                      </div><!-- /.input-field col s12 -->
                    </div><!-- /.row -->
                  </div><!-- /.card-content -->

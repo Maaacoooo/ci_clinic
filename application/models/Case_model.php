@@ -19,6 +19,17 @@ Class Case_model extends CI_Model
 
     }
 
+    function update_status($case_id, $status) {
+
+            $data = array(               
+                'status'         => $status                         
+             );
+            
+            $this->db->where('id', $case_id);
+            return $this->db->update('cases', $data);      
+
+    }
+
 
     /**
      * Returns the cases of a specific patient

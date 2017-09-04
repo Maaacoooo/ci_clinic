@@ -8,7 +8,24 @@
     <title><?=$title?> &middot; <?=$site_title?></title>
 
     <?php $this->load->view('inc/css'); ?>
+    
+    <script type="text/javascript">
+      function queues() {
 
+          if(document.getElementById("served").checked == true) {
+            document.getElementById("clearqueue").checked = true;
+          } 
+
+          if(document.getElementById("pending").checked == true) {
+            document.getElementById("generatequeue").checked = true;
+          } 
+
+          if(document.getElementById("cancel").checked == true) {
+            document.getElementById("clearqueue").checked = true;
+          } 
+
+      }
+    </script>
 
 </head>
 
@@ -88,6 +105,18 @@
                            <tr>
                              <th width="20%">Patient Name:</th>
                              <td><?=$info['fullname'] . ' ' . $info['lastname']?></td>
+                           </tr>
+                           <tr>
+                             <th>Case Status:</th>
+                             <td>
+                               <?php if ($case['status'] == 3): ?>
+                                 <span class="badge-label grey darken-3">Cancelled</span>     
+                               <?php elseif($case['status'] == 1): ?>
+                                 <span class="badge-label green darken-3">Served</span>                                   
+                               <?php else: ?> 
+                                 <span class="badge-label red darken-3">Pending</span> 
+                               <?php endif ?>
+                             </td>
                            </tr>
                            <tr>
                              <th>Date of Entry:</th>
@@ -231,6 +260,54 @@
                   <div class="modal-footer grey darken-4">
                     <a href="#" class="waves-effect waves-red btn-flat amber-text strong modal-action modal-close">Cancel</a>
                     <button type="submit" class="waves-effect waves-red btn green modal-action">Add Prescription</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+
+            <div id="changeStatus" class="modal">
+              <?=form_open('cases/change_status')?>
+                <div class="modal-content">
+                    <div class="row">
+                      <h5 class="header">Change Status</h5><!-- /.header -->
+                      <div class="col s6">
+                         <p>This changes the status of the case.</p>                        
+
+                         <input name="status" type="radio" id="pending" onclick="queues()" value="<?=$this->encryption->encrypt(0)?>" class="with-gap" <?php if ($case['status'] == 0)echo'checked';?>>
+                         <label for="pending">Pending</label>
+                         <input name="status" type="radio" id="served" onclick="queues()" value="<?=$this->encryption->encrypt(1)?>" class="with-gap" <?php if ($case['status'] == 1)echo'checked';?>>
+                         <label for="served">Served</label>
+                         <input name="status" type="radio" id="cancel" onclick="queues()" value="<?=$this->encryption->encrypt(3)?>" class="with-gap" <?php if ($case['status'] == 3)echo'checked';?>>
+                         <label for="cancel">Cancelled</label>
+                         <p><i class="mdi-action-info-outline tiny"></i> Once case is set to <span class="badge-label green darken-3">served</span>, Please tick the <a href="#">`clear queues`</a> checkbox to accomodate a new queue.</p>
+                      </div><!-- /.col s12 -->
+                      <div class="col s6">
+                         <p><i class="mdi-action-info-outline tiny"></i> You can clear and generate queues at the same time.</p>                        
+                        <div class="card">
+                          <div class="card-content">
+                            <h6 class="header strong">Queue Options</h6><!-- /.header -->                            
+                            <p>
+                              <input type="checkbox" id="clearqueue" name="clearqueue">
+                              <label for="clearqueue">Clear Queues for this Case</label>
+                            </p>
+                            <p>
+                              <input type="checkbox" id="generatequeue" name="generatequeue">
+                              <label for="generatequeue">Generate New Queue</label>
+                            </p>
+                            <p>
+                              <input type="checkbox" id="nextqueue" name="nextqueue" checked>
+                              <label for="nextqueue">Proceed to the Next Queue</label>
+                            </p>
+                          </div><!-- /.card-content -->
+                        </div><!-- /.card -->
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($case['id'])?>" />
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <a href="#" class="waves-effect waves-red btn-flat red-text strong modal-action modal-close">Cancel</a>
+                    <button type="submit" class="waves-effect waves-red btn amber modal-action">Change</button>
                   </div>
               <?=form_close()?>
             </div>

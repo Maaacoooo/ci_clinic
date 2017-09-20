@@ -81,3 +81,18 @@
 			width: 100%;
 			border: 1px #cecece solid;				
 		}
+
+		.text-right {
+			text-align: right;
+		}
+
+		.strong {
+			font-weight: bold;
+		}
+
+		.underlined {
+			padding-left: 10px;
+			padding-right: 10px;
+			border-bottom: 1px #cecece solid;
+			width: 100%;
+		}

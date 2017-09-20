@@ -255,3 +255,11 @@ h5.badge-label {
 	border-radius: 3px;
 	margin-right: 30px;
 }
+
+
+.underlined {
+	padding-left: 10px;
+	padding-right: 10px;
+	border-bottom: 1px #cecece solid;
+	width: 100%;
+}

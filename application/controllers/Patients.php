@@ -10,6 +10,7 @@ class Patients extends CI_Controller {
        $this->load->model('patient_model');
        $this->load->model('case_model');
        $this->load->model('prescription_model');
+       $this->load->model('medcert_model');
 	}	
 
 
@@ -175,13 +176,11 @@ class Patients extends CI_Controller {
 			$data['site_title'] = APP_NAME;
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 			
-			$data['info'] = $this->patient_model->view_patient($patient_id);
+			$data['info'] = $this->patient_model->view_patient($patient_id);	
 			$data['bplace'] = $this->patient_model->fetch_address($patient_id, 0);
 			$data['addr'] = $this->patient_model->fetch_address($patient_id, 1);
 
-			$data['email'] = $this->patient_model->fetch_contacts($patient_id, 1);
-			$data['mobile'] = $this->patient_model->fetch_contacts($patient_id, 0);
-
+			$data['meddoctors'] =$this->medcert_model->fetch_doctors(); //for MedCert Doctor Options
 
 			//check if it is partially deleted
 			if((!$data['info']['is_deleted']) && $data['info'] && $patient_id) {
@@ -197,8 +196,11 @@ class Patients extends CI_Controller {
 					//check validity of the CASE Row
 					if ($data['case']) {						
 
+						$data['medcerts'] = $this->medcert_model->fetch_medcert('', $case_id); //Overide Medical Certicate Information
+
 						//check the prescription request
 						if($this->uri->segment(6) == 'prescription') {
+							//PRESCRIPTION MODULE
 							//check the prescription request
 							if($this->uri->segment(7) == 'create') {
 
@@ -238,10 +240,11 @@ class Patients extends CI_Controller {
 							}
 
 						} elseif(!$this->uri->segment(6)) {
+							//CASE MODULE
 							//load CASE View
 							$data['title'] =  $data['case']['title'];	//Page title		
 							$data['prescriptions'] = $this->prescription_model->fetch_case_prescription($case_id);
-							$data['logs']	= $this->logs_model->fetch_logs('case', $case_id, 0);
+							$data['logs']	= $this->logs_model->fetch_logs('case', $case_id, 0); //cases 
 
 							$this->load->view('case/view', $data);	
 						} else {
@@ -253,9 +256,15 @@ class Patients extends CI_Controller {
 					}
 
 				} elseif(!$this->uri->segment(4)) {
+					//PATIENT MODULE
 					//Load default patient information view
 					$data['title'] = $data['info']['fullname'] . ' ' . $data['info']['lastname'];	//Page title
-					$data['cases'] = $this->case_model->fetch_patient_case($patient_id);				
+					$data['cases'] = $this->case_model->fetch_patient_case($patient_id);		
+
+					$data['email'] = $this->patient_model->fetch_contacts($patient_id, 1);
+					$data['mobile'] = $this->patient_model->fetch_contacts($patient_id, 0);
+
+					$data['medcerts'] = $this->medcert_model->fetch_medcert($patient_id, 0);	
 
 					$data['total_cases'] = $this->case_model->count_cases($patient_id);
 					$data['logs']	= $this->logs_model->fetch_logs('patient', $patient_id, 10);
@@ -263,11 +272,39 @@ class Patients extends CI_Controller {
 					$this->load->view('patient/view', $data);	
 
 				} elseif($this->uri->segment(4) == 'logs') {
+					//LOGS MODULE
 					//Show Logs
 					$data['title'] = 'Logs: ' . $data['info']['fullname'] . ' ' . $data['info']['lastname'];	//Page title
 					$data['logs']	= $this->logs_model->fetch_logs('patient', $patient_id, 0);
 					
 					$this->load->view('patient/logs', $data);	
+					
+				} elseif($this->uri->segment(4) == 'medcert') {
+					//MEDICAL CERTIFICATES MODULE					
+					$medcert_id = $this->uri->segment(6);
+					$data['medcert'] = $this->medcert_model->view($medcert_id);
+					
+					if($this->uri->segment(5) == 'view') {						
+
+						if($data['medcert']) {
+							$data['title'] = 'Medical Certificate: ' . $data['medcert']['title'];	//Page title				
+							$this->load->view('medcert/view', $data);	
+						} else {
+							show_404();
+						}						
+
+					} elseif($this->uri->segment(5) == 'print') {						
+
+						if($data['medcert']) {
+							$data['title'] = 'Medical Certificate: ' . $data['medcert']['title'];	//Page title				
+							$this->load->view('medcert/print', $data);	
+						} else {
+							show_404();
+						}						
+
+					} else {
+						show_404();
+					}
 					
 				} else {
 					show_404();

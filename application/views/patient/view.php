@@ -77,211 +77,254 @@
               <?php } ?> 
               </div>
             </div>
-            
+
+
+
             <div class="row">
-              <div class="col s12 l8">
-                <h5 class="header">Patient Information: <?=$title?></h5><!-- /.header -->
-                <table class="striped bordered">
-                  <tr>
-                    <th>Lastname:</th>
-                    <td width="80%"><?=$info['lastname']?></td>
-                  </tr>
-                  <tr>
-                    <th>Firstname:</th>
-                    <td><?=$info['fullname']?></td>
-                  </tr>
-                  <tr>
-                    <th>Middle Name:</th>
-                    <td><?=$info['middlename']?></td>
-                  </tr>
-                  <tr>
-                    <th>Sex:</th>
-                    <td>
-                      <?php if ($info['sex'] == 0): ?>
-                        <span class="badge-label pink">Female</span>     
-                      <?php else: ?>
-                        <span class="badge-label blue">Male</span>  
-                      <?php endif ?>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Birthdate / Age:</th>
-                    <td><?=$info['birthdate']?> / <?=getAge($info['birthdate'], time())?> y.o</td>
-                  </tr>
-                  <tr>
-                    <th>Birthplace:</th>
-                    <td>
-                      <?php 
-                      if($bplace['building']) {
-                        echo $bplace['building'] . ', ';
-                      } 
-                      if($bplace['street']) {
-                        echo $bplace['street'] . ', ';
-                      }
-                      if($bplace['barangay']) {
-                        echo $bplace['barangay'] . ', ';
-                      }
-                      if($bplace['city']) {
-                        echo $bplace['city'] . ', ';
-                      }
-                      if($bplace['province']) {
-                        echo $bplace['province'] . ', ';
-                      }
-                      if($bplace['zip']) {
-                        echo $bplace['zip'] . ', ';
-                      }
-                      if($bplace['country']) {
-                        echo $bplace['country'];
-                      }
-                      ?>
-                      <a href="#updateBplace" class="modal-trigger"><i class="mdi-editor-mode-edit tiny"></i></a>                      
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Address:</th>
-                    <td>
-                    <?php 
-                      if($addr['building']) {
-                        echo $addr['building'] . ', ';
-                      } 
-                      if($addr['street']) {
-                        echo $addr['street'] . ', ';
-                      }
-                      if($addr['barangay']) {
-                        echo $addr['barangay'] . ', ';
-                      }
-                      if($addr['city']) {
-                        echo $addr['city'] . ', ';
-                      }
-                      if($addr['province']) {
-                        echo $addr['province'] . ', ';
-                      }
-                      if($addr['zip']) {
-                        echo $addr['zip'] . ', ';
-                      }
-                      if($addr['country']) {
-                        echo $addr['country'];
-                      }
-                      ?>
-                      <a href="#updateAddr" class="modal-trigger"><i class="mdi-editor-mode-edit tiny"></i></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Contact Number:</th>
-                    <td>
-                      <ul>
-                        <?php if ($mobile): ?>
-                        <?php foreach ($mobile as $con): ?>
-                          <li><?=$con['details']?> <a href="#delCon<?=$con['id']?>" class="modal-trigger"><i class="mdi-content-remove-circle-outline tiny"></i></a> </li>
-                        <?php endforeach ?>  
-                        <?php endif ?>
-                        <li><small><a href="#createContact" class="modal-trigger"><em>[ New Contact... ]</em></a></small></li>
-                      </ul>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Email:</th>
-                    <td>
-                      <ul>
-                        <?php if ($email): ?>
-                        <?php foreach ($email as $mail): ?>
-                          <li><?=$mail['details']?> <a href="#delEmail<?=$mail['id']?>" class="modal-trigger"><i class="mdi-content-remove-circle-outline tiny"></i></a> </li>
-                        <?php endforeach ?>  
-                        <?php endif ?>
-                        <li><small><a href="#createEmail" class="modal-trigger"><em>[ New Email... ]</em></a></small></li>
-                      </ul>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Date Registered:</td>
-                    <td><em><?=$info['created_at']?></em></td>
-                  </tr>
-                  <?php if ($info['created_at'] != $info['updated_at']): ?>
-                  <tr>
-                    <td>Last Update:</td>
-                    <td><em><?=timespan(mysql_to_unix($info['updated_at']), time())?> ago <small><?=$info['updated_at']?></small></em></td>
-                  </tr>
-                  <?php endif ?>                  
-                </table><!-- /.striped -->
-                <br />
-                  <div class="right">
-                    <a href="#UpdateModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-editor-border-color left"></i></a>
-                    <a href="#deleteModal" class="modal-trigger btn waves-effect red">Archive<i class="mdi-action-delete left"></i></a>
-                  </div><!-- /.right -->
-              </div><!-- /.col s12 l8 -->
-              <div class="col s12 l4">
-
-                <div class="row">
-                  <div class="col s12">
-                    <div class="card">
-                      <div class="card-content">
-                        <div class="row">
-                          <div class="col s12">
-                            <h5 class="header">Cases <span class="right">(<?=$total_cases?>)</span></h5><!-- /.header -->
-                            <table class="bordered">
-                            <?php if ($cases): ?>
-                            <?php foreach ($cases as $cse): ?>
-                              <tr>
-                                <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>">
-                                    <?=$cse['title']?>                              
-                                    <?php if ($cse['status'] == 3): ?>
-                                      <span class="badge-label grey darken-3">Cancelled</span>     
-                                    <?php elseif($cse['status'] == 1): ?>
-                                      <span class="badge-label green darken-3">Served</span>                                   
-                                    <?php else: ?> 
-                                      <span class="badge-label red darken-3">Pending</span> 
-                                    <?php endif ?>
-                                </a></td>
-                                <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>"><?=nice_date(($cse['created_at']), 'M. d, Y')?></a></td>
-                              </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                              <tr>
-                                <td>No Case Found!</td>
-                              </tr>
-                            <?php endif; ?>                      
-                            </table><!-- /.bordered -->
-                            <br />
-                            <div class="right">
-                              <a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-av-my-library-books left"></i></a>
-                            </div><!-- /.right -->
-                          </div><!-- /.col s12 -->
-                        </div><!-- /.row -->
-                      </div><!-- /.card-content -->
-                    </div><!-- /.card -->
-                  </div><!-- /.col s12 -->
-                </div><!-- /.row -->               
-
-                <div class="row">
-                  <div class="col s12">
-                    <div class="card">
-                      <div class="card-content">
-                        <h6 class="header"><span class="strong">Patient Logs</span> <small><em><a href="<?=base_url('patients/view/'.$info['id'].'/logs')?>" class="right">[ View All Logs ]</a></em></small></h6><!-- /.header -->
-                        <table class="bordered">
-                        <?php if ($logs): ?>
-                        <?php foreach ($logs as $log): ?>
-                          <tr>
-                            <td><span class="badge-label pink darken-1"><?=$log['user']?></span></td>
-                            <td><?=$log['action']?></td>
-                            <td><small><?=$log['date_time']?></small></td>
-                          </tr>
-                        <?php endforeach; ?>
+              <div class="col s12">
+                <ul class="tabs z-depth-1" style="width: 100%;">
+                  <li class="tab col s2"><a class="active" href="#info">Information</a></li>
+                  <li class="tab col s2"><a href="#cases">Cases</a></li>
+                  <li class="tab col s2"><a href="#billing">Billing</a></li>
+                  <li class="tab col s2"><a href="#medcert">Med. Certificates</a></li>
+                  <li class="tab col s2"><a href="#immunization">Immunizations</a></li>
+                  <li class="tab col s2"><a href="#logs">Logs</a></li>               
+                </ul>
+              </div>
+              <div class="col s12 card">
+                <!-- TABS CONTENT -->
+                <!-- PATIENT INFORMATION -->
+                <div id="info" class="col s12 card-content">
+                  <h5 class="header">Patient Information: <?=$title?></h5><!-- /.header -->
+                  <table class="striped bordered">
+                    <tr>
+                      <th>Lastname:</th>
+                      <td width="80%"><?=$info['lastname']?></td>
+                    </tr>
+                    <tr>
+                      <th>Firstname:</th>
+                      <td><?=$info['fullname']?></td>
+                    </tr>
+                    <tr>
+                      <th>Middle Name:</th>
+                      <td><?=$info['middlename']?></td>
+                    </tr>
+                    <tr>
+                      <th>Sex:</th>
+                      <td>
+                        <?php if ($info['sex'] == 0): ?>
+                          <span class="badge-label pink">Female</span>     
                         <?php else: ?>
-                          <tr>
-                            <td>No Logs Found!</td>
-                          </tr>
-                        <?php endif; ?>                      
-                        </table><!-- /.bordered -->
+                          <span class="badge-label blue">Male</span>  
+                        <?php endif ?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Birthdate / Age:</th>
+                      <td><?=$info['birthdate']?> / <?=getAge($info['birthdate'], time())?> y.o</td>
+                    </tr>
+                    <tr>
+                      <th>Birthplace:</th>
+                      <td>
+                        <?php 
+                        if($bplace['building']) {
+                          echo $bplace['building'] . ', ';
+                        } 
+                        if($bplace['street']) {
+                          echo $bplace['street'] . ', ';
+                        }
+                        if($bplace['barangay']) {
+                          echo $bplace['barangay'] . ', ';
+                        }
+                        if($bplace['city']) {
+                          echo $bplace['city'] . ', ';
+                        }
+                        if($bplace['province']) {
+                          echo $bplace['province'] . ', ';
+                        }
+                        if($bplace['zip']) {
+                          echo $bplace['zip'] . ', ';
+                        }
+                        if($bplace['country']) {
+                          echo $bplace['country'];
+                        }
+                        ?>
+                        <a href="#updateBplace" class="modal-trigger"><i class="mdi-editor-mode-edit tiny"></i></a>                      
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Address:</th>
+                      <td>
+                      <?php 
+                        if($addr['building']) {
+                          echo $addr['building'] . ', ';
+                        } 
+                        if($addr['street']) {
+                          echo $addr['street'] . ', ';
+                        }
+                        if($addr['barangay']) {
+                          echo $addr['barangay'] . ', ';
+                        }
+                        if($addr['city']) {
+                          echo $addr['city'] . ', ';
+                        }
+                        if($addr['province']) {
+                          echo $addr['province'] . ', ';
+                        }
+                        if($addr['zip']) {
+                          echo $addr['zip'] . ', ';
+                        }
+                        if($addr['country']) {
+                          echo $addr['country'];
+                        }
+                        ?>
+                        <a href="#updateAddr" class="modal-trigger"><i class="mdi-editor-mode-edit tiny"></i></a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Contact Number:</th>
+                      <td>
+                        <ul>
+                          <?php if ($mobile): ?>
+                          <?php foreach ($mobile as $con): ?>
+                            <li><?=$con['details']?> <a href="#delCon<?=$con['id']?>" class="modal-trigger"><i class="mdi-content-remove-circle-outline tiny"></i></a> </li>
+                          <?php endforeach ?>  
+                          <?php endif ?>
+                          <li><small><a href="#createContact" class="modal-trigger"><em>[ New Contact... ]</em></a></small></li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Email:</th>
+                      <td>
+                        <ul>
+                          <?php if ($email): ?>
+                          <?php foreach ($email as $mail): ?>
+                            <li><?=$mail['details']?> <a href="#delEmail<?=$mail['id']?>" class="modal-trigger"><i class="mdi-content-remove-circle-outline tiny"></i></a> </li>
+                          <?php endforeach ?>  
+                          <?php endif ?>
+                          <li><small><a href="#createEmail" class="modal-trigger"><em>[ New Email... ]</em></a></small></li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Date Registered:</td>
+                      <td><em><?=$info['created_at']?></em></td>
+                    </tr>
+                    <?php if ($info['created_at'] != $info['updated_at']): ?>
+                    <tr>
+                      <td>Last Update:</td>
+                      <td><em><?=timespan(mysql_to_unix($info['updated_at']), time())?> ago <small><?=$info['updated_at']?></small></em></td>
+                    </tr>
+                    <?php endif ?>                  
+                  </table><!-- /.striped -->
+                  <br />
+                    <div class="right">
+                      <a href="#UpdateModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-editor-border-color left"></i></a>
+                      <a href="#deleteModal" class="modal-trigger btn waves-effect red">Archive<i class="mdi-action-delete left"></i></a>
+                    </div><!-- /.right -->
+                </div> <!-- /#info -->
+                <!-- END PATIENT INFORMATION -->
 
-                      </div><!-- /.card-content -->
-                    </div><!-- /.card -->
-                  </div><!-- /.col s12 -->
-                </div><!-- /.row -->
+                <!-- CASE INFORTION -->
+                <div id="cases" class="col s12 card-content">
+                  <h5 class="header">Cases <span class="right">(<?=$total_cases?>)</span></h5><!-- /.header -->
+                  <table class="bordered">
+                  <?php if ($cases): ?>
+                  <?php foreach ($cases as $cse): ?>
+                    <tr>
+                      <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>">
+                        <?=$cse['title']?>                              
+                         <?php if ($cse['status'] == 3): ?>
+                           <span class="badge-label grey darken-3">Cancelled</span>     
+                         <?php elseif($cse['status'] == 1): ?>
+                           <span class="badge-label green darken-3">Served</span>                                   
+                         <?php else: ?> 
+                           <span class="badge-label red darken-3">Pending</span> 
+                         <?php endif ?>
+                     </a></td>
+                     <td><a href="<?=base_url('patients/view/'.$cse['patient_id'].'/case/'.$cse['id'])?>"><?=nice_date(($cse['created_at']), 'M. d, Y')?></a></td>
+                   </tr>
+                  <?php endforeach; ?>
+                  <?php else: ?>
+                    <tr>
+                      <td>No Case Found!</td>
+                    </tr>
+                  <?php endif; ?>                      
+                  </table><!-- /.bordered -->
+                  <br />
+                  <div class="right">
+                              <a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-av-my-library-books left"></i></a>
+                  </div><!-- /.right -->
+                </div>
+                <!-- END CASE INFORMATION -->
 
+                <!-- BILLING INFORTION --> 
+                <div id="billing" class="col s12 card-content">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, fuga. Billing 
+                </div>
+                <!-- END BILLING INFORMATION -->
 
-              </div><!-- /.col s12 l4 -->
+                <!-- MEDICAL CERTIFICATES INFORMATION --> 
+                <div id="medcert" class="col s12 card-content">
+                    <h5 class="header">Medical Certificates</h5><!-- /.header -->
+                    <table class="striped bordered">
+                    <?php if ($medcerts): ?>                    
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Doctor</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php foreach ($medcerts as $med): ?>
+                        <tr>
+                          <td><a href="<?=base_url('patients/view/'.$med['patient_id'].'/medcert/view/'.$med['cert_id'])?>">CERT #<?=prettyID($med['cert_id'])?></a></td>
+                          <td><a href="<?=base_url('patients/view/'.$med['patient_id'].'/medcert/view/'.$med['cert_id'])?>"><?=$med['doctor']?></a></td>
+                          <td><a href="<?=base_url('patients/view/'.$med['patient_id'].'/medcert/view/'.$med['cert_id'])?>"><?=$med['created_at']?></a></td>
+                        </tr>
+                        <?php endforeach ?>
+                      </tbody>
+                    <?php else: ?>  
+                        <tr>
+                          <td>No Medical Certificates Found!</td>
+                        </tr>
+                    <?php endif ?>
+                    </table><!-- /.striped bordered -->                    
+                </div>
+                <!-- END MEDICAL CERTIFICATES INFORMATION -->
+
+                <!-- IMMUNIZATIONS INFORMATION --> 
+                <div id="immunization" class="col s12 card-content">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis repudiandae aspernatur unde laborum saepe. Facilis vel voluptatibus iste, porro aliquid repudiandae, fugiat natus quia sit et excepturi culpa obcaecati illo.</p>
+                </div>
+                <!-- END IMMUNIZATIONS INFORMATION -->
+
+                <!-- LOGS INFORMATION --> 
+                <div id="logs" class="col s12 card-content">
+                  <h6 class="header"><span class="strong">Patient Logs</span> <small><em><a href="<?=base_url('patients/view/'.$info['id'].'/logs')?>" class="right">[ View All Logs ]</a></em></small></h6><!-- /.header -->
+                    <table class="bordered">
+                    <?php if ($logs): ?>
+                    <?php foreach ($logs as $log): ?>
+                      <tr>
+                        <td><span class="badge-label pink darken-1"><?=$log['user']?></span></td>
+                        <td><?=$log['action']?></td>
+                        <td><small><?=$log['date_time']?></small></td>
+                      </tr>
+                    <?php endforeach; ?>
+                    <?php else: ?>
+                      <tr>
+                        <td>No Logs Found!</td>
+                      </tr>
+                    <?php endif; ?>                      
+                    </table><!-- /.bordered -->
+                </div> 
+                <!-- END LOGS INFORMATION -->                                 
+                <!-- END TABS CONTENT -->
+              </div> <!-- /. col s12 card -->
             </div><!-- /.row -->
-         
+                     
           </div>
         </div>
         <!--end container-->
@@ -578,3 +621,10 @@
    
 </body>
 </html>
+
+
+
+
+
+                
+

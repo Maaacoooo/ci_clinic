@@ -95,97 +95,131 @@
               <?php } ?> 
               </div>
             </div>
-            
+
+
             <div class="row">
-               <div class="col s12 l8">
+              <div class="col s12">
+                <ul class="tabs z-depth-1" style="width: 100%;">
+                  <li class="tab col s2"><a class="active" href="#info">Case Information</a></li>
+                  <li class="tab col s2"><a href="#prescription">Prescriptions</a></li>
+                  <li class="tab col s2"><a href="#labrequest">Lab Request</a></li>
+                  <li class="tab col s2"><a href="#medcert">Med. Certificates</a></li>
+                  <li class="tab col s2"><a href="#immunization">Immunizations</a></li>
+                  <li class="tab col s2"><a href="#logs">Logs</a></li>               
+                </ul>
+              </div>
+              <div class="col s12 card">
+                <!-- TABS CONTENT -->
+                
+                <!-- CASE INFORTION -->
+                <div id="info" class="col s12 card-content">
                   <div class="row">
-                     <div class="col s12">                       
-                       <h5 class="header">Case Information : <?=$case['title']?></h5><!-- /.header -->
-                         <table class="bordered striped">
-                           <tr>
-                             <th width="20%">Patient Name:</th>
-                             <td><?=$info['fullname'] . ' ' . $info['lastname']?></td>
-                           </tr>
-                           <tr>
-                             <th>Case Status:</th>
-                             <td>
-                               <?php if ($case['status'] == 3): ?>
-                                 <span class="badge-label grey darken-3">Cancelled</span>     
-                               <?php elseif($case['status'] == 1): ?>
-                                 <span class="badge-label green darken-3">Served</span>                                   
-                               <?php else: ?> 
-                                 <span class="badge-label red darken-3">Pending</span> 
-                               <?php endif ?>
-                             </td>
-                           </tr>
-                           <tr>
-                             <th>Date of Entry:</th>
-                             <td><?=nice_date($case['created_at'], 'M. d, Y')?></td>
-                           </tr>
-                           <tr>
-                             <th>Age of Entry:</th>
-                             <td><?=getAge($info['birthdate'], mysql_to_unix($case['created_at']))?></td>
-                           </tr>
-                           <tr>
-                             <th>Weight (kg):</th>
-                             <td><?=$case['weight']?></td>
-                           </tr>
-                           <tr>
-                             <th>Height (cm):</th>
-                             <td><?=$case['height']?></td>
-                           </tr>
-                           <tr>
-                             <th colspan="2">Description:</th>
-                           </tr>
-                           <tr>
-                             <td colspan="2"><?=$case['description']?></td>
-                           </tr>
-                         </table><!-- /.bordered striped -->    
-                         <p>
-                          <small>
-                            <em>
-                              Registered: <?=$case['created_at']?>
-                              <?php if ($case['created_at'] != $case['updated_at']): ?>
-                                <span class="right">Updated: <?=$case['updated_at']?></span>
-                              <?php endif ?>
-                            </em>
-                          </small>
-                          </p>   
-                     </div><!-- /.col s12 -->
-                   </div><!-- /.row --> 
-               </div><!-- /.col s12 l8 -->
+                    <div class="col s12 l8">
+                      <h5 class="header">Case Information : <?=$case['title']?></h5><!-- /.header -->
+                    <table class="bordered striped">
+                      <tr>
+                        <th width="20%">Patient Name:</th>
+                        <td><?=$info['fullname'] . ' ' . $info['lastname']?></td>
+                      </tr>
+                      <tr>
+                        <th>Case Status:</th>
+                        <td>
+                          <?php if ($case['status'] == 3): ?>
+                            <span class="badge-label grey darken-3">Cancelled</span>     
+                          <?php elseif($case['status'] == 1): ?>
+                            <span class="badge-label green darken-3">Served</span>                                   
+                          <?php else: ?> 
+                            <span class="badge-label red darken-3">Pending</span> 
+                          <?php endif ?>
+                        </td>
+                       </tr>
+                       <tr>
+                         <th>Date of Entry:</th>
+                         <td><?=nice_date($case['created_at'], 'M. d, Y')?></td>
+                       </tr>
+                       <tr>
+                         <th>Age of Entry:</th>
+                         <td><?=getAge($info['birthdate'], mysql_to_unix($case['created_at']))?></td>
+                       </tr>
+                       <tr>
+                         <th>Weight (kg):</th>
+                         <td><?=$case['weight']?></td>
+                       </tr>
+                       <tr>
+                         <th>Height (cm):</th>
+                         <td><?=$case['height']?></td>
+                       </tr>
+                       <tr>
+                         <th colspan="2">Description:</th>
+                       </tr>
+                       <tr>
+                         <td colspan="2"><?=$case['description']?></td>
+                       </tr>
+                    </table><!-- /.bordered striped -->    
+                    <p>
+                    <small>
+                      <em>
+                        Registered: <?=$case['created_at']?>
+                        <?php if ($case['created_at'] != $case['updated_at']): ?>
+                          <span class="right">Updated: <?=$case['updated_at']?></span>
+                        <?php endif ?>
+                      </em>
+                    </small>
+                    </p>
+                    </div><!-- /.col s12 l8 -->
+                    <div class="col s12 l4">                      
+                       <div class="card">
+                         <div class="card-content">
+                            <h6 class="header strong">Options</h6><!-- /.header -->
+                            <div class="row">
+                              <a href="#changeStatus" class="modal-trigger btn waves-effect orange col s8 offset-s2">Laboratory Request</a>   
+                            </div><!-- /.row -->
+                            <br />    
+                            <div class="row">
+                              <a href="#changeStatus" class="modal-trigger btn waves-effect pink col s8 offset-s2">Immunization Request</a>   
+                            </div><!-- /.row -->
+                            <br />     
+                            <div class="row">
+                              <a href="#medcertModal" class="modal-trigger btn waves-effect light-blue col s8 offset-s2">Issue Med. Cert</a>   
+                            </div><!-- /.row -->  
+                            <br />
+                            <?php if ($user['usertype'] == 'Doctor'): ?>
+                            <div class="row">
+                              <a href="#addPrescription" class="modal-trigger btn waves-effect green col s8 offset-s2">Add Prescription</a>  
+                            </div><!-- /.row -->    
+                            <br/>    
+                            <div class="row">
+                              <a href="#changeStatus" class="modal-trigger btn waves-effect amber col s8 offset-s2">Change Status</a>   
+                            </div><!-- /.row -->
+                            <br />    
+                            <?php endif ?>   
+                         </div><!-- /.card-content -->
+                       </div><!-- /.card -->                       
+                    </div><!-- /.col s12 l4 -->
+                  </div><!-- /.row -->
+                </div>
+                <!-- END CASE INFORMATION -->
 
-
-               <div class="col s12 l4">
-                 
-                  <div class="row">
-                   <div class="col s12">
-                    <?php if ($user['usertype'] == 'Doctor'): ?>
-                     <div class="card">
-                       <div class="card-content">
-                          <h6 class="header strong">Options</h6><!-- /.header -->
-                          <div class="row">
-                            <a href="#addPrescription" class="modal-trigger btn waves-effect green col s8 offset-s2">Add Prescription</a>  
-                          </div><!-- /.row -->    
-                          <br/>    
-                          <div class="row">
-                            <a href="#changeStatus" class="modal-trigger btn waves-effect amber col s8 offset-s2">Change Status</a>   
-                          </div><!-- /.row -->        
-                       </div><!-- /.card-content -->
-                     </div><!-- /.card -->
-                     <?php endif ?> 
-                                         
-                     <table class="bordered card">
+                <!-- PRESCRIPTION INFORMATION --> 
+                <div id="prescription" class="col s12 card-content">
+                  <h5 class="header">Prescriptions</h5><!-- /.header -->
+                   <div class="row">
+                     <div class="col s12">
+                       <table class="bordered">
                         <thead>
                           <tr>
-                            <th>Prescriptions</th>
+                            <th>Issued by</th>
+                            <th>Title</th>
+                            <th>Date and Time</th>
                           </tr>
                         </thead>
                         <tbody>
                           <?php if ($prescriptions): ?>
                             <?php foreach ($prescriptions as $pres): ?>
                               <tr>
-                                <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$case['id'].'/prescription/view/'.$pres['id'])?>"><?=$pres['title'].' - '.$pres['created_at']?></a></td>
+                                <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$case['id'].'/prescription/view/'.$pres['id'])?>"><?=$pres['created_by']?></a></td>
+                                <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$case['id'].'/prescription/view/'.$pres['id'])?>"><?=$pres['title']?></a></td>
+                                <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$case['id'].'/prescription/view/'.$pres['id'])?>"><?=$pres['created_at']?></a></td>
                               </tr>
                             <?php endforeach ?>   
                           <?php else: ?>
@@ -194,39 +228,90 @@
                               </tr>                         
                           <?php endif ?>
                         </tbody>
-                     </table><!-- /.striped bordered -->
-                   </div><!-- /.col s12 -->
-                 </div><!-- /.row -->
+                       </table><!-- /.striped bordered -->
+                     </div><!-- /.col s12 -->
+                   </div><!-- /.row -->
+                   <br /> 
+                   <div class="row">
+                     <div class="col s12">          
+                         <a href="#addPrescription" class="modal-trigger btn waves-effect green right">Add Prescription</a>  
+                     </div><!-- /.col s12 -->
+                   </div><!-- /.row -->
+                </div>
+                <!-- END PRESCRIPTION INFORMATION -->
 
-                 <div class="row">
-                  <div class="col s12">
-                    <div class="card">
-                      <div class="card-content">
-                        <h6 class="header"><span class="strong">Case Logs</span></h6><!-- /.header -->
-                        <table class="bordered">
-                        <?php if ($logs): ?>
-                        <?php foreach ($logs as $log): ?>
-                          <tr>
-                            <td><span class="badge-label pink darken-1"><?=$log['user']?></span></td>
-                            <td><?=$log['action']?></td>
-                            <td><small><?=$log['date_time']?></small></td>
-                          </tr>
-                        <?php endforeach; ?>
-                        <?php else: ?>
-                          <tr>
-                            <td>No Logs Found!</td>
-                          </tr>
-                        <?php endif; ?>                      
-                        </table><!-- /.bordered -->
+                <!-- LAB REQUEST INFORMATION --> 
+                <div id="labrequest" class="col s12 card-content">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, fuga. Lab Request 
+                </div>
+                <!-- END LAB REQUEST INFORMATION -->
 
-                      </div><!-- /.card-content -->
-                    </div><!-- /.card -->
-                  </div><!-- /.col s12 -->
-                </div><!-- /.row -->
-               </div><!-- /.col s12 l4 -->
+                <!-- MEDICAL CERTIFICATES INFORMATION --> 
+                <div id="medcert" class="col s12 card-content">
+                  <h5 class="header">Medical Certificates</h5><!-- /.header -->
+                    <table class="striped bordered">
+                    <?php if ($medcerts): ?>                    
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Doctor</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php foreach ($medcerts as $med): ?>
+                        <tr>
+                          <td><a href="<?=base_url('patients/view/'.$med['patient_id'].'/medcert/view/'.$med['cert_id'])?>">CERT #<?=prettyID($med['cert_id'])?> - <?=$med['title']?></a></td>
+                          <td><a href="<?=base_url('patients/view/'.$med['patient_id'].'/medcert/view/'.$med['cert_id'])?>"><?=$med['doctor']?></a></td>
+                          <td><a href="<?=base_url('patients/view/'.$med['patient_id'].'/medcert/view/'.$med['cert_id'])?>"><?=$med['created_at']?></a></td>
+                        </tr>
+                        <?php endforeach ?>
+                      </tbody>
+                    <?php else: ?>  
+                        <tr>
+                          <td>No Medical Certificates Found!</td>
+                        </tr>
+                    <?php endif ?>
+                    </table><!-- /.striped bordered --> 
+                    <br />
+                    <div class="row">
+                     <div class="col s12">          
+                         <a href="#medcertModal" class="modal-trigger btn waves-effect light-blue right">Issue Medical Certificate</a>
+                     </div><!-- /.col s12 -->
+                   </div><!-- /.row -->
+                </div>
+                <!-- END MEDICAL CERTIFICATES INFORMATION -->
 
+                <!-- IMMUNIZATIONS INFORMATION --> 
+                <div id="immunization" class="col s12 card-content">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis repudiandae aspernatur unde laborum saepe. Facilis vel voluptatibus iste, porro aliquid repudiandae, fugiat natus quia sit et excepturi culpa obcaecati illo.</p>
+                </div>
+                <!-- END IMMUNIZATIONS INFORMATION -->
 
-             </div><!-- /.row --> 
+                <!-- LOGS INFORTION --> 
+                <div id="logs" class="col s12 card-content">
+                  <h6 class="header"><span class="strong">Case Logs</span></h6><!-- /.header -->
+                    <table class="bordered">
+                    <?php if ($logs): ?>
+                    <?php foreach ($logs as $log): ?>
+                      <tr>
+                        <td><span class="badge-label pink darken-1"><?=$log['user']?></span></td>
+                        <td><?=$log['action']?></td>
+                        <td><small><?=$log['date_time']?></small></td>
+                      </tr>
+                    <?php endforeach; ?>
+                    <?php else: ?>
+                      <tr>
+                        <td>No Logs Found!</td>
+                      </tr>
+                    <?php endif; ?>                      
+                    </table><!-- /.bordered -->
+                </div> 
+                <!-- END LOGS INFORMATION -->                                 
+                <!-- END TABS CONTENT -->
+              </div> <!-- /. col s12 card -->
+            </div><!-- /.row -->
+            
          
           </div>
         </div>
@@ -320,7 +405,48 @@
               
             <?php endif ?>
 
-
+            <div id="medcertModal" class="modal">
+              <?=form_open('cases/create_medcert')?>
+                <div class="modal-content">
+                    <div class="row">
+                      <h5 class="header">Issue Medical Certificate</h5><!-- /.header -->
+                      <div class="col s6">
+                         <p><i class="mdi-action-info-outline tiny"></i> Please note that you <span class="red-text strong">CANNOT UNDO nor UPDATE</span> the Medical Certificate. All Inputs should treated as final and true.</p>
+                         <p>Please input the required fields</p>                       
+                          <div class="input-field col s12">
+                            <input type="text" name="title" id="title" class="validate" required="" />
+                            <label for="title">Case Title</label>
+                          </div><!-- /.input-field col s12 -->
+                          <div class="col s12">
+                            <label>Attending Physician</label>
+                            <select class="browser-default" name="doctor" required="">
+                              <option value="" disabled="" selected="">Choose Physician...</option>
+                              <?php foreach ($meddoctors as $doc): ?>
+                              <option value="<?=$doc['name']?>">Dr. <?=$doc['name'].' - LIC. # '.$doc['lic_no']?></option>
+                              <?php endforeach ?>
+                            </select>
+                          </div>                           
+                        <input type="hidden" name="id" value="<?=$this->encryption->encrypt($case['id'])?>" />
+                        <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                      </div><!-- /.col s12 -->
+                      <div class="col s6">
+                        <div class="col s12">
+                            <label for="remarks">Remarks and Recommendations</label>                            
+                            <textarea name="remarks" id="remarks" cols="30" rows="10" class="ckeditor" required=""></textarea>
+                        </div><!-- /.input-field col s12 -->                             
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($case['id'])?>" />
+                    <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <a href="#" class="waves-effect waves-red btn-flat red-text strong modal-action modal-close">Cancel</a>
+                    <button type="submit" class="waves-effect waves-red btn light-blue modal-action">Issue Certificate</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+  
+  
 
      <!-- //////////////////////////////////////////////////////////////////////////// -->
 

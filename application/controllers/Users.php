@@ -29,7 +29,7 @@ class Users extends CI_Controller {
 	   		$config['num_links'] = 5;
 			$config['base_url'] = base_url('/users/index/');
 			$config["total_rows"] = $this->user_model->count_users();
-			$config['per_page'] = 1;				
+			$config['per_page'] = 10;				
 			$this->load->config('pagination'); //LOAD PAGINATION CONFIG
 
 			$this->pagination->initialize($config);

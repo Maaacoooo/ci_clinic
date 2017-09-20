@@ -187,7 +187,7 @@
                        <input type="text" name="email" id="email" class="validate" value="<?=set_value('email')?>" required/>
                        <label for="email">Email Address</label>
                      </div><!-- /.input-field col s6 -->
-                   </div><!-- /.row -->>
+                   </div><!-- /.row -->
                    <div class="row" id="submit_patient">
                      <div class="input-field col s12">
                         <button type="submit" class="btn waves-effect green right">Register New Patient</button>                       

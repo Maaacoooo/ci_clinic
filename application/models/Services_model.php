@@ -24,8 +24,7 @@ Class Services_model extends CI_Model
             $data = array(              
                 'title'          => $this->input->post('title'),  
                 'description'    => $this->input->post('description'),                 
-                'code'           => $this->input->post('code'),                 
-                'service_cat'    => $this->input->post('category'),                 
+                'code'           => $this->input->post('code'),                            
                 'amount'         => $this->input->post('amount')                         
              );
             

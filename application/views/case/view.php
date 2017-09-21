@@ -8,7 +8,9 @@
     <title><?=$title?> &middot; <?=$site_title?></title>
 
     <?php $this->load->view('inc/css'); ?>
-    
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.theme.min.css" rel="stylesheet">
+
     <script type="text/javascript">
       function queues() {
 
@@ -171,13 +173,6 @@
                        <div class="card">
                          <div class="card-content">
                             <h6 class="header strong">Options</h6><!-- /.header -->
-                            <div class="row">
-                              <a href="#changeStatus" class="modal-trigger btn waves-effect orange col s8 offset-s2">Laboratory Request</a>   
-                            </div><!-- /.row -->
-                            <br />    
-                            <div class="row">
-                              <a href="#changeStatus" class="modal-trigger btn waves-effect pink col s8 offset-s2">Immunization Request</a>   
-                            </div><!-- /.row -->
                             <br />     
                             <div class="row">
                               <a href="#medcertModal" class="modal-trigger btn waves-effect light-blue col s8 offset-s2">Issue Med. Cert</a>   
@@ -242,8 +237,30 @@
 
                 <!-- LAB REQUEST INFORMATION --> 
                 <div id="labrequest" class="col s12 card-content">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, fuga. Lab Request 
-                </div>
+                  <h5 class="header">Laboratory Requests</h5><!-- /.header -->     
+                  <?=form_open('laboratory/create')?> 
+                  <div class="row">
+                    <div class="col s10 input-field">
+                      <input type="text" name="labreq" id="labreq" class="validate" />
+                      <input type="hidden" name="id" value="<?=$this->encryption->encrypt($case['id'])?>" />                    
+                      <label for="labreq">Request for Laboratory Service</label>
+                    </div><!-- /.col s9 -->
+                    <div class="input-field col s2">
+                      <button type="submit" class="btn waves-effect orange">Request</button>
+                    </div><!-- /.input-field col s2-->
+                  </div><!-- /.row -->    
+                  <?=form_close()?>       
+                  <table class="striped bordered">
+                    <thead>
+                      <tr>
+                        <th>Service</th>
+                        <th>CODE</th>
+                        <th>Requestor</th>
+                        <th>Date Time</th>
+                      </tr>
+                    </thead>
+                  </table><!-- /.striped bordered -->                    
+                </div><!-- /#labrequest -->
                 <!-- END LAB REQUEST INFORMATION -->
 
                 <!-- MEDICAL CERTIFICATES INFORMATION --> 
@@ -453,8 +470,17 @@
     <?php $this->load->view('inc/footer'); ?>
 
     <?php $this->load->view('inc/js'); ?>
-    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
+   
+    <script src="<?php echo base_url();?>assets/js/jquery-ui.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
     
+    <script type="text/javascript">
+      $(function(){
+      $("#labreq").autocomplete({    
+        source: "<?php echo base_url('index.php/laboratory/autocomplete');?>" // path to the get_birds method
+      });
+    });
+    </script>
+    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
    
 </body>
 </html>

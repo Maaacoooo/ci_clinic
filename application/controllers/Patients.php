@@ -11,9 +11,8 @@ class Patients extends CI_Controller {
        $this->load->model('case_model');
        $this->load->model('prescription_model');
        $this->load->model('medcert_model');
+       $this->load->model('laboratory_model');
 	}	
-
-
 
 	public function index()		{
 
@@ -197,6 +196,7 @@ class Patients extends CI_Controller {
 					if ($data['case']) {						
 
 						$data['medcerts'] = $this->medcert_model->fetch_medcert('', $case_id); //Overide Medical Certicate Information
+						$data['labreqs'] = $this->laboratory_model->fetch_requests($case_id);
 
 						//check the prescription request
 						if($this->uri->segment(6) == 'prescription') {
@@ -238,6 +238,26 @@ class Patients extends CI_Controller {
 							} else {
 								show_404();
 							}
+
+						} elseif($this->uri->segment(6) == 'laboratory') {
+							//LABORATORY MODULE
+							$labreq_id = $this->uri->segment(7); // Lab Request ID
+							$data['labreq'] = $this->laboratory_model->view($labreq_id, $case_id);
+
+							if($data['labreq']) {
+
+								$data['title'] =  'Lab Request #'.prettyID($labreq_id). ': ' . $data['labreq']['service'];	//Page title	
+								$data['lab_files'] = $this->laboratory_model->fetch_files($labreq_id); //Results and Files 
+
+								$this->load->view('laboratory/view', $data);
+
+							} else {
+								show_404();
+							}
+
+						} elseif($this->uri->segment(6) == 'immunization') {
+							//LABORATORY MODULE
+							echo 'immunization';
 
 						} elseif(!$this->uri->segment(6)) {
 							//CASE MODULE

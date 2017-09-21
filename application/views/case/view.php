@@ -253,12 +253,37 @@
                   <table class="striped bordered">
                     <thead>
                       <tr>
+                        <th>Request</th>
                         <th>Service</th>
-                        <th>CODE</th>
                         <th>Requestor</th>
                         <th>Date Time</th>
                       </tr>
                     </thead>
+                    <tbody>
+                      <?php if ($labreqs): ?>
+                        <?php foreach ($labreqs as $lab): ?>
+                        <tr>
+                          <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$lab['case_id'].'/laboratory/'.$lab['id'])?>">#<?=prettyID($lab['id'])?></a></td>
+                          <td>
+                            <a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$lab['case_id'].'/laboratory/'.$lab['id'])?>"><?=$lab['service']?> - <?=$lab['code']?></a>
+                            <?php if ($lab['status'] == 3): ?>
+                            <span class="badge-label grey darken-3">Cancelled</span>     
+                            <?php elseif($lab['status'] == 1): ?>
+                              <span class="badge-label green darken-3">Served</span>                                   
+                            <?php else: ?> 
+                              <span class="badge-label red darken-3">Pending</span> 
+                            <?php endif ?>
+                          </td>
+                          <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$lab['case_id'].'/laboratory/'.$lab['id'])?>"><?=$lab['user']?></a></td>
+                          <td><a href="<?=base_url('patients/view/'.$info['id'].'/case/'.$lab['case_id'].'/laboratory/'.$lab['id'])?>"><?=$lab['created_at']?></a></td>
+                        </tr>
+                        <?php endforeach ?>
+                      <?php else: ?>
+                        <tr>
+                          <td colspan="4">No Laboratory Request found!</td>
+                        </tr>
+                      <?php endif ?>
+                    </tbody>
                   </table><!-- /.striped bordered -->                    
                 </div><!-- /#labrequest -->
                 <!-- END LAB REQUEST INFORMATION -->

@@ -44,6 +44,13 @@ Class Services_model extends CI_Model
 
     }    
 
+    function view($id, $cat) {
+            $this->db->where('id', $id);
+            $this->db->where('service_cat', $cat);
+            $query = $this->db->get("services");
+            return $query->row_array();
+    }
+
 
     /**
      * Returns the paginated array of rows 
@@ -79,13 +86,18 @@ Class Services_model extends CI_Model
 
 
     function search_service($term, $cat) {
-        $this->db->where('service_cat', $cat);
         $this->db->like('title', $term);
         $this->db->or_like('code', $term);
-        $this->db->or_like('description', $term);
+        $this->db->or_like('description', $term); 
         
+        $this->db->having('service_cat', $cat);
+
         $query = $this->db->get("services");
+
+        log_message('error', $this->db->last_query());
         return $query->result_array();
+
+
 
     }
 

@@ -71,18 +71,20 @@ class Laboratory extends CI_Controller {
 			
 			//FORM VALIDATION
 			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
-			$this->form_validation->set_rules('labreq', 'Service Request', 'trim|required');   
+			$this->form_validation->set_rules('labreq', 'Service Request', 'trim|required|callback_check_service');   
 		 
 		   if($this->form_validation->run() == FALSE)	{
 
 				$this->session->set_flashdata('error', 'An Error has Occured!');
-				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				redirect($_SERVER['HTTP_REFERER'].'#labrequest', 'refresh');
 
 			} else {
 
-				$case_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row				
+				$case_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
+				$service_id = cleanId($this->input->post('labreq')); //gets the service row ID
+				$service = $this->services_model->view($service_id, 'laboratory')['title'];//sets the service title		
 
-				if($this->laboratory_model->create($case_id, $userdata['username'])) {
+				if($this->laboratory_model->create($case_id, $service, $userdata['username'])) {
 
 					$labreq_id = $this->db->insert_id(); //fetch last insert labreq Row ID
 
@@ -123,8 +125,248 @@ class Laboratory extends CI_Controller {
 
 
 
+	function check_service($str) {
+
+		$id = cleanId($str);
+
+		$result = $this->services_model->view($id, 'laboratory');
+
+		if($result) {			
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('check_service', 'No Service Found!');			
+			return FALSE;
+		}
+	}
+
+
+	public function update()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+			$this->form_validation->set_rules('description', 'Description', 'trim');   
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$labreq_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
+
+				if($this->laboratory_model->update($labreq_id)) {
+
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'laboratory',
+						'tag_id'	=> 	$labreq_id,
+						'action' 	=> 	'Updated Description'
+						);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+					$this->session->set_flashdata('success', 'Description / Remarks Updated!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+	public function attach_result()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+			$this->form_validation->set_rules('title', 'Title', 'trim|required');   
+			$this->form_validation->set_rules('description', 'Description', 'trim');   
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$labreq_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
+
+				if($this->laboratory_model->create_file($labreq_id, $userdata['username'])) {
+
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'laboratory',
+						'tag_id'	=> 	$labreq_id,
+						'action' 	=> 	'Attached a Result : `'.$this->input->post('title').'`'
+						);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+					$this->session->set_flashdata('success', 'Result Attached!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+	public function update_result()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+			$this->form_validation->set_rules('title', 'Title', 'trim|required');   
+			$this->form_validation->set_rules('description', 'Description', 'trim');   
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$file_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
+
+				if($this->laboratory_model->update_file($file_id)) {
+
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'lab_file',
+						'tag_id'	=> 	$file_id,
+						'action' 	=> 	'Updated a Result : `'.$this->input->post('title').'`'
+					);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+					$this->session->set_flashdata('success', 'Result Updated!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+	public function delete_result()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');     
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$file_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
+
+				if($this->laboratory_model->delete_file($file_id)) {
+
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'lab_file',
+						'tag_id'	=> 	$file_id,
+						'action' 	=> 	'Deleted a Result'
+					);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+					$this->session->set_flashdata('success', 'Result Deleted!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+	public function download($file_id)		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			$download = $this->laboratory_model->view_file($file_id);
+			$path = './uploads/patients/'.$download['patient_id'].'/case/'.$download['case_id'].'/laboratory/'.$download['labreq_id'].'/'.$download['link'];
+
+			var_dump(force_download($path, NULL));
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+
+
 	/**
-	 * This function is used for Patient Autocomplete
 	 * @return JSON 	the array of results
 	 */
 	public function autocomplete(){

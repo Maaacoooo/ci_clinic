@@ -11,7 +11,6 @@ class Services extends CI_Controller {
 	}	
 
 
-
 	public function clinic()		{
 
 		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata

@@ -78,4 +78,17 @@ Class Services_model extends CI_Model
 
 
 
+    function search_service($term, $cat) {
+        $this->db->where('service_cat', $cat);
+        $this->db->like('title', $term);
+        $this->db->or_like('code', $term);
+        $this->db->or_like('description', $term);
+        
+        $query = $this->db->get("services");
+        return $query->result_array();
+
+    }
+
+
+
 }

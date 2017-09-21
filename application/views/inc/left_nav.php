@@ -50,13 +50,16 @@
                       </li>                     
                   </ul>
               </li>  
-              <li class="bold"><a href="<?=base_url('cases')?>" class="waves-effect waves-cyan"><i class="mdi-action-label"></i> Cases</a></li> 
+              <li class="bold"><a href="<?=base_url('billing')?>" class="waves-effect waves-cyan"><i class="mdi-action-credit-card"></i> Billing</a></li> 
+              <li class="bold"><a href="<?=base_url('cases')?>" class="waves-effect waves-cyan"><i class="mdi-action-assignment"></i> Cases</a></li> 
+              <li class="bold"><a href="<?=base_url('laboratory')?>" class="waves-effect waves-cyan"><i class="mdi-action-accessibility"></i> Laboratory Requests</a></li> 
+              <li class="bold"><a href="<?=base_url('immunization')?>" class="waves-effect waves-cyan"><i class="mdi-action-favorite"></i> Immunization Requests</a></li> 
               <li class="bold"><a href="<?=base_url('queues')?>" class="waves-effect waves-cyan" target="_blank"><i class="mdi-action-label"></i> Queues</a></li> 
               <li class="li-hover"><div class="divider"></div></li>     
               <li class="li-hover"><p class="ultra-small margin more-text">CLINIC DATA</p></li>       
-              <li class="bold"><a href="<?=base_url('services/clinic')?>" class="waves-effect waves-cyan"><i class="mdi-action-account-child"></i> Clinic Services and Fees</a></li>  
-              <li class="bold"><a href="<?=base_url('services/laboratory')?>" class="waves-effect waves-cyan"><i class="mdi-action-account-child"></i> Laboratory Services</a></li>  
-              <li class="bold"><a href="<?=base_url('services/immunization')?>" class="waves-effect waves-cyan"><i class="mdi-action-account-child"></i> Immunization Services</a></li>  
+              <li class="bold"><a href="<?=base_url('services/clinic')?>" class="waves-effect waves-cyan">Clinic Services and Fees</a></li>  
+              <li class="bold"><a href="<?=base_url('services/laboratory')?>" class="waves-effect waves-cyan">Laboratory Services</a></li>  
+              <li class="bold"><a href="<?=base_url('services/immunization')?>" class="waves-effect waves-cyan">Immunization Services</a></li>  
               <li class="li-hover"><div class="divider"></div></li>            
           </ul>         
           <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only grey darken-4"><i class="mdi-navigation-menu" ></i></a>

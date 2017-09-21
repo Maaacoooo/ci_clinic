@@ -51,8 +51,7 @@ class Cases extends CI_Controller {
 		    $data['total_result'] = $config["total_rows"];
 		    //END PAGINATION		
 
-			$this->load->view('case/list', $data);
-				
+			$this->load->view('case/list', $data);				
 			
 
 		} else {

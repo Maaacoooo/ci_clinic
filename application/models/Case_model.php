@@ -78,4 +78,44 @@ Class Case_model extends CI_Model
         return $this->db->count_all_results("cases");
     }
 
+
+     /**
+     * Returns the paginated array of rows 
+     * @param  int      $limit      The limit of the results; defined at the controller
+     * @param  int      $id         the Page ID of the request. 
+     * @return Array        The array of returned rows 
+     */
+    function fetch_pending_cases($limit, $id) {
+            $this->db->select('
+            patients.id as patient_id,
+            CONCAT(patients.fullname, " ", patients.lastname) as patient_name,
+            cases.id as case_id,
+            cases.title,
+            cases.status,
+            cases.created_at
+                ');
+            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');
+            $this->db->order_by('cases.created_at', 'ASC');
+            $this->db->where('cases.status', 0);
+            $this->db->limit($limit, (($id-1)*$limit));           
+            $query = $this->db->get("cases");
+
+            if ($query->num_rows() > 0) {
+                return $query->result_array();
+            }
+
+
+            return false;
+
+    }
+
+    /**
+     * Returns the total number of rows of users
+     * @return int       the total rows
+     */
+    function count_pending_cases() {
+        $this->db->where('status', 0);
+        return $this->db->count_all_results("cases");
+    }
+
 }

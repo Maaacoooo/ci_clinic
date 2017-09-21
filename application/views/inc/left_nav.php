@@ -50,6 +50,7 @@
                       </li>                     
                   </ul>
               </li>  
+              <li class="bold"><a href="<?=base_url('cases')?>" class="waves-effect waves-cyan"><i class="mdi-action-label"></i> Cases</a></li> 
               <li class="bold"><a href="<?=base_url('queues')?>" class="waves-effect waves-cyan" target="_blank"><i class="mdi-action-label"></i> Queues</a></li> 
               <li class="li-hover"><div class="divider"></div></li>     
               <li class="li-hover"><p class="ultra-small margin more-text">CLINIC DATA</p></li>       

@@ -81,32 +81,7 @@
           <div class="section">
              <div class="row">
                <div class="col s12 l7">
-                 <table class="striped bordered highlight">
-                  <thead>
-                    <tr>
-                        <th>Service</th>
-                        <th>Code</th>
-                        <th>Amount</th>
-                        <th></th>
-                    </tr>
-                  </thead>
-
-                  <tbody>                    
-                    <?php if($results):
-                      foreach($results as $row): ?>
-                    <tr>
-                      <td><a href="#updateModal<?=$row['id']?>" class="modal-trigger"><?=$row['title']?></a></td>                 
-                      <td><a href="#updateModal<?=$row['id']?>" class="modal-trigger"><?=$row['code']?></a></td>                 
-                      <td><a href="#updateModal<?=$row['id']?>" class="modal-trigger"><?=$row['amount']?></a></td>    
-                      <td><a href="#deleteModal<?=$row['id']?>" class="modal-trigger btn waves-effect red"><i class="mdi-action-delete"></i></a></td>                        
-                    </tr> 
-                    <?php endforeach; 
-                      endif; ?>            
-                  </tbody>
-                </table>
-                <div class="right">
-                    <?php foreach ($links as $link) { echo $link; } ?>
-                </div>
+                 
                </div><!-- /.col s12 l7 -->
                <div class="col s12 l5">                
                  <div class="card-panel">

@@ -13,6 +13,56 @@ class Cases extends CI_Controller {
 	}	
 
 
+	public function index()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+
+			$data['title'] 		= 'Pending Cases';
+			$data['site_title'] = APP_NAME;
+			$data['user'] 		= $this->user_model->userdetails($userdata['username']); //fetches users record
+
+
+			//Paginated data		            
+	   		$config['num_links'] = 5;
+			$config['base_url'] = base_url('cases/index');
+			$config["total_rows"] = $this->case_model->count_pending_cases();
+			$config['per_page'] = 20;		
+
+			$this->load->config('pagination'); //LOAD PAGINATION CONFIG
+
+			$this->pagination->initialize($config);
+		    if($this->uri->segment(3)){
+		       $page = ($this->uri->segment(3)) ;
+		  	}	else 	{
+		       $page = 1;		               
+		    }
+
+		    $data["results"] = $this->case_model->fetch_pending_cases($config["per_page"], $page);
+		    $str_links = $this->pagination->create_links();
+		    $data["links"] = explode('&nbsp;',$str_links );
+
+		    //ITEM NUMBERING
+		    $data['per_page'] = $config['per_page'];
+		    $data['page'] = $page;
+
+		    //GET TOTAL RESULT
+		    $data['total_result'] = $config["total_rows"];
+		    //END PAGINATION		
+
+			$this->load->view('case/list', $data);
+				
+			
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
 
 
 	public function create()		{

@@ -133,7 +133,7 @@
                           <div class="input-field col s12">
                             <div class="right">
                               <input type="checkbox" id="resetpass" name="resetpass" onclick="enablereset()">
-                              <label for="resetpass">Reset Password</label>
+                              <label for="resetpass">Update Password</label>
                             </div><!-- /.right -->
                           </div><!-- /.input-fielf col s12 -->
                           <div class="input-field col s12">

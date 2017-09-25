@@ -155,6 +155,50 @@ Class Billing_Model extends CI_Model {
     }
 
 
+    function fetch_billing_records($case_id, $patient_id, $status) {
+
+            $this->db->join('cases', 'cases.id = billing.case_id', 'left');
+            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');            
+            $this->db->join('billing_payments', 'billing_payments.billing_id = billing.id', 'left');
+            $this->db->select('
+                billing.id,
+                billing.status,
+                billing.created_at,
+                billing.updated_at,
+                cases.id as case_id,
+                cases.title as case_title,
+                "test" as payables,
+                SUM(billing_payments.amount) as payments
+            ');
+
+            if(is_int($case_id)) {
+                $this->db->where('billing.case_id', $case_id);           
+            }
+
+            if(is_int($patient_id)) {
+                $this->db->where('patients.id', $patient_id);
+            }
+
+            if(is_int($status)) {
+                $this->db->where('billing.status', $status);
+            }
+
+            $this->db->group_by('billing.id');
+            $this->db->where('billing.is_deleted', 0);
+
+            $query = $this->db->get("billing");
+
+            log_message('error', $this->db->last_query());
+            if ($query->num_rows() > 0) {
+                return $query->result_array();
+            }
+
+            return false;
+
+    }
+
+
+
 
 
 

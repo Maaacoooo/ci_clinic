@@ -150,9 +150,11 @@
                        <a href="#resultModal" class="modal-trigger btn waves-effect light-blue col s8 offset-s2">Attach Result</a>   
                      </div><!-- /.row -->
                      <br />  
+                     <?php if (!$labreq['status']): ?>
                      <div class="row">
                        <a href="#changeStatus" class="modal-trigger btn waves-effect amber col s8 offset-s2">Change Status</a>   
-                     </div><!-- /.row -->  
+                     </div><!-- /.row -->    
+                     <?php endif ?>
                    </div><!-- /.card-content -->
                  </div><!-- /.card -->
                </div><!-- /.col s12 l4 -->
@@ -231,6 +233,7 @@
             <?php endif ?>
 
 
+             <?php if (!$labreq['status']): ?>
              <div id="changeStatus" class="modal">
               <?=form_open('laboratory/change_status')?>
                 <div class="modal-content">
@@ -259,6 +262,7 @@
                   </div>
               <?=form_close()?>
             </div>
+             <?php endif ?>
 
 
             <div id="resultModal" class="modal">

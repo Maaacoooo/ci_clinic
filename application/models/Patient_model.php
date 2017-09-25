@@ -124,7 +124,7 @@ Class Patient_model extends CI_Model
               patients.sex,
               patients.birthdate,
               CONCAT(patients_address.city, ", ", patients_address.province) AS address,
-              count(cases.id) as cases
+              COUNT(DISTINCT(cases.id)) as cases
               ');
             $this->db->where('patients.is_deleted', 0);
             $this->db->join('cases', 'cases.patient_id = patients.id', 'left');

@@ -4,7 +4,7 @@
 	<title><?=$title?> &middot; <?=$site_title?></title>
 	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
 </head>
-<body onload="#window.print()">
+<body onload="window.print()">
 	
 	<?php $this->load->view('inc/print_header');?>
 	

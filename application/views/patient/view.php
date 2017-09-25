@@ -254,14 +254,55 @@
                   </table><!-- /.bordered -->
                   <br />
                   <div class="right">
-                              <a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-av-my-library-books left"></i></a>
+                      <a href="#caseModal" class="modal-trigger btn waves-effect green">New Case<i class="mdi-av-my-library-books left"></i></a>
                   </div><!-- /.right -->
                 </div>
                 <!-- END CASE INFORMATION -->
 
                 <!-- BILLING INFORTION --> 
                 <div id="billing" class="col s12 card-content">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, fuga. Billing 
+                  <h5 class="header">Billing Queues</h5><!-- /.header -->
+                  <div class="card-panel light-green white-text">
+                    <p><i class="mdi-action-info-outline tiny"></i> To add a Billing Queue, go to tab <em>Cases > Select a Case > Generate Billing Queue</em></p>
+                  </div><!-- /.card-panel light-green white-text -->
+                  <table class="bordered">
+                  <?php if ($billing): ?>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>CASE</th>
+                        <th>Payables</th>
+                        <th>Payments</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($billing as $bill): ?>
+                          <tr>
+                            <td><a href="<?=base_url('billing/view/'.$bill['id'])?>">BILL #<?=prettyID($bill['id'])?></a></td>
+                            <td><a href="<?=base_url('billing/view/'.$bill['id'])?>">
+                              <?=$bill['case_title']?>                              
+                               <?php if ($bill['status'] == 3): ?>
+                                 <span class="badge-label grey darken-3">Cancelled</span>     
+                               <?php elseif($bill['status'] == 1): ?>
+                                 <span class="badge-label green darken-3">Served</span>                                   
+                               <?php else: ?> 
+                                 <span class="badge-label red darken-3">Pending</span> 
+                               <?php endif ?>
+                           </a></td>
+                            <td><a href="<?=base_url('billing/view/'.$bill['id'])?>"><?=$bill['payables']?></a></td>
+                            <td><a href="<?=base_url('billing/view/'.$bill['id'])?>"><?=$bill['payments']?></a></td>
+                            <td><a href="<?=base_url('billing/view/'.$bill['id'])?>"><?=nice_date(($bill['created_at']), 'M. d, Y')?></a></td>
+                         </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                  
+                  <?php else: ?>
+                    <tr>
+                      <td>No Billing Queue Found!</td>
+                    </tr>
+                  <?php endif; ?>                      
+                  </table><!-- /.bordered -->
                 </div>
                 <!-- END BILLING INFORMATION -->
 
@@ -297,7 +338,31 @@
 
                 <!-- IMMUNIZATIONS INFORMATION --> 
                 <div id="immunization" class="col s12 card-content">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis repudiandae aspernatur unde laborum saepe. Facilis vel voluptatibus iste, porro aliquid repudiandae, fugiat natus quia sit et excepturi culpa obcaecati illo.</p>
+                    <h5 class="header">Immunizations Taken</h5><!-- /.header -->
+                    <table class="striped bordered">
+                    <?php if ($immunizations): ?>                    
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Service</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php foreach ($immunizations as $immu): ?>
+                        <tr>
+                          <td><a href="<?=base_url('patients/view/'.$immu['patient_id'].'/case/'.$immu['case_id'].'/immunization/'.$immu['id'])?>">IMMU #<?=prettyID($immu['id'])?></a></td>
+                          <td><a href="<?=base_url('patients/view/'.$immu['patient_id'].'/case/'.$immu['case_id'].'/immunization/'.$immu['id'])?>"><?=$immu['service']?></a></td>
+                          <td><a href="<?=base_url('patients/view/'.$immu['patient_id'].'/case/'.$immu['case_id'].'/immunization/'.$immu['id'])?>"><?=$immu['updated_at']?></a></td>
+                        </tr>
+                        <?php endforeach ?>
+                      </tbody>
+                    <?php else: ?>  
+                        <tr>
+                          <td>No Immunization Records Found!</td>
+                        </tr>
+                    <?php endif ?>
+                    </table><!-- /.striped bordered --> 
                 </div>
                 <!-- END IMMUNIZATIONS INFORMATION -->
 

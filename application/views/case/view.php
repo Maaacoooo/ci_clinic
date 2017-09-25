@@ -219,7 +219,7 @@
                             <?php endforeach ?>   
                           <?php else: ?>
                               <tr>
-                                <td>No Prescriptions Found!</td>
+                                <td colspan="3">No Prescriptions Found!</td>
                               </tr>                         
                           <?php endif ?>
                         </tbody>
@@ -326,7 +326,54 @@
 
                 <!-- IMMUNIZATIONS INFORMATION --> 
                 <div id="immunization" class="col s12 card-content">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis repudiandae aspernatur unde laborum saepe. Facilis vel voluptatibus iste, porro aliquid repudiandae, fugiat natus quia sit et excepturi culpa obcaecati illo.</p>
+                  <h5 class="header">Immunizations Requests</h5><!-- /.header -->
+                  <?=form_open('immunization/create')?> 
+                  <div class="row">
+                    <div class="col s10 input-field">
+                      <input type="text" name="immu" id="immu" class="validate" />
+                      <input type="hidden" name="id" value="<?=$this->encryption->encrypt($case['id'])?>" />                    
+                      <label for="immu">Request for Immunization Service</label>
+                    </div><!-- /.col s9 -->
+                    <div class="input-field col s2">
+                      <button type="submit" class="btn waves-effect orange">Request</button>
+                    </div><!-- /.input-field col s2-->
+                  </div><!-- /.row -->    
+                  <?=form_close()?>       
+                    <table class="striped bordered">
+                    <?php if ($immunizations): ?>                    
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Service</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php foreach ($immunizations as $immu): ?>
+                        <tr>
+                          <td><a href="<?=base_url('patients/view/'.$immu['patient_id'].'/case/'.$immu['case_id'].'/immunization/'.$immu['id'])?>">IMMU #<?=prettyID($immu['id'])?></a></td>
+                          <td>
+                          <a href="<?=base_url('patients/view/'.$immu['patient_id'].'/case/'.$immu['case_id'].'/immunization/'.$immu['id'])?>">
+                          <?=$immu['service']?>
+                          <?php if ($immu['status'] == 3): ?>
+                            <span class="badge-label grey darken-3">Cancelled</span>     
+                            <?php elseif($immu['status'] == 1): ?>
+                              <span class="badge-label green darken-3">Served</span>                                   
+                            <?php else: ?> 
+                              <span class="badge-label red darken-3">Pending</span> 
+                            <?php endif ?>
+                          </a>
+                          </td>
+                          <td><a href="<?=base_url('patients/view/'.$immu['patient_id'].'/case/'.$immu['case_id'].'/immunization/view/'.$immu['id'])?>"><?=$immu['updated_at']?></a></td>
+                        </tr>
+                        <?php endforeach ?>
+                      </tbody>
+                    <?php else: ?>  
+                        <tr>
+                          <td>No Immunization Records Found!</td>
+                        </tr>
+                    <?php endif ?>
+                    </table><!-- /.striped bordered --> 
                 </div>
                 <!-- END IMMUNIZATIONS INFORMATION -->
 
@@ -502,6 +549,12 @@
       $(function(){
       $("#labreq").autocomplete({    
         source: "<?php echo base_url('index.php/laboratory/autocomplete');?>" // path to the get_birds method
+      });
+    });
+
+       $(function(){
+      $("#immu").autocomplete({    
+        source: "<?php echo base_url('index.php/immunization/autocomplete');?>" // path to the get_birds method
       });
     });
     </script>

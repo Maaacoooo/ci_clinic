@@ -12,6 +12,8 @@ class Patients extends CI_Controller {
        $this->load->model('prescription_model');
        $this->load->model('medcert_model');
        $this->load->model('laboratory_model');
+       $this->load->model('immunization_model');
+       $this->load->model('billing_model');
 	}	
 
 	public function index()		{
@@ -167,7 +169,7 @@ class Patients extends CI_Controller {
 
 	}
 
-	public function view($patient_id) {
+	public function view(int $patient_id) {
 		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
 
 		if($userdata)	{
@@ -192,11 +194,9 @@ class Patients extends CI_Controller {
 
 					//Case Information
 					$data['case'] = $this->case_model->view_case($case_id, $patient_id);
-					//check validity of the CASE Row
-					if ($data['case']) {						
 
-						$data['medcerts'] = $this->medcert_model->fetch_medcert('', $case_id); //Overide Medical Certicate Information
-						$data['labreqs'] = $this->laboratory_model->fetch_requests($case_id);
+					//check validity of the CASE Row
+					if ($data['case']) {											
 
 						//check the prescription request
 						if($this->uri->segment(6) == 'prescription') {
@@ -257,13 +257,25 @@ class Patients extends CI_Controller {
 
 						} elseif($this->uri->segment(6) == 'immunization') {
 							//LABORATORY MODULE
-							echo 'immunization';
+							$immu_id = $this->uri->segment(7);
+							$data['immu'] = $this->immunization_model->view($immu_id, $case_id);
+
+							if($data['immu']) {
+								$data['title'] =  'Immunization Request #'.prettyID($immu_id). ': ' . $data['immu']['service'];	//Page title									
+								$this->load->view('immunization/view', $data);
+
+							} else {
+								show_404();
+							}
 
 						} elseif(!$this->uri->segment(6)) {
 							//CASE MODULE
 							//load CASE View
 							$data['title'] =  $data['case']['title'];	//Page title		
 							$data['prescriptions'] = $this->prescription_model->fetch_case_prescription($case_id);
+							$data['immunizations'] = $this->immunization_model->fetch_immunizations($case_id, $patient_id, '');	
+							$data['medcerts'] = $this->medcert_model->fetch_medcert('', $case_id); //Overide Medical Certicate Information
+							$data['labreqs'] = $this->laboratory_model->fetch_requests($case_id);
 							$data['logs']	= $this->logs_model->fetch_logs('case', $case_id, 0); //cases 
 
 							$this->load->view('case/view', $data);	
@@ -285,6 +297,8 @@ class Patients extends CI_Controller {
 					$data['mobile'] = $this->patient_model->fetch_contacts($patient_id, 0);
 
 					$data['medcerts'] = $this->medcert_model->fetch_medcert($patient_id, 0);	
+					$data['immunizations'] = $this->immunization_model->fetch_immunizations('', $patient_id, 1);	
+					$data['billing'] = $this->billing_model->fetch_billing_records('', $patient_id, '');	
 
 					$data['total_cases'] = $this->case_model->count_cases($patient_id);
 					$data['logs']	= $this->logs_model->fetch_logs('patient', $patient_id, 10);

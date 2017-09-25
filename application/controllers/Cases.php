@@ -10,6 +10,7 @@ class Cases extends CI_Controller {
        $this->load->model('case_model');
        $this->load->model('queue_model');
        $this->load->model('medcert_model');
+       $this->load->model('billing_model');
 	}	
 
 
@@ -89,6 +90,10 @@ class Cases extends CI_Controller {
 				if($this->case_model->create_case($patient_id)) {
 
 					$case_id = $this->db->insert_id(); //fetch last insert case Row ID
+
+					//Generate a Billing Queue ///////////////
+					$this->billing_model->create($case_id, $userdata['username']);					
+					/////////////////////////////////////////
 
 					// Save Log Data ///////////////////
 					$log[] = array(

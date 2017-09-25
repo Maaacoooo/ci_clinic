@@ -93,10 +93,10 @@
                   <?php if($results): ?>
                   <?php foreach($results as $row): ?>
                   <tr>
-                    <td><a href="<?=base_url('patients/view/'.$row['patient_id'].'/case/'.$row['case_id'].'/laboratory/'.$row['id'])?>"><?=$row['patient_name']?></a></td>                                 
-                    <td><a href="<?=base_url('patients/view/'.$row['patient_id'].'/case/'.$row['case_id'].'/laboratory/'.$row['id'])?>">REQ #<?=prettyID($row['id'])?></a></td>                  
+                    <td><a href="<?=base_url('patients/view/'.$row['patient_id'].'/case/'.$row['case_id'].'/immunization/'.$row['id'])?>"><?=$row['patient_name']?></a></td>                                 
+                    <td><a href="<?=base_url('patients/view/'.$row['patient_id'].'/case/'.$row['case_id'].'/immunization/'.$row['id'])?>">REQ #<?=prettyID($row['id'])?></a></td>                  
                     <td>
-                      <a href="<?=base_url('patients/view/'.$row['patient_id'].'/case/'.$row['case_id'].'/laboratory/'.$row['id'])?>"><?=$row['service']?></a>
+                      <a href="<?=base_url('patients/view/'.$row['patient_id'].'/case/'.$row['case_id'].'/immunization/'.$row['id'])?>"><?=$row['service']?></a>
                       <?php if ($row['status'] == 3): ?>
                         <span class="badge-label grey darken-3">Cancelled</span>     
                       <?php elseif($row['status'] == 1): ?>

@@ -515,8 +515,6 @@
                               <?php endforeach ?>
                             </select>
                           </div>                           
-                        <input type="hidden" name="id" value="<?=$this->encryption->encrypt($case['id'])?>" />
-                        <input type="hidden" name="pid" value="<?=$this->encryption->encrypt($info['id'])?>" />
                       </div><!-- /.col s12 -->
                       <div class="col s6">
                         <div class="col s12">

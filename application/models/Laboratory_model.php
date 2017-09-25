@@ -3,7 +3,6 @@
 Class Laboratory_model extends CI_Model
 {
 
-
     function create($case_id, $service, $user) {
 
       
@@ -28,7 +27,7 @@ Class Laboratory_model extends CI_Model
 
     }    
 
-    function change_status($status, $id) {
+    function update_status($status, $id) {
 
             $data = array(                             
                 'status'     => $status                      
@@ -49,6 +48,7 @@ Class Laboratory_model extends CI_Model
             lab_request.created_at,
             lab_request.updated_at,
             lab_request.case_id,
+            services.id,
             services.code,
             patients.id as patient_id    
             ');
@@ -57,6 +57,7 @@ Class Laboratory_model extends CI_Model
             $this->db->join('patients', 'patients.id = cases.patient_id', 'left');            
 
             $this->db->where('lab_request.id', $id);
+
             if($case_id) {
                 $this->db->where('lab_request.case_id', $case_id);
             }
@@ -90,6 +91,82 @@ Class Laboratory_model extends CI_Model
             return false;
 
     }
+
+
+     function fetch_labreq($limit, $id, $search, $status) {
+
+            if($search) {
+              $this->db->group_start();
+              $this->db->like('cases.title', $search);
+              $this->db->or_like('lab_request.service', $search);
+              $this->db->or_like('patients.fullname', $search);
+              $this->db->or_like('patients.lastname', $search);
+              $this->db->or_like('patients.middlename', $search);
+              $this->db->group_end();
+            }
+
+            $this->db->where('lab_request.status', $status);              
+
+            $this->db->join('cases', 'cases.id = lab_request.case_id', 'left');
+            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');            
+            $this->db->join('users', 'users.username = lab_request.user', 'left');
+            $this->db->select('
+                lab_request.id,
+                lab_request.service,
+                lab_request.status,
+                lab_request.created_at,
+                lab_request.updated_at,
+                users.name as user,
+                users.username,
+                cases.id as case_id,
+                cases.title as case_title,
+                patients.id as patient_id,
+                CONCAT(patients.lastname, ", ", patients.fullname) as patient_name
+            ');
+            
+            $this->db->group_by('lab_request.id');
+            $this->db->order_by('lab_request.created_at', 'DESC');
+            $this->db->limit($limit, (($id-1)*$limit));
+
+            $query = $this->db->get("lab_request");
+
+            if ($query->num_rows() > 0) {
+                return $query->result_array();
+            }
+            return false;
+
+    }
+
+    /**
+     * Returns the total number of rows of users
+     * @return int       the total rows
+     */
+    function count_labreq($search, $status) {
+        
+            if($search) {
+              $this->db->group_start();
+              $this->db->like('cases.title', $search);
+              $this->db->or_like('lab_request.service', $search);
+              $this->db->or_like('patients.fullname', $search);
+              $this->db->or_like('patients.lastname', $search);
+              $this->db->or_like('patients.middlename', $search);
+              $this->db->group_end();
+            }
+
+            $this->db->where('lab_request.status', $status);
+
+            $this->db->join('cases', 'cases.id = lab_request.case_id', 'left');
+            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');
+            $this->db->join('users', 'users.username = lab_request.user', 'left');            
+
+            return $this->db->count_all_results("lab_request"); 
+
+    
+    }
+
+
+
+    // LAB REQUEST FILES /////////////////////////////////////////////////
 
 
     /**

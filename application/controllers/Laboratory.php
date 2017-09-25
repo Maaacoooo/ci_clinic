@@ -9,6 +9,7 @@ class Laboratory extends CI_Controller {
        $this->load->model('user_model');
        $this->load->model('services_model');
        $this->load->model('laboratory_model');
+       $this->load->model('billing_model');
 	}	
 
 
@@ -18,15 +19,20 @@ class Laboratory extends CI_Controller {
 
 		if($userdata)	{
 
-			$data['title'] 		= 'Pending Cases';
+			$data['title'] 		= 'Pending Laboratory Requests';
 			$data['site_title'] = APP_NAME;
 			$data['user'] 		= $this->user_model->userdetails($userdata['username']); //fetches users record
 
+			//Search
+			$search = '';
+			if(isset($_GET['search'])) {
+				$search = $_GET['search'];
+			}
 
 			//Paginated data		            
 	   		$config['num_links'] = 5;
-			$config['base_url'] = base_url('cases/index');
-			$config["total_rows"] = $this->case_model->count_pending_cases();
+			$config['base_url'] = base_url('laboratory/index');
+			$config["total_rows"] = $this->laboratory_model->count_labreq($search, 0);
 			$config['per_page'] = 20;		
 
 			$this->load->config('pagination'); //LOAD PAGINATION CONFIG
@@ -38,7 +44,7 @@ class Laboratory extends CI_Controller {
 		       $page = 1;		               
 		    }
 
-		    $data["results"] = $this->case_model->fetch_pending_cases($config["per_page"], $page);
+		    $data["results"] = $this->laboratory_model->fetch_labreq($config["per_page"], $page, $search, 0);
 		    $str_links = $this->pagination->create_links();
 		    $data["links"] = explode('&nbsp;',$str_links );
 
@@ -50,7 +56,7 @@ class Laboratory extends CI_Controller {
 		    $data['total_result'] = $config["total_rows"];
 		    //END PAGINATION		
 
-			$this->load->view('case/list', $data);				
+			$this->load->view('laboratory/list', $data);				
 			
 
 		} else {
@@ -179,6 +185,87 @@ class Laboratory extends CI_Controller {
 
 					$this->session->set_flashdata('success', 'Description / Remarks Updated!');
 					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
+	public function change_status()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+			$this->form_validation->set_rules('status', 'Status', 'trim|required');   
+ 
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+			
+				$labreq_id = $this->encryption->decrypt($this->input->post('id')); //ID of the Laboratory Request
+
+				$status = $this->encryption->decrypt($this->input->post('status')); 		
+
+				$case = $this->laboratory_model->view($labreq_id, '');
+
+				//proceed action
+				if($this->laboratory_model->update_status($status, $labreq_id)) {
+
+					//IF Status set to 1 or 'served'
+					if($status == 1) {
+						$billing = $this->billing_model->get_Open_Billing($case['case_id']); //get current Open Billing 
+						$this->billing_model->add_item($billing['id'], $case['service'], 1); //add Service in the current Billing
+
+						// Save Log ///////////////////
+						$log[] = array(
+							'user' 		=> 	$userdata['username'],
+							'tag' 		=> 	'billing',
+							'tag_id'	=> 	$billing['id'],
+							'action' 	=> 	'Added Service - ' . $case['service']
+						);
+					}
+
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'laboratory',
+						'tag_id'	=> 	$labreq_id,
+						'action' 	=> 	'Updated a Laboratory Request Status'
+					);
+
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'case',
+						'tag_id'	=> 	$case['case_id'],
+						'action' 	=> 	'Updated a Laboratory Request Status #'.prettyID($labreq_id).' - '.$case['service']
+					);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+
+					$this->session->set_flashdata('success', 'Laboratory Request Status Updated!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					
+					
 				}
 			}
 

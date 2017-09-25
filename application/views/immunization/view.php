@@ -146,12 +146,12 @@
                     <div class="row">
                       <h5 class="header">Change Status</h5><!-- /.header -->
                       <div class="col s6">                         
-                         <p><i class="mdi-action-info-outline tiny"></i> Once the Laboratory Request is set to <span class="badge-label green darken-3">served</span>, 
+                         <p><i class="mdi-action-info-outline tiny"></i> Once the Immunization Request is set to <span class="badge-label green darken-3">served</span>, 
                          the system will automatically add this Service to the current Open Billing Record. </p> 
                          <p>These actions cannot be undone.</p>
                       </div><!-- /.col s12 -->  
                       <div class="col s6">
-                        <p>This changes the status of the Laboratory Request.</p>                       
+                        <p>This changes the status of the Immunization Request.</p>                       
                          <input name="status" type="radio" id="pending" value="<?=$this->encryption->encrypt(0)?>" class="with-gap" <?php if ($case['status'] == 0)echo'checked';?>>
                          <label for="pending">Pending</label>
                          <input name="status" type="radio" id="served" value="<?=$this->encryption->encrypt(1)?>" class="with-gap" <?php if ($case['status'] == 1)echo'checked';?>>

@@ -75,36 +75,39 @@ Class Billing_Model extends CI_Model {
               $this->db->group_end();
             }
 
-            if($status) {
+            if(!is_null($status)) {
               $this->db->where('billing.status', $status);
             }  
 
-            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');
             $this->db->join('cases', 'cases.id = billing.case_id', 'left');
-            $this->db->join('users', 'users.username = billing.user', 'left');
+            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');            
             $this->db->join('billing_payments', 'billing_payments.billing_id = billing.id', 'left');
             $this->db->join('billing_items', 'billing_items.billing_id = billing.id', 'left');
+            //$this->db->join('services', 'services.title = billing_items.service', 'left');
             $this->db->select('
-                billing.billing_id,
-                billing.remarks,
+                billing.id as billing_id,
                 billing.status,
                 billing.created_at,
                 billing.updated_at,
-                users.name as user,
-                users.username,
                 cases.id as case_id,
                 cases.title as case_title,
                 patients.id as patient_id,
-                CONCAT(patients.lastname, ", ", $patients.fullname) as patient_name,
+                CONCAT(patients.lastname, ", ", patients.fullname) as patient_name,
                 SUM(billing_payments.amount) as payments,
-                SUM((billing_items.amount - billing_items.discount)*billing_items.qty) as payables
+                "" as payables
             ');
-            
+
+ 
             $this->db->group_by('billing.id');
+
+
+
             $this->db->order_by('billing.created_at', 'DESC');
             $this->db->limit($limit, (($id-1)*$limit));
 
             $query = $this->db->get("billing");
+
+            log_message('error', $this->db->last_query());
 
             if ($query->num_rows() > 0) {
                 return $query->result_array();
@@ -127,13 +130,12 @@ Class Billing_Model extends CI_Model {
               $this->db->group_end();
             }
 
-            if($status) {
+            if(!is_null($status)) {
               $this->db->where('billing.status', $status);
             }   
 
-            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');
             $this->db->join('cases', 'cases.id = billing.case_id', 'left');
-            $this->db->group_by('billing.id');
+            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');
 
             return $this->db->count_all_results("billing");
     }
@@ -171,15 +173,15 @@ Class Billing_Model extends CI_Model {
                 SUM(billing_payments.amount) as payments
             ');
 
-            if(is_int($case_id)) {
+            if(!is_null($case_id)) {
                 $this->db->where('billing.case_id', $case_id);           
             }
 
-            if(is_int($patient_id)) {
+            if(!is_null($patient_id)) {
                 $this->db->where('patients.id', $patient_id);
             }
 
-            if(is_int($status)) {
+            if(!is_null($status)) {
                 $this->db->where('billing.status', $status);
             }
 

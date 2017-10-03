@@ -78,13 +78,12 @@ Class Billing_Model extends CI_Model {
             if(!is_null($status)) {
               $this->db->where('billing.status', $status);
             }  
+            $this->db->group_by('billing.id');
 
-            $this->db->join('cases', 'cases.id = billing.case_id', 'left');
-            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');            
-            $this->db->join('billing_payments', 'billing_payments.billing_id = billing.id', 'left');
-            $this->db->join('billing_items', 'billing_items.billing_id = billing.id', 'left');
-            //$this->db->join('services', 'services.title = billing_items.service', 'left');
-            $this->db->select('
+           $this->db->join('billing_items', 'billing_items.billing_id = billing.id', 'left');
+           $this->db->join('cases', 'cases.id = billing.case_id', 'left');
+           $this->db->join('patients', 'patients.id = cases.patient_id', 'left'); 
+           $this->db->select('
                 billing.id as billing_id,
                 billing.status,
                 billing.created_at,
@@ -93,26 +92,35 @@ Class Billing_Model extends CI_Model {
                 cases.title as case_title,
                 patients.id as patient_id,
                 CONCAT(patients.lastname, ", ", patients.fullname) as patient_name,
-                SUM(billing_payments.amount) as payments,
-                "" as payables
+                SUM(billing_items.qty * billing_items.amount) as payables
             ');
-
- 
-            $this->db->group_by('billing.id');
-
-
 
             $this->db->order_by('billing.created_at', 'DESC');
             $this->db->limit($limit, (($id-1)*$limit));
 
-            $query = $this->db->get("billing");
+            $query1 = $this->db->get("billing");
+            $q1 = $query1->result_array();
 
-            log_message('error', $this->db->last_query());
+            foreach ($q1 as $row) {
+              $this->db->select_sum('amount', 'payments');
+              $this->db->where('billing_id', $row['billing_id']);
+              $query2 = $this->db->get('billing_payments');
 
-            if ($query->num_rows() > 0) {
-                return $query->result_array();
+              $bill['billing_id'] = $row['billing_id'];
+              $bill['status'] = $row['status'];
+              $bill['created_at'] = $row['created_at'];
+              $bill['updated_at'] = $row['updated_at'];
+              $bill['case_id'] = $row['case_id'];
+              $bill['case_title'] = $row['case_title'];
+              $bill['patient_id'] = $row['patient_id'];
+              $bill['patient_name'] = $row['patient_name'];
+              $bill['payables'] = $row['payables'];
+
+              $bill['payments'] = $query2->row_array()['payments'];
+              $bill_arr[] = $bill;
             }
-            return false;
+
+            return $bill_arr;
 
     }
 
@@ -215,11 +223,12 @@ Class Billing_Model extends CI_Model {
      * @param [type] $export_id [description]
      * @param [type] $user      [description]
      */
-    function add_item($billing, $service, $qty) {
+    function add_item($billing, $service, $qty, $amount) {
 
             $data = array(              
                 'billing_id'   => $billing,  
                 'service'      => $service,
+                'amount'       => $amount,
                 'qty'          => $qty            
              );
        

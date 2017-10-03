@@ -227,7 +227,7 @@ class Laboratory extends CI_Controller {
 					//IF Status set to 1 or 'served'
 					if($status == 1) {
 						$billing = $this->billing_model->get_Open_Billing($case['case_id']); //get current Open Billing 
-						$this->billing_model->add_item($billing['id'], $case['service'], 1); //add Service in the current Billing
+						$this->billing_model->add_item($billing['id'], $case['service'], 1, $case['amount']); //add Service in the current Billing
 
 						// Save Log ///////////////////
 						$log[] = array(

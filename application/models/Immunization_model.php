@@ -51,6 +51,7 @@ Class Immunization_model extends CI_Model
             immunizations.case_id,
             services.id,
             services.code,
+            services.amount,
             patients.id as patient_id    
             ');
             $this->db->join('services', 'services.title = immunizations.service', 'left');            

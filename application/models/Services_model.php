@@ -46,7 +46,10 @@ Class Services_model extends CI_Model
 
     function view($id, $cat) {
             $this->db->where('id', $id);
+
+            if(!is_null($cat)) {                
             $this->db->where('service_cat', $cat);
+            }
             $query = $this->db->get("services");
             return $query->row_array();
     }

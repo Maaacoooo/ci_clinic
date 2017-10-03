@@ -69,6 +69,29 @@ class Billing extends CI_Controller {
 
 
 
+	public function view($billing_id) {
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			$data['site_title'] = APP_NAME;
+			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
+			
+			$data['info'] = $this->billing_model->view($billing_id);	
+				
+			
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+	}
+
+	
+
+
+
 	public function create()		{
 
 		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata

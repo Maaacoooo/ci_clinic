@@ -8,15 +8,32 @@
     <title><?=$title?> &middot; <?=$site_title?></title>
 
     <?php $this->load->view('inc/css'); ?>
+    <script>
+      function changeBalance() {
+        var balance = <?=decimalize(($info['payables']-$info['discounts']) - $info['payments'])?>;
+        var pay = document.getElementById("amount").value;
 
+        //display to balance
+        document.getElementById("balance").value = (balance - pay).toFixed(2);
+      }
+
+      <?php 
+      if ($this->session->flashdata('invoice')): ?>
+      function load_receipt() {
+        window.open("<?=$this->session->flashdata('invoice')?>");
+      }
+      <?php
+      endif;
+      ?>
+    </script>
 
 </head>
-
-<body>
+  
+<body <?php if($this->session->flashdata('invoice'))echo 'onload="load_receipt()"';?>>
     
     <?php $this->load->view('inc/header'); ?>
 
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
+  <!-- //////////////////////////////////////////////////////////////////////////// -->
 
 
   <!-- START MAIN -->
@@ -105,6 +122,18 @@
                      </td>
                    </tr>
                    <tr>
+                     <th>Total Payables</th>
+                     <td class="red-text"><?=decimalize($info['payables'] - $info['discounts'])?></td>
+                   </tr>
+                   <tr>
+                     <th>Total Payments</th>
+                     <td class="blue-text"><?=$info['payments']?></td>
+                   </tr>
+                   <tr class="green lighten-5">
+                     <th>Remaining Balance</th>
+                     <td class="green-text strong"><?=decimalize(($info['payables'] - $info['discounts']) - $info['payments'])?></td>
+                   </tr>
+                   <tr>
                      <th>Requested by</th>
                      <td><?=$info['user']?></td>
                    </tr>
@@ -126,11 +155,11 @@
                      <h6 class="strong header">Options</h6><!-- /.strong header -->
                      <br />                          
                      <div class="row">
-                       <a href="#changeStatus" class="modal-trigger btn waves-effect green col s8 offset-s2">Add Payment</a>   
+                       <a href="#changeStatus" class="modal-trigger btn waves-effect amber col s8 offset-s2">Change Status</a>   
                      </div><!-- /.row --> 
                      <br />                          
                      <div class="row">
-                       <a href="#changeStatus" class="modal-trigger btn waves-effect green col s8 offset-s2">Add Payment</a>   
+                       <a href="#addPayment" class="modal-trigger btn waves-effect green col s8 offset-s2">Add Payment</a>   
                      </div><!-- /.row -->  
                    </div><!-- /.card-content -->
                  </div><!-- /.card -->
@@ -255,7 +284,7 @@
         
           <?php if (!$info['status']): ?>
             <div id="changeStatus" class="modal">
-              <?=form_open('immunization/change_status')?>
+              <?=form_open('billing/change_status')?>
                 <div class="modal-content">
                     <div class="row">
                       <h5 class="header">Change Status</h5><!-- /.header -->
@@ -285,13 +314,48 @@
           <?php endif ?>           
 
             <div id="updateRemarks" class="modal">
-              <?=form_open('immunization/update')?>
+              <?=form_open('billing/update')?>
                 <div class="modal-content">
                     <h5 class="header">Update Description</h5><!-- /.header -->
                     <div class="row">
                       <div class="col s12">
                         <label>Description</label>
                         <textarea name="description" id="description" cols="30" rows="10" class="ckeditor"><?=$info['remarks']?></textarea>
+                      </div><!-- /.col s12 -->                     
+                    </div><!-- /.row -->
+                    <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                  </div>
+                  <div class="modal-footer grey darken-4">
+                    <a href="#" class="waves-effect waves-red btn-flat red-text strong modal-action modal-close">Cancel</a>
+                    <button type="submit" class="waves-effect waves-amber btn amber modal-action">Update</button>
+                  </div>
+              <?=form_close()?>
+            </div>
+
+            <div id="addPayment" class="modal">
+              <?=form_open('billing/add_payment')?>
+                <div class="modal-content">
+                    <h5 class="header">Add Payment</h5><!-- /.header -->
+                    <div class="row">
+                     <div class="input-field col s12">
+                        <input type="text" name="payee" id="payee" class="validate" value="<?=$info['patient_name']?>" required/>
+                        <label for="payee">Payee</label>
+                      </div><!-- /.input-field col s12 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                     <div class="input-field col s6">
+                        <input type="text" name="amount" onkeyup="changeBalance()" id="amount" class="validate" value="<?=decimalize(($info['payables'] - $info['discounts']) - $info['payments'])?>" required/>
+                        <label for="amount">Amount</label>
+                      </div><!-- /.input-field col s6 -->
+                     <div class="input-field col s6">
+                        <input type="text" id="balance" class="validate" value="00.00" readonly />
+                        <label for="balance">Balance</label>
+                      </div><!-- /.input-field col s6 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                      <div class="col s12">
+                        <label>Remarks</label>
+                        <textarea name="remarks" id="description" cols="30" rows="10" class="ckeditor"><?=$info['remarks']?></textarea>
                       </div><!-- /.col s12 -->                     
                     </div><!-- /.row -->
                     <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['id'])?>" />

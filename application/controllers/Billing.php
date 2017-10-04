@@ -328,6 +328,68 @@ class Billing extends CI_Controller {
 	}
 
 
+	public function add_payment()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
+			$this->form_validation->set_rules('payee', 'Payee', 'trim|required');   
+			$this->form_validation->set_rules('amount', 'Amount', 'trim|required|decimal');   
+			$this->form_validation->set_rules('remarks', 'Remarks', 'trim');   
+ 
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+			
+				$billing_id = $this->encryption->decrypt($this->input->post('id')); //ID of the Laboratory Request
+				$billing = $this->billing_model->view($billing_id); // gets the billing info
+				$balance = (($billing['payables'] - $billing['discounts']) - $billing['payments']) - $this->input->post('amount'); //get current Balance
+
+				//proceed action
+				if($this->billing_model->add_payment($billing_id, $balance, $userdata['username'])) {
+
+					$payment_id = $this->db->insert_id();
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'billing',
+						'tag_id'	=> 	$billing_id,
+						'action' 	=> 	'Added a New Payment'
+					);
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+
+					$this->session->set_flashdata('success', 'Payment Received!');
+					$this->session->set_flashdata('invoice', base_url('billing/view/'.$billing_id.'/payment/'.$payment_id));
+
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					
+					
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
+
 
 	/**
 	 * @return JSON 	the array of results

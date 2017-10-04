@@ -50,11 +50,12 @@ Class Billing_Model extends CI_Model {
                 cases.title as case_title,
                 patients.id as patient_id,
                 CONCAT(patients.lastname, ", ", patients.fullname) as patient_name,
-                SUM(billing_items.qty * billing_items.amount) as payables,
+                SUM(billing_items.qty * billing_items.amount ) as payables,
+                SUM(billing_items.qty * billing_items.discount ) as discounts,
                 users.name as user,
                 users.username as username,
             ');
-
+            $this->db->where('billing.id', $id);
             $query1 = $this->db->get("billing");
             $q1 = $query1->row_array();
 
@@ -72,6 +73,7 @@ Class Billing_Model extends CI_Model {
               $bill['patient_id'] = $q1['patient_id'];
               $bill['patient_name'] = $q1['patient_name'];
               $bill['payables'] = $q1['payables'];
+              $bill['discounts'] = $q1['discounts'];
               $bill['user']  = $q1['user'];
               $bill['payments'] = $query2->row_array()['payments'];
             
@@ -304,12 +306,13 @@ Class Billing_Model extends CI_Model {
 
     // PAYMENTS ////////////////////////////////////////////////////////////////////////////////////////
     
-    function add_payment($billing, $user) {
+    function add_payment($billing, $balance, $user) {
 
         $data = array(                          
                 'billing_id'     => $billing,
                 'user'           => $user,
                 'payee'          => $this->input->post('payee'),       
+                'balance'        => $balance,       
                 'amount'         => $this->input->post('amount'),       
                 'remarks'        => $this->input->post('remarks'),       
              );

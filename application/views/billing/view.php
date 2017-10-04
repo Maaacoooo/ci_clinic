@@ -119,6 +119,11 @@
                        <?php else: ?> 
                          <span class="badge-label red darken-3">Pending</span> 
                        <?php endif ?>
+                       <?php if (($info['payables'] - $info['discounts']) > $info['payments']): ?>
+                        <span class="badge-label red darken-3">UNPAID</span>
+                      <?php else: ?>
+                        <span class="badge-label green darken-3">PAID</span>                        
+                      <?php endif ?>
                      </td>
                    </tr>
                    <tr>
@@ -145,9 +150,9 @@
                      <td colspan="2"><?=$info['remarks']?></td>
                    </tr>                 
                  </table><!-- /.striped bordered -->
-                 <small><em>Created at <?=$info['created_at']?></em></small>
+                 <small><em>Created at <?=$info['created_at']?></em></small> <br />
                  <?php if ($info['updated_at']): ?>
-                 <small class="right"><em>Last updated <?=$info['updated_at']?></em></small>                 
+                 <small><em>Last updated <?=$info['updated_at']?></em></small>                 
                  <?php endif ?>
 
                  <div class="card">

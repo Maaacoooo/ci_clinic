@@ -110,6 +110,7 @@ Class Billing_Model extends CI_Model {
                 cases.title as case_title,
                 patients.id as patient_id,
                 CONCAT(patients.lastname, ", ", patients.fullname) as patient_name,
+                SUM(billing_items.qty * billing_items.discount ) as discounts,
                 SUM(billing_items.qty * billing_items.amount) as payables
             ');
 
@@ -133,6 +134,7 @@ Class Billing_Model extends CI_Model {
               $bill['patient_id'] = $row['patient_id'];
               $bill['patient_name'] = $row['patient_name'];
               $bill['payables'] = $row['payables'];
+              $bill['discounts'] = $row['discounts'];
 
               $bill['payments'] = $query2->row_array()['payments'];
               $bill_arr[] = $bill;

@@ -298,7 +298,7 @@ class Patients extends CI_Controller {
 
 					$data['medcerts'] = $this->medcert_model->fetch_medcert($patient_id, 0);	
 					$data['immunizations'] = $this->immunization_model->fetch_immunizations('', $patient_id, 1);	
-					$data['billing'] = $this->billing_model->fetch_billing_records('', $patient_id, '');	
+					$data['billing'] = $this->billing_model->fetch_billing_records(NULL, $patient_id, NULL);	
 
 					$data['total_cases'] = $this->case_model->count_cases($patient_id);
 					$data['logs']	= $this->logs_model->fetch_logs('patient', $patient_id, 10);

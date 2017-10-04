@@ -106,13 +106,13 @@
                       <?php else: ?> 
                         <span class="badge-label red darken-3">Pending</span> 
                       <?php endif ?>
-                      <?php if ($row['payables'] > $row['payments']): ?>
+                      <?php if (($row['payables'] - $row['discounts']) > $row['payments']): ?>
                         <span class="badge-label red darken-3">UNPAID</span>
                       <?php else: ?>
                         <span class="badge-label green darken-3">PAID</span>                        
                       <?php endif ?>
                     </td>
-                    <td><a href="<?=base_url('billing/view/'.$row['billing_id'])?>"><?=$row['payables']?></a></td>                                
+                    <td><a href="<?=base_url('billing/view/'.$row['billing_id'])?>"><?=decimalize(($row['payables'] - $row['discounts']))?></a></td>                                
                     <td><a href="<?=base_url('billing/view/'.$row['billing_id'])?>"><?=$row['payments']?></a></td>                                
                     <td><?=$row['created_at']?></td>
                   </tr>

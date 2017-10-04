@@ -269,10 +269,8 @@
                   <?php if ($billing): ?>
                     <thead>
                       <tr>
-                        <th></th>
+                        <th>BILLING ID</th>
                         <th>CASE</th>
-                        <th>Payables</th>
-                        <th>Payments</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -290,8 +288,6 @@
                                  <span class="badge-label red darken-3">Pending</span> 
                                <?php endif ?>
                            </a></td>
-                            <td><a href="<?=base_url('billing/view/'.$bill['id'])?>"><?=$bill['payables']?></a></td>
-                            <td><a href="<?=base_url('billing/view/'.$bill['id'])?>"><?=$bill['payments']?></a></td>
                             <td><a href="<?=base_url('billing/view/'.$bill['id'])?>"><?=nice_date(($bill['created_at']), 'M. d, Y')?></a></td>
                          </tr>
                         <?php endforeach; ?>

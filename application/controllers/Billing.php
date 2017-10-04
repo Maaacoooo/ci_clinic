@@ -357,6 +357,11 @@ class Billing extends CI_Controller {
 
 					$payment_id = $this->db->insert_id();
 
+					if($balance <= 0) {
+						//change Status of the Billing Queue
+						$this->billing_model->update_status($billing_id, 1);
+					}
+
 					// Save Log Data ///////////////////
 					$log[] = array(
 						'user' 		=> 	$userdata['username'],

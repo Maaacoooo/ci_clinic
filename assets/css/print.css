@@ -2,9 +2,7 @@
 			display: block;
 		}
 		body {
-			font-family: Arial;
-			width: 100%;
-			
+			font-family: Arial;			
 		}
 
 		.content {		
@@ -77,7 +75,6 @@
 
 		.container {
 			display: block;
-			padding: 20px;
 			width: 100%;
 			border: 1px #cecece solid;				
 		}
@@ -95,4 +92,21 @@
 			padding-right: 10px;
 			border-bottom: 1px #cecece solid;
 			width: 100%;
+		}
+
+		.right {
+			float: right;
+		}
+
+		.cut {
+			width: 100%;
+			display: block;
+			border-top: 1px dashed #cecece;
+			height: 1px;
+			margin-top: 40px;
+			margin-bottom: 20px;
+		}
+
+		.remarks {
+			font-size: 11px;
 		}

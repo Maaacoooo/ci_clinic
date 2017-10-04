@@ -36,30 +36,46 @@ Class Billing_Model extends CI_Model {
 
 
     function view($id) {
-            $this->db->join('patients', 'patients.id = cases.patient_id', 'left');
-            $this->db->join('cases', 'cases.id = billing.case_id', 'left');
-            $this->db->join('users', 'users.username = billing.user', 'left');
-            $this->db->join('billing_payments', 'billing_payments.billing_id = billing.id', 'left');
-            $this->db->join('billing_items', 'billing_items.billing_id = billing.id', 'left');
-            $this->db->select('
-                billing.billing_id,
-                billing.remarks,
+           $this->db->join('billing_items', 'billing_items.billing_id = billing.id', 'left');
+           $this->db->join('cases', 'cases.id = billing.case_id', 'left');
+           $this->db->join('users', 'users.username = billing.user', 'left');
+           $this->db->join('patients', 'patients.id = cases.patient_id', 'left'); 
+           $this->db->select('
+                billing.id,
                 billing.status,
                 billing.created_at,
                 billing.updated_at,
-                users.name as user,
-                users.username,
+                billing.remarks,
                 cases.id as case_id,
                 cases.title as case_title,
                 patients.id as patient_id,
-                CONCAT(patients.lastname, ", ", $patients.fullname) as patient_name,
-                SUM(billing_payments.amount) as payments,
-                SUM((billing_items.amount - billing_items.discount)*billing_items.qty) as payables
+                CONCAT(patients.lastname, ", ", patients.fullname) as patient_name,
+                SUM(billing_items.qty * billing_items.amount) as payables,
+                users.name as user,
+                users.username as username,
             ');
-            $this->db->where('billing.id', $id);
-            $query = $this->db->get('billing');
 
-            return $query->row_array();
+            $query1 = $this->db->get("billing");
+            $q1 = $query1->row_array();
+
+              $this->db->select_sum('amount', 'payments');
+              $this->db->where('billing_id', $q1['id']);
+              $query2 = $this->db->get('billing_payments');
+
+              $bill['id'] = $q1['id'];
+              $bill['status'] = $q1['status'];
+              $bill['remarks'] = $q1['remarks'];
+              $bill['created_at'] = $q1['created_at'];
+              $bill['updated_at'] = $q1['updated_at'];
+              $bill['case_id'] = $q1['case_id'];
+              $bill['case_title'] = $q1['case_title'];
+              $bill['patient_id'] = $q1['patient_id'];
+              $bill['patient_name'] = $q1['patient_name'];
+              $bill['payables'] = $q1['payables'];
+              $bill['user']  = $q1['user'];
+              $bill['payments'] = $query2->row_array()['payments'];
+            
+            return $bill;
     }
 
 
@@ -268,7 +284,8 @@ Class Billing_Model extends CI_Model {
             $this->db->select('
             services.title,
             services.code,
-            services.amount,
+            services.service_cat,
+            billing_items.amount,
             billing_items.qty,
             billing_items.discount
             ');          
@@ -301,7 +318,6 @@ Class Billing_Model extends CI_Model {
     }
 
     function fetch_billing_payments($billing) {
-
            
             $this->db->where('billing_id', $billing);
             $query = $this->db->get("billing_payments");
@@ -311,6 +327,27 @@ Class Billing_Model extends CI_Model {
             }
             return false;
 
+    }
+
+    function view_payment($id, $billing_id) {
+            $this->db->join('users', 'users.username = billing_payments.user', 'left');
+            $this->db->select('
+              billing_payments.id,
+              billing_payments.payee,
+              billing_payments.amount,
+              billing_payments.balance,
+              billing_payments.remarks,
+              billing_payments.created_at,
+              users.username as username,
+              users.name as user
+              ');           
+            $this->db->where('id', $id);
+            $this->db->where('billing_id', $billing_id);
+            $query = $this->db->get("billing_payments");
+
+    
+            return $query->row_array();
+           
     }
 
 

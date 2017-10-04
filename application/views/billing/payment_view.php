@@ -40,6 +40,8 @@
                 <ol class="breadcrumb">
                     <li><a href="<?=base_url()?>">Dashboard</a></li>
                     <li><a href="<?=base_url('patients')?>">Patients</a></li>
+                    <li><a href="<?=base_url('patients/view/'.$info['patient_id'])?>"><?=$info['patient_name']?></a></li>
+                    <li><a href="<?=base_url('billing/view/'.$info['id'])?>">BILL #<?=prettyID($info['id'])?></a></li>
                     <li class="active"><?=$title?></li>
                 </ol>
               </div>
@@ -80,55 +82,50 @@
             </div>
             
             <div class="row">
-              <div class="col s12">
-                <table class="striped bordered highlight">
-                  <?php if($results): ?>
-                  <thead>
-                    <tr>    
-                      <th>Patient Name</th>           
-                      <th>Billing ID</th>   
-                      <th>Case</th>            
-                      <th>Total Payable</th>       
-                      <th>Total Payments</th>       
-                      <th></th>       
-                    </tr>
-                  </thead>                  
-                  <?php foreach($results as $row): ?>
-                  <tr>
-                    <td><a href="<?=base_url('billing/view/'.$row['billing_id'])?>"><?=$row['patient_name']?></a></td>                                 
-                    <td><a href="<?=base_url('billing/view/'.$row['billing_id'])?>">BILL #<?=prettyID($row['billing_id'])?></a></td>                  
-                    <td>
-                      <a href="<?=base_url('billing/view/'.$row['billing_id'])?>">CASE #<?=prettyID($row['case_id'])?> <?=$row['case_title']?></a>
-                      <?php if ($row['status'] == 3): ?>
-                        <span class="badge-label grey darken-3">Cancelled</span>     
-                      <?php elseif($row['status'] == 1): ?>
-                        <span class="badge-label green darken-3">Served</span>                                   
-                      <?php else: ?> 
-                        <span class="badge-label red darken-3">Pending</span> 
-                      <?php endif ?>
-                      <?php if ($row['payables'] > $row['payments']): ?>
-                        <span class="badge-label red darken-3">UNPAID</span>
-                      <?php else: ?>
-                        <span class="badge-label green darken-3">PAID</span>                        
-                      <?php endif ?>
-                    </td>
-                    <td><a href="<?=base_url('billing/view/'.$row['billing_id'])?>"><?=$row['payables']?></a></td>                                
-                    <td><a href="<?=base_url('billing/view/'.$row['billing_id'])?>"><?=$row['payments']?></a></td>                                
-                    <td><?=$row['created_at']?></td>
-                  </tr>
-                  <?php endforeach; ?>
-                  <?php else: ?>
-                    <tr>
-                      <td>No Pending Billing Queues!</td>
-                    </tr>
-                  <?php endif; ?>
-                </table><!-- /.striped bordered highlight -->
-                <div class="right">
-                    <?php foreach ($links as $link) { echo $link; } ?>
-                </div>
-              </div><!-- /.col s12 -->
-            </div><!-- /.row -->
-          
+                 <div class="col s12">
+                  <div class="card">
+                    <div class="card-content">
+                      <div class="row">
+                        <div class="col s12 l4">
+                          <table class="striped bordered">
+                            <tr>
+                              <th width="40%">Payee</th>
+                              <td><?=$payment['payee']?></td>
+                            </tr>
+                            <tr>
+                              <th>Amount</th>
+                              <td><?=$payment['amount']?></td>
+                            </tr>
+                            <tr>
+                              <th>Balance as of Payment</th>
+                              <td><?=$payment['balance']?></td>
+                            </tr>
+                            <tr>
+                              <th>Recieved by</th>
+                              <td><?=$payment['user']?></td>
+                            </tr>
+                            <tr>
+                              <th>Date Time</th>
+                              <td><?=$payment['created_at']?></td>
+                            </tr>
+                            <tr>
+                              <th colspan="2">Remarks</th>
+                            </tr>
+                            <tr>
+                              <td colspan="2"><?=$payment['remarks']?></td>
+                            </tr>
+                          </table><!-- /.striped bordered -->
+                        </div><!-- /.col s12 l4 -->
+                        <div class="col s12 l8">
+                          <iframe src="<?=base_url('billing/view/'.$info['id'].'/payment/'.$payment['id'].'/print')?>" frameborder="0" width="100%" height="450px"></iframe>
+                        </div><!-- /.col s12 l8 -->
+                      </div><!-- /.row -->
+                    </div>
+                  </div>
+                 </div><!-- /.col s12 -->
+            </div><!-- /.row -->   
+
+
          
           </div>
         </div>

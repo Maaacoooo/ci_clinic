@@ -79,6 +79,10 @@
         return str_pad($str,5,"0",STR_PAD_LEFT);
     }
 
+    function decimalize($str) {
+        return sprintf("%1\$.2f", $str);
+    }
+
 
   
 

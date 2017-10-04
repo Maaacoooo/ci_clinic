@@ -78,7 +78,34 @@ class Billing extends CI_Controller {
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 			
 			$data['info'] = $this->billing_model->view($billing_id);	
-				
+
+			$data['billing_items'] = $this->billing_model->fetch_billing_items($billing_id);
+			$data['payments'] = $this->billing_model->fetch_billing_payments($billing_id);
+
+			if($this->uri->segment(4) == "payment") {
+				$payment_id = $this->uri->segment(5);
+				$data['payment'] = $this->billing_model->view_payment($payment_id, $billing_id);
+
+				if($payment_id && $data['payment']) {
+					if($this->uri->segment(6) =='print') {
+						$data['title'] = 'Payment #'.prettyID($data['payment']['id']);
+						$this->load->view('billing/payment_print', $data);
+					} else {
+						$data['title'] = 'Payment #'.prettyID($data['payment']['id']);
+						$this->load->view('billing/payment_view', $data);
+					}
+				} else {
+					show_404();
+				}				
+
+			} elseif(!$this->uri->segment(4)) {
+
+				$data['title'] = 'Bill #'.prettyID($data['info']['id']);
+				$this->load->view('billing/view', $data);
+
+			} else {
+				show_404();
+			}
 			
 
 		} else {

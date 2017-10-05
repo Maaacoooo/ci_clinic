@@ -110,3 +110,23 @@
 		.remarks {
 			font-size: 11px;
 		}
+
+		.badge-label {
+			display: inline-block;
+			color: white;
+			padding: 2px 8px 2px 8px;
+			border-radius: 3px;
+			font-size: 12px;
+		}
+
+		.red {
+			background: #b71c1c;
+		}
+
+		.green {
+			background: #4caf50;
+		}
+
+		.grey {
+			background: #212121;
+		}

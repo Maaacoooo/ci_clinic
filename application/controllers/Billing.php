@@ -98,11 +98,16 @@ class Billing extends CI_Controller {
 					show_404();
 				}				
 
-			} elseif(!$this->uri->segment(4)) {
+			} elseif($this->uri->segment(4) == 'print') {
+
+				$data['title'] = 'Bill #'.prettyID($data['info']['id']);
+				$this->load->view('billing/print', $data);
+
+			} elseif(!$this->uri->segment(4) == 'print') {
 
 				$data['title'] = 'Bill #'.prettyID($data['info']['id']);
 				$this->load->view('billing/view', $data);
-
+			
 			} else {
 				show_404();
 			}
@@ -119,7 +124,7 @@ class Billing extends CI_Controller {
 
 
 
-	public function create()		{
+	public function add_service()		{
 
 		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
 
@@ -127,38 +132,28 @@ class Billing extends CI_Controller {
 			
 			//FORM VALIDATION
 			$this->form_validation->set_rules('id', 'ID', 'trim|required');   
-			$this->form_validation->set_rules('immu', 'Service Request', 'trim|required|callback_check_service');   
+			$this->form_validation->set_rules('service', 'Service Request', 'trim|required|callback_check_service');   
 		 
 		   if($this->form_validation->run() == FALSE)	{
 
 				$this->session->set_flashdata('error', 'An Error has Occured!');
-				redirect($_SERVER['HTTP_REFERER'].'#labrequest', 'refresh');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
 
 			} else {
 
-				$case_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
-				$service_id = cleanId($this->input->post('immu')); //gets the service row ID
-				$service = $this->services_model->view($service_id, 'immunization')['title'];//sets the service title		
+				$billing_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
+				$service_id = cleanId($this->input->post('service')); //gets the service row ID
+				$service = $this->services_model->view($service_id, 'clinic');//sets the service array		
 
-				if($this->immunization_model->create($case_id, $service, $userdata['username'])) {
+				if($this->billing_model->add_item($billing_id, $service['title'], 1, $service['amount'], "")) {
 
-					$immu_id = $this->db->insert_id(); //fetch last insert labreq Row ID
-
-					// Save Log Data ///////////////////
+					
 					$log[] = array(
 						'user' 		=> 	$userdata['username'],
-						'tag' 		=> 	'case',
-						'tag_id'	=> 	$case_id,
-						'action' 	=> 	'Requested an Immunization Service : `'.$this->input->post('immu').'`'
+						'tag' 		=> 	'billing',
+						'tag_id'	=> 	$billing_id,
+						'action' 	=> 	'Added a Clinic Service to Billing - ' . $service['title']
 						);
-
-					$log[] = array(
-						'user' 		=> 	$userdata['username'],
-						'tag' 		=> 	'immunization',
-						'tag_id'	=> 	$immu_id,
-						'action' 	=> 	'Request Created'
-						);
-
 			
 					//Save log loop
 					foreach($log as $lg) {
@@ -166,8 +161,8 @@ class Billing extends CI_Controller {
 					}		
 					////////////////////////////////////
 
-					$this->session->set_flashdata('success', 'Immunization Service Request Created!');
-					redirect($_SERVER['HTTP_REFERER'].'#immunization', 'refresh');
+					$this->session->set_flashdata('success', 'Clinic Service Added!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
 				}
 			}
 
@@ -179,13 +174,55 @@ class Billing extends CI_Controller {
 
 	}
 
+	public function update_service() {
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('billing_id', 'ID', 'trim|required');     
+			$this->form_validation->set_rules('id[]', 'ID', 'trim|required');     
+			$this->form_validation->set_rules('qty[]', 'Quantity', 'trim');   
+		 
+		   if($this->form_validation->run() == FALSE)	{
+				$this->session->set_flashdata('loc_item', '1');				
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$billing_id = $this->encryption->decrypt($this->input->post('billing_id'));				
+
+				foreach ($this->input->post('id') as $key => $item) {
+		                            
+		            $disc   = $this->input->post('disc')[$key];        
+
+		           	$this->billing_model->update_item_qty($billing_id, $this->encryption->decrypt($item), '', $disc);
+             
+		        }		
+		
+					$this->session->set_flashdata('success', 'Services Updated!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+					
+				
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+		
+	}
+
 
 
 	function check_service($str) {
 
 		$id = cleanId($str);
 
-		$result = $this->services_model->view($id, 'immunization');
+		$result = $this->services_model->view($id, 'clinic');
 
 		if($result) {			
 			return TRUE;
@@ -403,7 +440,7 @@ class Billing extends CI_Controller {
 	    
 	    if (isset($_GET['term'])){
 	      $q = strtolower($_GET['term']);
-	      $result = $this->services_model->search_service($q, 'immunization');
+	      $result = $this->services_model->search_service($q, 'clinic');
 
 	      foreach($result as $row) {
 	      	$new_row['label']=htmlentities(stripslashes($row['title'] . ' - ' . $row['code'] . ' - ' . $row['amount']));

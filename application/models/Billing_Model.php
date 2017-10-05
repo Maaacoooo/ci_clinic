@@ -243,40 +243,33 @@ Class Billing_Model extends CI_Model {
      * @param [type] $export_id [description]
      * @param [type] $user      [description]
      */
-    function add_item($billing, $service, $qty, $amount) {
+    function add_item($billing, $service, $qty, $amount, $remarks) {
 
             $data = array(              
                 'billing_id'   => $billing,  
                 'service'      => $service,
                 'amount'       => $amount,
-                'qty'          => $qty            
+                'qty'          => $qty,            
+                'remarks'      => $remarks            
              );
        
             return $this->db->insert('billing_items', $data);    
 
     }
 
-    function update_item_qty($billing, $row_id, $qty, $remarks, $discount) {
+    function update_item_qty($billing, $row_id, $remarks, $discount) {
 
-            //if $qty > 0 - update row 
-            if($qty) {
-              
-              $data = array(              
-                'qty'        => $qty,                    
-                'remarks'    => $remarks,                    
+            $disc = array(                                               
                 'discount'   => $discount                    
              );
             
-              $this->db->where('billing_id', $billing);
-              $this->db->where('id', $row_id);
-              return $this->db->update('billing_items', $data); 
+            $this->db->where('billing_id', $billing);
+            $this->db->where('id', $row_id);
+            $this->db->update('billing_items', $disc); 
 
-            } else {    
-              $this->db->where('id', $row_id);
-              $this->db->where('billing_id', $billing);
-              return $this->db->delete('billing_items'); 
+            
 
-            }     
+            return TRUE;
 
     }
 
@@ -286,14 +279,16 @@ Class Billing_Model extends CI_Model {
 
             $this->db->join('services', 'services.title = billing_items.service', 'left');
             $this->db->select('
+            billing_items.id,
             services.title,
             services.code,
             services.service_cat,
             billing_items.amount,
             billing_items.qty,
-            billing_items.discount
+            billing_items.discount,
+            billing_items.remarks
             ');          
-           
+            $this->db->order_by('services.service_cat', "ASC");
             $this->db->where('billing_items.billing_id', $billing);
             $query = $this->db->get("billing_items");
 

@@ -8,6 +8,8 @@
     <title><?=$title?> &middot; <?=$site_title?></title>
 
     <?php $this->load->view('inc/css'); ?>
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/jquery-ui.theme.min.css" rel="stylesheet">
     <script>
       function changeBalance() {
         var balance = <?=decimalize(($info['payables']-$info['discounts']) - $info['payments'])?>;
@@ -165,6 +167,10 @@
                      <br />                          
                      <div class="row">
                        <a href="#addPayment" class="modal-trigger btn waves-effect green col s8 offset-s2">Add Payment</a>   
+                     </div><!-- /.row --> 
+                     <br /> 
+                     <div class="row">
+                       <a href="<?=current_url()?>/print" target="_blank" class="btn waves-effect blue col s8 offset-s2"><i class="mdi-action-print"></i>Print Statement</a>   
                      </div><!-- /.row -->  
                    </div><!-- /.card-content -->
                  </div><!-- /.card -->
@@ -173,13 +179,26 @@
                <div class="col s12 l9">
                  <div class="card">
                    <div class="card-content">
-                     
+                     <?=form_open('billing/add_service')?>
+                     <div class="row">
+                       <div class="input-field col s9">
+                         <input type="text" name="service" id="service" class="validate" />
+                         <input type="hidden" name="id" value="<?=$this->encryption->encrypt($info['id'])?>" />
+                         <label for="service">Add New Service</label>
+                       </div><!-- /.input-field col s9 -->
+                       <div class="input-field col s3">
+                         <button type="submit" class="btn waves-effect waves-blue blue">Add Service</button>
+                       </div><!-- /.input-field col s3 -->
+                     </div><!-- /.row -->
+                     <?=form_close()?>
                    </div><!-- /.card-content -->
                  </div><!-- /.card -->
                  <div class="card">
-                   <div class="card-content">
+                   <div class="card-content table-responsive">
                      <h6 class="strong header">Services</h6><!-- /.strong header -->                     
                     <?php $payables = 0; if ($billing_items): $x = 1;?>
+                    <?=form_open('billing/update_service')?>
+                    <input type="hidden" name="billing_id" value="<?=$this->encryption->encrypt($info['id'])?>" />
                     <table class="striped bordered condensed">
                        <thead>
                          <tr>
@@ -187,7 +206,6 @@
                            <th width="5%"></th>
                            <th>Service</th>
                            <th width="10%">AMT</th>
-                           <th width="5%">QTY</th>
                            <th width="10%">DISC</th>
                            <th width="10%">SUB</th>
                          </tr>
@@ -205,16 +223,10 @@
                                <span class="badge-label pink">CLINIC</span>                              
                              <?php endif ?>
                            </td>
-                           <td><?=$bill['title']?></td>
+                           <td><?=$bill['title']?> - <?=$bill['remarks']?></td>
                            <td><?=$bill['amount']?></td>
                            <td>
-                            <?php if ($bill['service_cat'] == 'clinic'): ?>
-                            <input type="text" name="qty[]" value="<?=$bill['qty']?>" />
-                            <?php else: ?>
-                            <?=$bill['qty']?>                                
-                            <?php endif ?>                              
-                           </td>
-                           <td>
+                             <input type="hidden" name="id[]" value="<?=$this->encryption->encrypt($bill['id'])?>" />
                              <input type="text" name="disc[]" value="<?=$bill['discount']?>" id="" />
                            </td>
                            <td><?=decimalize(($bill['qty'] * $bill['amount'])-($bill['qty'] * $bill['discount']))?></td>
@@ -224,17 +236,18 @@
                            $totDisc[] = $bill['discount'];
                            ?>
                          </tr>
-                         <?php endforeach ?>
+                         <?php endforeach ?>                         
                         </tbody>
                         <tfoot>
                           <tr class="red lighten-5">
-                            <td colspan="5" class="strong right-align"><a class="btn modal-trigger amber waves-effect waves-amber left">Update</a> Total</td>
+                            <td colspan="4" class="strong right-align"><button type="submit" class="btn amber waves-effect waves-amber left">Update Services</button> Total</td>
                             <td class="strong red-text"><?=decimalize(array_sum($totDisc))?></td>
                             <?php $payables = array_sum($totSub); //override payables variable ?>
                             <td class="strong red-text"><?=decimalize($payables)?></td>
                           </tr>
                         </tfoot>
                      </table><!-- /.striped bordered condensed -->
+                     <?=form_close()?>
                       <?php endif ?>                       
                    </div><!-- /.card-content -->
                  </div><!-- /.card -->
@@ -388,12 +401,22 @@
 
 
      <!-- //////////////////////////////////////////////////////////////////////////// -->
-
     <?php $this->load->view('inc/footer'); ?>
 
     <?php $this->load->view('inc/js'); ?>
-    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
+   
+    <script src="<?php echo base_url();?>assets/js/jquery-ui.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+    
+    <script type="text/javascript">
+      $(function(){
+      $("#service").autocomplete({    
+        source: "<?php echo base_url('index.php/billing/autocomplete');?>" // path to the get_birds method
+      });
+    });
 
+    </script>
+    <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
+   
 </body>
 </html>
 

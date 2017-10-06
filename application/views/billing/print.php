@@ -9,10 +9,9 @@
 		}
 	</style>
 </head>
-<body onload="window.print()">
-	
+<body>
+	<a href="#" class="right print" onclick="print()">[ Print ]</a>
 	<?php $this->load->view('inc/print_header');?>
-	
 	<h4 class="text-right">Billing #<?=prettyID($info['id'])?></h4>
 	<div class="container">
 		<h3 class="text-center">Billing Statement</h3>

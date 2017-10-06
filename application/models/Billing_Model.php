@@ -120,6 +120,10 @@ Class Billing_Model extends CI_Model {
             $query1 = $this->db->get("billing");
             $q1 = $query1->result_array();
 
+            if (!$query1->num_rows() > 0) {
+                return false;
+            }
+
             foreach ($q1 as $row) {
               $this->db->select_sum('amount', 'payments');
               $this->db->where('billing_id', $row['billing_id']);
@@ -271,6 +275,21 @@ Class Billing_Model extends CI_Model {
 
             return TRUE;
 
+    }
+
+
+    function remove_item($id) {
+
+            $this->db->where('id', $id);
+            return $this->db->delete('billing_items');   
+
+    }
+
+    function view_item($id) {
+          $this->db->where('id', $id);
+          $query = $this->db->get('billing_items');
+
+          return $query->row_array();
     }
 
 

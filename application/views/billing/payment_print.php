@@ -3,15 +3,8 @@
 <head>
 	<title><?=$title?> &middot; <?=$site_title?></title>
 	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
-  <style>
-    @media print {
-      .print {
-        visibility: hidden;
-      }
-    }
-  </style>
 </head>
-<body onload="#window.print()">
+<body>
 	<a href="#" class="right print" onclick="print()">[ Print ]</a>
 	<div class="page">
    <?php $this->load->view('inc/print_header');?>  

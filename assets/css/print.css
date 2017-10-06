@@ -130,3 +130,11 @@
 		.grey {
 			background: #212121;
 		}
+
+
+
+@media print {
+      .print {
+        visibility: hidden;
+      }
+    }

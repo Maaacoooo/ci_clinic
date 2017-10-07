@@ -305,6 +305,24 @@ class Patients extends CI_Controller {
 
 					$this->load->view('patient/view', $data);	
 
+				}  elseif($this->uri->segment(4) == 'print') {
+					//PATIENT MODULE
+					//Load default patient information view
+					$data['title'] = $data['info']['fullname'] . ' ' . $data['info']['lastname'];	//Page title
+					$data['cases'] = $this->case_model->fetch_patient_case($patient_id);		
+
+					$data['email'] = $this->patient_model->fetch_contacts($patient_id, 1);
+					$data['mobile'] = $this->patient_model->fetch_contacts($patient_id, 0);
+
+					$data['medcerts'] = $this->medcert_model->fetch_medcert($patient_id, 0);	
+					$data['immunizations'] = $this->immunization_model->fetch_immunizations('', $patient_id, 1);	
+					$data['billing'] = $this->billing_model->fetch_billing_records(NULL, $patient_id, NULL);	
+
+					$data['total_cases'] = $this->case_model->count_cases($patient_id);
+					$data['logs']	= $this->logs_model->fetch_logs('patient', $patient_id, 10);
+
+					$this->load->view('patient/print', $data);	
+
 				} elseif($this->uri->segment(4) == 'logs') {
 					//LOGS MODULE
 					//Show Logs

@@ -220,6 +220,7 @@
                   </table><!-- /.striped -->
                   <br />
                     <div class="right">
+                      <a href="<?=current_url()?>/print" target="_blank" class="btn waves-effect light-blue"><i class="mdi-action-print"></i> Print</a>
                       <a href="#UpdateModal" class="modal-trigger btn waves-effect amber">Update<i class="mdi-editor-border-color left"></i></a>
                       <a href="#deleteModal" class="modal-trigger btn waves-effect red">Archive<i class="mdi-action-delete left"></i></a>
                     </div><!-- /.right -->

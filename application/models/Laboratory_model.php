@@ -176,8 +176,90 @@ Class Laboratory_model extends CI_Model
     
     function fetch_lab_report($labreq_id) {
         
-        $labreq = $this->view($labreq_id, ''); //gets the Lab Request information
 
+        $labreq = $this->view($labreq_id, ''); //gets the Lab Request information
+        
+         $this->db->select('
+            service_examinations.id as exam_id,
+            service_examinations.title,
+            service_examinations.normal_values
+        ');        
+        $this->db->where('service_examinations.service', $labreq['service']);
+        $this->db->where('service_examinations.service_exam_cat', NULL);
+        $query_exams = $this->db->get('service_examinations');
+
+        $dataset = NULL;
+
+        $result['exam_cat'] = NULL;
+
+        foreach($query_exams->result_array() as $exams) {
+
+            //gets service_examnizations
+            $exam['title'] = $exams['title'];
+            $exam['normal_values'] = $exams['normal_values'];
+            $exam['exam_id'] = $exams['exam_id'];
+
+            //gets the result of the examinations
+            $this->db->where('labreq_id', $labreq_id);
+            $this->db->where('exam_id', $exams['exam_id']);
+            $query_value = $this->db->get('lab_report_values');
+
+            $exam['value']    = $query_value->row_array()['value'];
+            $exam['id']       = $query_value->row_array()['id'];
+
+            //Compile result
+            $result['exams'][] = $exam;
+            
+        }
+
+        $dataset[] = $result; 
+
+        
+        
+        //loop the damn Exam Category
+        $this->db->where('service', $labreq['service']);
+        $query_exam_cat = $this->db->get('service_exam_cat');
+
+        foreach ($query_exam_cat->result_array() as $cat) {
+
+            $result['exam_cat'] = $cat['title']; //set exam category
+
+            $this->db->select('
+            service_examinations.id as exam_id,
+            service_examinations.title,
+            service_examinations.normal_values
+            ');        
+            $this->db->where('service_examinations.service_exam_cat', $cat['title']);
+            $query_exams = $this->db->get('service_examinations');
+
+            foreach($query_exams->result_array() as $exams) {
+
+                //gets service_examnizations
+                $exam['title'] = $exams['title'];
+                $exam['normal_values'] = $exams['normal_values'];
+                $exam['exam_id'] = $exams['exam_id'];
+
+                //gets the result of the examinations
+                $this->db->where('labreq_id', $labreq_id);
+                $this->db->where('exam_id', $exams['exam_id']);
+                $query_value = $this->db->get('lab_report_values');
+
+                $exam['value']    = $query_value->row_array()['value'];
+                $exam['id']       = $query_value->row_array()['id'];
+
+                //Compile Exam result
+                $exam_arr[] = $exam;
+                $result['exams'] = $exam_arr;                   
+            }     
+            $exam_arr = array(); //reset array
+
+            $dataset[] = $result; 
+        }     
+        
+
+        //var_dump($dataset);
+
+        /*
         $this->db->select('
             service_examinations.id as exam_id,
             service_examinations.title,
@@ -204,7 +286,7 @@ Class Laboratory_model extends CI_Model
 
             //Compile result
             $dataset[] = $result;
-        }
+        } */
 
         if($dataset) {
            return $dataset; 

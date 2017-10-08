@@ -183,18 +183,38 @@
                          <th width="40%" class="center">EXAMINATIONS</th>
                          <th width="35%" class="center">NORMAL VALUES</th>
                          <th class="center">RESULT</th>
-                       </tr>                     
+                       </tr>                        
                        <?php foreach ($lab_report as $rep): ?>
-                         <tr>
-                           <td><?=$rep['title']?></td>
-                           <td><?=$rep['normal_values']?></td>
-                           <td>
-                             <input type="text" name="value[]" class="input-table browser-default" placeholder="<?=$rep['title']?>..." value="<?=$rep['value']?>" />  
-                             <input type="hidden" name="val_id[]" value="<?=$this->encryption->encrypt($rep['id'])?>" />
-                             <input type="hidden" name="exam_id[]" value="<?=$this->encryption->encrypt($rep['exam_id'])?>" />
-                           </td>
-                         </tr>
-                       <?php endforeach ?>                     
+                         <?php if (!$rep['exam_cat']): ?>
+                          <?php foreach ($rep['exams'] as $ex): ?>
+                            <tr>
+                              <td><?=$ex['title']?></td>
+                               <td><?=$ex['normal_values']?></td>
+                               <td>
+                                 <input type="text" name="value[]" class="input-table browser-default" placeholder="<?=$ex['title']?>..." value="<?=$ex['value']?>" />  
+                                 <input type="hidden" name="val_id[]" value="<?=$this->encryption->encrypt($ex['id'])?>" />
+                                 <input type="hidden" name="exam_id[]" value="<?=$this->encryption->encrypt($ex['exam_id'])?>" />
+                               </td>
+                            </tr>                             
+                           <?php endforeach ?>
+                         <?php else: ?>
+                           <tr>
+                             <th colspan="3"><?=$rep['exam_cat']?></th>
+                           </tr>
+                           <?php foreach ($rep['exams'] as $ex): ?>
+                             <tr>
+                               <td><?=$ex['title']?></td>
+                               <td><?=$ex['normal_values']?></td>
+                               <td>
+                                 <input type="text" name="value[]" class="input-table browser-default" placeholder="<?=$ex['title']?>..." value="<?=$ex['value']?>" />  
+                                 <input type="hidden" name="val_id[]" value="<?=$this->encryption->encrypt($ex['id'])?>" />
+                                 <input type="hidden" name="exam_id[]" value="<?=$this->encryption->encrypt($ex['exam_id'])?>" />
+                               </td>
+                             </tr>
+                           <?php endforeach ?>
+                         <?php endif ?>
+                         
+                       <?php endforeach ?>                 
                      </tbody>
                      <input type="hidden" name="id" value="<?=$this->encryption->encrypt($labreq['labreq_id'])?>" />
                      <tfoot>
@@ -240,11 +260,26 @@
                          <th class="center">RESULT</th>
                        </tr>                     
                        <?php foreach ($lab_report as $rep): ?>
-                         <tr>
-                           <td><?=$rep['title']?></td>
-                           <td><?=$rep['normal_values']?></td>
-                           <td> <?=$rep['value']?></td>
-                         </tr>
+                         <?php if (!$rep['exam_cat']): ?>
+                          <?php foreach ($rep['exams'] as $ex): ?>
+                             <tr>
+                               <td><?=$ex['title']?></td>
+                               <td><?=$ex['normal_values']?></td>
+                               <td><?=$ex['value']?></td>
+                             </tr>
+                           <?php endforeach ?>
+                         <?php else: ?>
+                           <tr>
+                             <th colspan="3"><?=$rep['exam_cat']?></th>
+                           </tr>
+                           <?php foreach ($rep['exams'] as $ex): ?>
+                             <tr>
+                               <td><?=$ex['title']?></td>
+                               <td><?=$ex['normal_values']?></td>
+                               <td><?=$ex['value']?></td>
+                             </tr>
+                           <?php endforeach ?>
+                         <?php endif ?>                         
                        <?php endforeach ?>                     
                      </tbody>
                    </table>
@@ -255,6 +290,10 @@
                  <div class="card">
                    <div class="card-content">
                      <h6 class="strong header">Options</h6><!-- /.strong header -->
+                     <br />     
+                     <div class="row">
+                       <a href="<?=current_url()?>/print" target="_blank" class="btn waves-effect light-blue col s8 offset-s2"><i class="mdi-action-print"></i> Print Request</a>   
+                     </div><!-- /.row -->
                      <br />     
                      <div class="row">
                        <a href="#resultModal" class="modal-trigger btn waves-effect light-blue col s8 offset-s2">Attach Result File</a>   

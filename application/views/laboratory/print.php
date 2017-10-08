@@ -9,7 +9,7 @@
 		}
 	</style>
 </head>
-<body onload="#window.print()">
+<body onload="window.print()">
 	<a href="#" class="right print" onclick="print()">[ Print ]</a>
 	<?php $this->load->view('inc/print_header');?>
 	<h4 class="text-right">REQ #<?=prettyID($labreq['id'])?></h4>
@@ -108,12 +108,27 @@
                          <th class="center">RESULT</th>
                        </tr>                     
                        <?php foreach ($lab_report as $rep): ?>
-                         <tr>
-                           <td><?=$rep['title']?></td>
-                           <td><?=$rep['normal_values']?></td>
-                           <td> <?=$rep['value']?></td>
-                         </tr>
-                       <?php endforeach ?>                     
+                         <?php if (!$rep['exam_cat']): ?>
+                          <?php foreach ($rep['exams'] as $ex): ?>
+                             <tr>
+                               <td><?=$ex['title']?></td>
+                               <td><?=$ex['normal_values']?></td>
+                               <td><?=$ex['value']?></td>
+                             </tr>
+                           <?php endforeach ?>
+                         <?php else: ?>
+                           <tr>
+                             <th colspan="3"><?=$rep['exam_cat']?></th>
+                           </tr>
+                           <?php foreach ($rep['exams'] as $ex): ?>
+                             <tr>
+                               <td><?=$ex['title']?></td>
+                               <td><?=$ex['normal_values']?></td>
+                               <td><?=$ex['value']?></td>
+                             </tr>
+                           <?php endforeach ?>
+                         <?php endif ?>                         
+                       <?php endforeach ?>                   
                      </tbody>
                    </table>		
 		</div><!-- /.content -->

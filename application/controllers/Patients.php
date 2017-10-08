@@ -248,8 +248,13 @@ class Patients extends CI_Controller {
 
 								$data['title'] =  'Lab Request #'.prettyID($labreq_id). ': ' . $data['labreq']['service'];	//Page title	
 								$data['lab_files'] = $this->laboratory_model->fetch_files($labreq_id); //Results and Files 
+								$data['lab_report'] = $this->laboratory_model->fetch_lab_report($labreq_id); //Results and Files 
 
-								$this->load->view('laboratory/view', $data);
+								if ($this->uri->segment(8) == 'print') {
+									$this->load->view('laboratory/print', $data);									
+								} else {
+									$this->load->view('laboratory/view', $data);
+								}
 
 							} else {
 								show_404();

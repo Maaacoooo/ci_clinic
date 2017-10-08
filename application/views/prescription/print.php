@@ -7,9 +7,8 @@
 <body onload="window.print()">
 	
 	<?php $this->load->view('inc/print_header');?>
-
-	<div class="container">
-		<h3>Prescription: #<?=prettyID($prescription['id'])?></h3>
+	<h3>Prescription: #<?=prettyID($prescription['id'])?></h3>
+	<div class="container">		
 		<div class="content">
 			<span class="content-title">Patient Name: </span>
 			<span class="content-detail"><?=$info['fullname'] . ' ' . $info['lastname']?></span>

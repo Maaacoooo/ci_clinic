@@ -48,14 +48,20 @@ Class Laboratory_model extends CI_Model
             lab_request.created_at,
             lab_request.updated_at,
             lab_request.case_id,
+            lab_request.pathologist,
+            lab_request.medtech,
+            lab_request.report_no,
             services.id,
             services.code,
             services.amount,
-            patients.id as patient_id    
+            services.is_constant,
+            patients.id as patient_id,
+            users.name as requestor    
             ');
             $this->db->join('services', 'services.title = lab_request.service', 'left');            
             $this->db->join('cases', 'cases.id = lab_request.case_id', 'left');            
             $this->db->join('patients', 'patients.id = cases.patient_id', 'left');            
+            $this->db->join('users', 'users.username = lab_request.user', 'left');            
 
             $this->db->where('lab_request.id', $id);
 
@@ -165,6 +171,91 @@ Class Laboratory_model extends CI_Model
     
     }
 
+    // LAB REPORTS ///////////////////////////////////////////////////////
+    
+    function fetch_lab_report($labreq_id) {
+        
+        $labreq = $this->view($labreq_id, ''); //gets the Lab Request information
+
+        $this->db->select('
+            service_examinations.id as exam_id,
+            service_examinations.title,
+            service_examinations.normal_values
+        ');        
+        $this->db->where('service_examinations.service', $labreq['service']);
+        $query_exams = $this->db->get('service_examinations');
+
+        $dataset = NULL;
+        foreach($query_exams->result_array() as $exams) {
+
+            //gets service_examnizations
+            $result['title'] = $exams['title'];
+            $result['normal_values'] = $exams['normal_values'];
+            $result['exam_id'] = $exams['exam_id'];
+
+            //gets the result of the examinations
+            $this->db->where('labreq_id', $labreq_id);
+            $this->db->where('exam_id', $exams['exam_id']);
+            $query_value = $this->db->get('lab_report_values');
+
+            $result['value']    = $query_value->row_array()['value'];
+            $result['id']       = $query_value->row_array()['id'];
+
+            //Compile result
+            $dataset[] = $result;
+        }
+
+        if($dataset) {
+           return $dataset; 
+        } else {
+            return FALSE;
+        } 
+        
+
+    }
+
+    function update_lab_report($labreq_id) {
+
+            $data = array(                             
+                'report_no'     => $this->input->post('report_no'),                       
+                'medtech'       => $this->input->post('medtech'),                       
+                'pathologist'   => $this->input->post('patho')                       
+             );
+
+            $this->db->where('id', $labreq_id);
+            $this->db->update('lab_request', $data);
+
+            //Loop the input_result
+            $exam_id = $this->input->post('exam_id');
+            foreach ($exam_id as $key => $value) {
+
+                $exam_id = $this->encryption->decrypt($value);  //override variable
+                $val_id  = $this->encryption->decrypt($this->input->post('val_id')[$key]);
+
+                if($val_id) {
+                    //update row 
+                    $data = array(                                              
+                        'value'   => $this->input->post('value')[$key]                       
+                     );
+                    $this->db->where('id', $val_id);
+                    $this->db->update('lab_report_values', $data);
+                } else {
+                    //add new data
+                    $data = array(                             
+                        'exam_id'   => $exam_id,                       
+                        'labreq_id' => $labreq_id,                       
+                        'value'     => $this->input->post('value')[$key]                       
+                     );
+                    $this->db->insert('lab_report_values', $data);
+                }
+                
+            }
+
+            return TRUE;
+    }   
+
+
+    //////////////////////////////////////////////////////////////////////
 
 
     // LAB REQUEST FILES /////////////////////////////////////////////////

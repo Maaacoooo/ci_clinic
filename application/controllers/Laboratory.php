@@ -196,6 +196,55 @@ class Laboratory extends CI_Controller {
 
 	}
 
+	public function update_report()		{
+
+		$userdata = $this->session->userdata('admin_logged_in'); //it's pretty clear it's a userdata
+
+		if($userdata)	{
+			
+			//FORM VALIDATION
+			$this->form_validation->set_rules('id', 'ID', 'trim|required');    
+		 
+		   if($this->form_validation->run() == FALSE)	{
+
+				$this->session->set_flashdata('error', 'An Error has Occured!');
+				redirect($_SERVER['HTTP_REFERER'], 'refresh');
+
+			} else {
+
+				$labreq_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row	
+
+				if($this->laboratory_model->update_lab_report($labreq_id)) {
+
+
+					// Save Log Data ///////////////////
+					$log[] = array(
+						'user' 		=> 	$userdata['username'],
+						'tag' 		=> 	'laboratory',
+						'tag_id'	=> 	$labreq_id,
+						'action' 	=> 	'Updated Laboratory Report'
+						);
+
+			
+					//Save log loop
+					foreach($log as $lg) {
+						$this->logs_model->create_log($lg['user'], $lg['tag'], $lg['tag_id'], $lg['action']);				
+					}		
+					////////////////////////////////////
+
+					$this->session->set_flashdata('success', 'Laboratory Report Updated!');
+					redirect($_SERVER['HTTP_REFERER'], 'refresh');
+				}
+			}
+
+		} else {
+
+			$this->session->set_flashdata('error', 'You need to login!');
+			redirect('dashboard/login', 'refresh');
+		}
+
+	}
+
 
 	public function change_status()		{
 

@@ -140,6 +140,106 @@
                  <?php if ($labreq['updated_at']): ?>
                  <small class="right"><em>Last updated <?=$labreq['updated_at']?></em></small>                 
                  <?php endif ?>
+
+                 <hr />
+                 <?php if ($lab_report): ?>
+                   <?php if (!$labreq['status']): ?>
+                    <table class="table-report">
+                     <?=form_open('laboratory/update_report')?>
+                     <thead>
+                       <tr>
+                         <th colspan="3"><?=$labreq['service']?> Report</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <th>Authenticated Report No.</th>
+                         <td colspan="2">
+                            <input type="text" name="report_no" class="input-table browser-default" placeholder="Actual Authenticated Report No. ..." value="<?=$labreq['report_no']?>" />                           
+                         </td>
+                       </tr>
+                       <tr>
+                         <th>Medical Technician</th>
+                         <td colspan="2">
+                            <input type="text" name="medtech" class="input-table browser-default" placeholder="Fullname, Suffix - LIC No. ..." value="<?=$labreq['medtech']?>" />                           
+                         </td>
+                       </tr>
+                       <tr>
+                         <th>Pathologist</th>
+                         <td colspan="2">
+                            <input type="text" name="patho" class="input-table browser-default" placeholder="Fullname, Suffix - LIC No. ..." value="<?=$labreq['pathologist']?>" />                           
+                         </td>
+                       </tr>
+                       <tr>
+                         <td colspan="3"></td>
+                       </tr>
+                       <tr>
+                         <th width="40%" class="center">EXAMINATIONS</th>
+                         <th width="35%" class="center">NORMAL VALUES</th>
+                         <th class="center">RESULT</th>
+                       </tr>                     
+                       <?php foreach ($lab_report as $rep): ?>
+                         <tr>
+                           <td><?=$rep['title']?></td>
+                           <td><?=$rep['normal_values']?></td>
+                           <td>
+                             <input type="text" name="value[]" class="input-table browser-default" placeholder="<?=$rep['title']?>..." value="<?=$rep['value']?>" />  
+                             <input type="hidden" name="val_id[]" value="<?=$this->encryption->encrypt($rep['id'])?>" />
+                             <input type="hidden" name="exam_id[]" value="<?=$this->encryption->encrypt($rep['exam_id'])?>" />
+                           </td>
+                         </tr>
+                       <?php endforeach ?>                     
+                     </tbody>
+                     <input type="hidden" name="id" value="<?=$this->encryption->encrypt($labreq['labreq_id'])?>" />
+                     <tfoot>
+                       <tr>
+                         <td colspan="3">
+                           <button type="submit" class="btn right">Update Report</button>
+                         </td>
+                       </tr>
+                     </tfoot>
+                     <?=form_close()?>
+                   </table>
+                   <?php else: ?>  
+                    <table class="table-report">
+                     <?=form_open('laboratory/update_report')?>
+                     <thead>
+                       <tr>
+                         <th colspan="3"><?=$labreq['service']?> Report</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <th>Authenticated Report No.</th>
+                         <td colspan="2"><?=$labreq['report_no']?></td>
+                       </tr>
+                       <tr>
+                         <th>Medical Technician</th>
+                         <td colspan="2"><?=$labreq['medtech']?></td>
+                       </tr>
+                       <tr>
+                         <th>Pathologist</th>
+                         <td colspan="2"><?=$labreq['pathologist']?></td>
+                       </tr>
+                       <tr>
+                         <td colspan="3"></td>
+                       </tr>
+                       <tr>
+                         <th width="40%" class="center">EXAMINATIONS</th>
+                         <th width="35%" class="center">NORMAL VALUES</th>
+                         <th class="center">RESULT</th>
+                       </tr>                     
+                       <?php foreach ($lab_report as $rep): ?>
+                         <tr>
+                           <td><?=$rep['title']?></td>
+                           <td><?=$rep['normal_values']?></td>
+                           <td> <?=$rep['value']?></td>
+                         </tr>
+                       <?php endforeach ?>                     
+                     </tbody>
+                   </table>
+                 <?php endif ?>
+                 <?php endif ?>
                </div><!-- /.col s12 l8 -->
                <div class="col s12 l4">
                  <div class="card">
@@ -147,7 +247,7 @@
                      <h6 class="strong header">Options</h6><!-- /.strong header -->
                      <br />     
                      <div class="row">
-                       <a href="#resultModal" class="modal-trigger btn waves-effect light-blue col s8 offset-s2">Attach Result</a>   
+                       <a href="#resultModal" class="modal-trigger btn waves-effect light-blue col s8 offset-s2">Attach Result File</a>   
                      </div><!-- /.row -->
                      <br />  
                      <?php if (!$labreq['status']): ?>

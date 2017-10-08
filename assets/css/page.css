@@ -263,3 +263,36 @@ h5.badge-label {
 	border-bottom: 1px #cecece solid;
 	width: 100%;
 }
+
+
+/**
+ * Custom Tables for Laboratory Report
+ */
+
+.table-report {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.table-report thead th, .table-report thead td {
+	padding: 10px;
+	text-align: center;
+}
+
+.table-report th {
+	background: #EEEEEE;
+}
+
+.table-report th, .table-report td, .table-report tr{
+	border: 1px solid #212121;
+	padding: 2px 10px 2px 10px;
+}
+
+.input-table {
+	margin: 2px 0px 2px 0px !important;
+	padding: 5px 0px 5px 0px !important;
+	border: 1px solid #cecece !important;
+	height: inherit !important;
+	width: 100% !important; 
+	background: #fffde7 !important;
+}

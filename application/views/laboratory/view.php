@@ -171,6 +171,12 @@
                          </td>
                        </tr>
                        <tr>
+                         <th>Specimen</th>
+                         <td colspan="2">
+                            <input type="text" name="specimen" class="input-table browser-default" placeholder="Specimen..." value="<?=$labreq['specimen']?>" />                           
+                         </td>
+                       </tr>
+                       <tr>
                          <td colspan="3"></td>
                        </tr>
                        <tr>
@@ -220,6 +226,10 @@
                        <tr>
                          <th>Pathologist</th>
                          <td colspan="2"><?=$labreq['pathologist']?></td>
+                       </tr>
+                       <tr>
+                         <th>Specimen</th>
+                         <td colspan="2"><?=$labreq['specimen']?></td>
                        </tr>
                        <tr>
                          <td colspan="3"></td>

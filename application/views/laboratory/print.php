@@ -84,16 +84,20 @@
                      </thead>
                      <tbody>
                        <tr>
-                         <th>Authenticated Report No.</th>
+                         <th class="text-left">Authenticated Report No.</th>
                          <td colspan="2"><?=$labreq['report_no']?></td>
                        </tr>
                        <tr>
-                         <th>Medical Technician</th>
+                         <th class="text-left">Medical Technician</th>
                          <td colspan="2"><?=$labreq['medtech']?></td>
                        </tr>
                        <tr>
-                         <th>Pathologist</th>
+                         <th class="text-left">Pathologist</th>
                          <td colspan="2"><?=$labreq['pathologist']?></td>
+                       </tr>
+                       <tr>
+                         <th class="text-left">Specimen</th>
+                         <td colspan="2"><?=$labreq['specimen']?></td>
                        </tr>
                        <tr>
                          <td colspan="3"></td>

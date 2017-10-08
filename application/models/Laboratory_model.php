@@ -51,6 +51,7 @@ Class Laboratory_model extends CI_Model
             lab_request.pathologist,
             lab_request.medtech,
             lab_request.report_no,
+            lab_request.specimen,
             services.id,
             services.code,
             services.amount,
@@ -219,7 +220,8 @@ Class Laboratory_model extends CI_Model
             $data = array(                             
                 'report_no'     => $this->input->post('report_no'),                       
                 'medtech'       => $this->input->post('medtech'),                       
-                'pathologist'   => $this->input->post('patho')                       
+                'pathologist'   => $this->input->post('patho'),                       
+                'specimen'      => $this->input->post('specimen')                       
              );
 
             $this->db->where('id', $labreq_id);

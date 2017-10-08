@@ -402,7 +402,7 @@
 
       <!-- Modals -->
           <div id="caseModal" class="modal modal-fixed-footer">
-              <?=form_open('cases/create')?>              
+              <?=form_open_multipart('cases/create')?>              
                   <div class="modal-content">    
                    <h5 class="header">New Case: <?=$info['fullname'] . ' ' . $info['lastname']?></h5><!-- /.header black-text -->              
                    <div class="row">
@@ -415,6 +415,19 @@
                         <label for="height">Height (cm)</label>
                       </div><!-- /.input-field col s6 -->
                    </div><!-- /.row -->
+                   <div class="row">
+                         <div class="input-field col s12">
+                           <div class="file-field input-field">
+                            <div class="btn">
+                              <span>IMG</span>
+                              <input type="file" name="img">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                          </div>
+                         </div><!-- /.input-field col s12 l3 -->
+                  </div><!-- /.row -->
                    <div class="row">
                      <div class="input-field col s12">
                        <input type="text" name="title" id="title" class="validate" value="<?=set_value('title')?>" required/>

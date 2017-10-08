@@ -131,11 +131,10 @@ class Dashboard extends CI_Controller {
 					$patient_id = cleanId($this->input->post('patient_id'));
 				}			
 
+				$case_id = $this->case_model->create_case($patient_id); //fetch last insert case Row ID
 
 				// Insert Case Data
-				if($this->case_model->create_case($patient_id)) {
-
-					$case_id = $this->db->insert_id(); //fetch last insert case Row ID
+				if($case_id) {
 
 					//Generate a Billing Queue ///////////////
 					$this->billing_model->create($case_id, $userdata['username']);					

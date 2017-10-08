@@ -5,17 +5,62 @@ Class Case_model extends CI_Model
 
 
     function create_case($patient_id) {
+            
 
-      
             $data = array(              
                 'patient_id'     => $patient_id,  
                 'title'          => $this->input->post('title'),  
                 'description'    => $this->input->post('description'),                 
                 'weight'         => $this->input->post('weight'),   
-                'height'         => $this->input->post('height')                           
+                'height'         => $this->input->post('height')                      
              );
        
-            return $this->db->insert('cases', $data);      
+            $this->db->insert('cases', $data);      
+            $case_id = $this->db->insert_id();
+
+            //Process Image Upload
+              if($_FILES['img']['name'] != NULL)  {     
+
+                //Create Upload Path 
+                //Create main path for patient
+                if(!is_dir('./uploads/patients')) {
+                    mkdir('./uploads/patients');
+                }
+                //Create main path for patient account
+                if(!is_dir('./uploads/patients/'.$patient_id)) {
+                    mkdir('./uploads/patients/'.$patient_id);
+                }
+                //Create main path for case
+                if(!is_dir('./uploads/patients/'.$patient_id.'/case')) {
+                    mkdir('./uploads/patients/'.$patient_id.'/case');
+                }
+                //Create path for distinct case
+                $path = './uploads/patients/'.$patient_id.'/case/'.$case_id;
+                if(!is_dir($path)) {
+                    mkdir($path);
+                }
+
+                //Upload 
+                $config['upload_path'] = $path;
+                $config['allowed_types'] = 'gif|jpg|png'; 
+                $config['encrypt_name'] = TRUE;                        
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);         
+                
+                $field_name = "img";
+                $this->upload->do_upload($field_name);
+                $data2 = array('upload_data' => $this->upload->data());
+                foreach ($data2 as $key => $value) {     
+                  $filename = $value['file_name'];
+                }
+
+                //Save to database
+                $this->db->update('cases', array('img' => $filename), array('id' => $case_id));
+                
+            }
+
+            return $case_id;
 
     }
 

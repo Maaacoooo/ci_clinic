@@ -217,7 +217,7 @@
             </div><!-- /.row -->
            <?php endif; ?>
            
-           <?=form_open('dashboard')?>
+           <?=form_open_multipart('dashboard')?>
            <div class="row">
              <div class="col s12">
                <div class="card">
@@ -249,6 +249,19 @@
                        <label for="title">Case Title</label>
                      </div><!-- /.input-field col s12 -->
                    </div><!-- /.row -->
+                   <div class="row">
+                         <div class="input-field col s12">
+                           <div class="file-field input-field">
+                            <div class="btn">
+                              <span>IMG</span>
+                              <input type="file" name="img">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                          </div>
+                  </div><!-- /.input-field col s12 l3 -->
+                  </div><!-- /.row -->
                    <div class="row">
                      <div class="col s12">
                         <p>Case Description</p> <br />

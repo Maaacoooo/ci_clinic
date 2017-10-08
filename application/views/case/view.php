@@ -169,7 +169,14 @@
                     </small>
                     </p>
                     </div><!-- /.col s12 l8 -->
-                    <div class="col s12 l4">                      
+                    <div class="col s12 l4">   
+
+                      <?php if ($case['img']): ?>
+                      <div class="material-placeholder" style="">
+                        <img class="materialboxed responsive-img" src="<?=base_url('uploads/patients/'.$info['id'].'/case/'.$case['id'].'/'.$case['img'])?>" style="">
+                      </div>  
+                      <?php endif ?>
+
                        <div class="card">
                          <div class="card-content">
                             <h6 class="header strong">Options</h6><!-- /.header -->

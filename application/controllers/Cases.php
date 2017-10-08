@@ -86,10 +86,9 @@ class Cases extends CI_Controller {
 			} else {
 
 				$patient_id = $this->encryption->decrypt($this->input->post('id')); //ID of the row				
-
-				if($this->case_model->create_case($patient_id)) {
-
-					$case_id = $this->db->insert_id(); //fetch last insert case Row ID
+				$case_id = $this->case_model->create_case($patient_id);
+				
+				if($case_id) {
 
 					//Generate a Billing Queue ///////////////
 					$this->billing_model->create($case_id, $userdata['username']);					

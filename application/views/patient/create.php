@@ -8,7 +8,54 @@
     <title><?=$title?> &middot; <?=$site_title?></title>
 
     <?php $this->load->view('inc/css'); ?>
+    <script type="text/javascript">
+      function sameAdd() {
+        //get data 
+        var bplace_bldg = document.getElementById("bplace_bldg").value;
+        var bplace_strt = document.getElementById("bplace_strt").value;
+        var bplace_brgy = document.getElementById("bplace_brgy").value;
+        var bplace_city = document.getElementById("bplace_city").value;
+        var bplace_prov = document.getElementById("bplace_prov").value;
+        var bplace_zip = document.getElementById("bplace_zip").value;
+        var bplace_country = document.getElementById("bplace_country").value;
 
+        var checkbx = document.getElementById("checkAdd").checked;
+
+        if(checkbx == true) {
+          document.getElementById("addr_bldg").value = bplace_bldg;
+          document.getElementById("addr_strt").value = bplace_strt;
+          document.getElementById("addr_brgy").value = bplace_brgy;
+          document.getElementById("addr_city").value = bplace_city;
+          document.getElementById("addr_prov").value = bplace_prov;
+          document.getElementById("addr_zip").value = bplace_zip;
+          document.getElementById("addr_country").value = bplace_country;
+
+          document.getElementById("lbl_addr_bldg").className = "active";
+          document.getElementById("lbl_addr_strt").className = "active";
+          document.getElementById("lbl_addr_brgy").className = "active";
+          document.getElementById("lbl_addr_city").className = "active";
+          document.getElementById("lbl_addr_prov").className = "active";
+          document.getElementById("lbl_addr_zip").className = "active";
+          document.getElementById("lbl_addr_country").className = "active";
+
+        } else {
+          document.getElementById("addr_bldg").value = "";
+          document.getElementById("addr_strt").value = "";
+          document.getElementById("addr_brgy").value = "";
+          document.getElementById("addr_city").value = "";
+          document.getElementById("addr_prov").value = "";
+          document.getElementById("addr_zip").value = "";
+          document.getElementById("addr_country").value = "Philippines";
+
+          document.getElementById("lbl_addr_bldg").className = "";
+          document.getElementById("lbl_addr_strt").className = "";
+          document.getElementById("lbl_addr_brgy").className = "";
+          document.getElementById("lbl_addr_city").className = "";
+          document.getElementById("lbl_addr_prov").className = "";
+          document.getElementById("lbl_addr_zip").className = "";
+        }
+      }
+    </script>
 
 </head>
 
@@ -144,37 +191,45 @@
                            <label for="bplace_country">Country</label>
                          </div><!-- /.input-field col s12 -->
                      </fieldset>
-                   </div><!-- /.row -->          
+                   </div><!-- /.row -->   
+                   <div class="row">
+                          <div class="col s12">
+                            <div class="checkbox right">
+                              <input type="checkbox" id="checkAdd" onclick="sameAdd()">
+                              <label for="checkAdd">Present Address same with Birthplace</label>  
+                            </div><!-- /.checkbox -->
+                          </div><!-- /.col s12 -->
+                    </div><!-- /.row -->     
                    <div class="row">                     
                      <fieldset class=" green lighten-5">
                         <legend class="strong">Present Address</legend>
                           <div class="input-field col s12 l5">
                            <input type="text" name="addr_bldg" id="addr_bldg" class="validate" value="<?=set_value('addr_bldg')?>" required/>
-                           <label for="addr_bldg">Building / Block / House</label>
+                           <label for="addr_bldg" id="lbl_addr_bldg">Building / Block / House</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l4">
                            <input type="text" name="addr_strt" id="addr_strt" class="validate" value="<?=set_value('addr_strt')?>" required/>
-                           <label for="addr_strt">Street</label>
+                           <label for="addr_strt" id="lbl_addr_strt">Street</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
                            <input type="text" name="addr_brgy" id="addr_brgy" class="validate" value="<?=set_value('addr_brgy')?>" required/>
-                           <label for="addr_brgy">Barangay</label>
+                           <label for="addr_brgy" id="lbl_addr_brgy">Barangay</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
                            <input type="text" name="addr_city" id="addr_city" class="validate" value="<?=set_value('addr_city')?>" required/>
-                           <label for="addr_city">City / Municipality</label>
+                           <label for="addr_city" id="lbl_addr_city">City / Municipality</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l3">
                            <input type="text" name="addr_prov" id="addr_prov" class="validate" value="<?=set_value('addr_prov')?>" required/>
-                           <label for="addr_prov">Province / Region</label>
+                           <label for="addr_prov" id="lbl_addr_prov">Province / Region</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l2">
                            <input type="text" name="addr_zip" id="addr_zip" class="validate" value="<?=set_value('addr_zip')?>" required/>
-                           <label for="addr_zip">ZIP Code</label>
+                           <label for="addr_zip" id="lbl_addr_zip">ZIP Code</label>
                          </div><!-- /.input-field col s12 -->
                          <div class="input-field col s12 l4">
                            <input type="text" name="addr_country" id="addr_country" class="validate" value="<?php if(set_value('addr_country'))echo set_value('addr_country'); else echo 'Philippines';?>" required/>
-                           <label for="addr_country">Country</label>
+                           <label for="addr_country" id="lbl_addr_country">Country</label>
                          </div><!-- /.input-field col s12 -->
                      </fieldset>
                    </div><!-- /.row -->

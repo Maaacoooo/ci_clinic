@@ -268,6 +268,18 @@ class Patients extends CI_Controller {
 								show_404();
 							}
 
+						} elseif($this->uri->segment(6) == 'print') {
+							//CASE MODULE
+							//load CASE View
+							$data['title'] =  $data['case']['title'];	//Page title		
+							$data['prescriptions'] = $this->prescription_model->fetch_case_prescription($case_id);
+							$data['immunizations'] = $this->immunization_model->fetch_immunizations($case_id, $patient_id, '');	
+							$data['medcerts'] = $this->medcert_model->fetch_medcert('', $case_id); //Overide Medical Certicate Information
+							$data['labreqs'] = $this->laboratory_model->fetch_requests($case_id);
+							$data['logs']	= $this->logs_model->fetch_logs('case', $case_id, 0); //cases 
+
+							$this->load->view('case/print', $data);	
+
 						} elseif(!$this->uri->segment(6)) {
 							//CASE MODULE
 							//load CASE View

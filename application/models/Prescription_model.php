@@ -119,8 +119,19 @@ Class Prescription_model extends CI_Model
      */
     function fetch_case_prescription($case_id) {
 
-            $this->db->where('case_id', $case_id);
-            $this->db->order_by('created_at', 'DESC');
+            $this->db->select('
+            users.name as issuer,
+            prescription.id,
+            prescription.title,
+            prescription.description,
+            prescription.remarks,            
+            prescription.created_by,
+            prescription.created_at,
+            prescription.updated_at            
+                '); 
+            $this->db->join('users', 'users.username = prescription.created_by', 'left');       
+            $this->db->where('prescription.case_id', $case_id);  
+            $this->db->order_by('prescription.created_at', 'DESC');
             $query = $this->db->get("prescription");
 
             return $query->result_array();

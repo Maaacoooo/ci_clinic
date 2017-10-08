@@ -175,6 +175,10 @@
                             <h6 class="header strong">Options</h6><!-- /.header -->
                             <br />     
                             <div class="row">
+                              <a href="<?=current_url()?>/print" target="_blank" class="btn light-blue col s8 offset-s2"><i class="mdi-action-print"></i> Issue Med. Cert</a>   
+                            </div><!-- /.row -->  
+                            <br />     
+                            <div class="row">
                               <a href="#medcertModal" class="modal-trigger btn waves-effect light-blue col s8 offset-s2">Issue Med. Cert</a>   
                             </div><!-- /.row -->  
                             <br />

@@ -175,7 +175,7 @@
                             <h6 class="header strong">Options</h6><!-- /.header -->
                             <br />     
                             <div class="row">
-                              <a href="<?=current_url()?>/print" target="_blank" class="btn light-blue col s8 offset-s2"><i class="mdi-action-print"></i> Issue Med. Cert</a>   
+                              <a href="<?=current_url()?>/print" target="_blank" class="btn light-blue col s8 offset-s2"><i class="mdi-action-print"></i> Print Case Report</a>   
                             </div><!-- /.row -->  
                             <br />     
                             <div class="row">

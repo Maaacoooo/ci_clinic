@@ -37,6 +37,19 @@
 		</div><!-- /.content -->
 
 		<div class="content">
+			<span class="content-title">Status</span>
+			<span class="content-detail">
+				<?php if ($case['status'] == 3): ?>
+                  <span class="badge-label grey">Cancelled</span>     
+                <?php elseif($case['status'] == 1): ?>
+                  <span class="badge-label green">Served</span>                                   
+                <?php else: ?> 
+                  <span class="badge-label red">Pending</span> 
+                <?php endif ?>
+			</span>
+		</div><!-- /.content -->
+
+		<div class="content">
 			<span class="content-title">Case Description:</span>
 			<span class="content-detail"><br /><br />
 				<?=$case['title']?><br />

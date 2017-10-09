@@ -132,7 +132,12 @@
                             <label>Usertype</label>
                          </div><!-- /.input-field col s6 -->
                        </div><!-- /.row -->
-    
+                      <div class="row">
+                         <div class="input-field col s12">
+                            <input id="lic" name="lic" type="text" class="validate" value="<?=$info['lic_no']?>" required>
+                            <label for="lic">License No.</label>
+                         </div>                         
+                       </div><!-- /.row -->
                        <div class="row">
                           <div class="input-field col s2 <?php if(($user['username'] == $info['username'])){echo'offset-s8';}else{echo'offset-s6';}?>">
                               <button class="btn amber waves-effect waves-light right" type="submit" name="action">Update

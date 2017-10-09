@@ -238,11 +238,13 @@
                      </div><!-- /.col s12 -->
                    </div><!-- /.row -->
                    <br /> 
+                   <?php if ($user['usertype'] == 'Doctor'): ?>
                    <div class="row">
                      <div class="col s12">          
                          <a href="#addPrescription" class="modal-trigger btn waves-effect green right">Add Prescription</a>  
                      </div><!-- /.col s12 -->
                    </div><!-- /.row -->
+                   <?php endif; ?>
                 </div>
                 <!-- END PRESCRIPTION INFORMATION -->
 

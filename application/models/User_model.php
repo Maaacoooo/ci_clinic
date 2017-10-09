@@ -79,6 +79,8 @@ Class User_model extends CI_Model
                 'password'  => password_hash('ClinicUser', PASSWORD_DEFAULT),  //Default Password
                 'name'      => $this->input->post('name'),  
                 'usertype'  => $this->input->post('usertype'),                 
+                'usertype'  => $this->input->post('usertype'),                 
+                'lic_no'    => $this->input->post('lic'),                 
                 'img'       => $filename  
              );
        
@@ -132,7 +134,8 @@ Class User_model extends CI_Model
       
             $data = array(           
                 'name'      => $this->input->post('name'),  
-                'usertype'  => $this->input->post('usertype'),                 
+                'usertype'  => $this->input->post('usertype'),  
+                'lic_no'    => $this->input->post('lic'),               
                 'img'       => $filename  
              );
             

@@ -55,6 +55,7 @@ class Users extends CI_Controller {
 			$this->form_validation->set_rules('name', 'Name', 'trim|required'); 
 			$this->form_validation->set_rules('username', 'Username', 'trim|required|is_unique[users.username]|alpha_dash'); 
 			$this->form_validation->set_rules('usertype', 'Usertype', 'trim|required'); 
+			$this->form_validation->set_rules('lic', 'License No.', 'trim'); 
 			
 			
 			//Validate Usertype

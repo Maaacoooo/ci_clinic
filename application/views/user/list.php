@@ -171,7 +171,13 @@
                             </div><!-- /.select-wrapper -->
                             <label>Usertype</label>
                           </div><!-- /.input-field col s12 -->
-                       </div><!-- /.row -->         
+                       </div><!-- /.row -->     
+                       <div class="row">
+                         <div class="input-field col s12">
+                            <input id="lic" name="lic" type="text" class="validate" value="<?=set_value('lic')?>" required>
+                            <label for="lic">License No.</label>
+                         </div>                         
+                       </div><!-- /.row -->    
                        <div class="row">
                           <div class="input-field col s12">
                               <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Submit

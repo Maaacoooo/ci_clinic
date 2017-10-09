@@ -96,8 +96,12 @@
                     <tr>
                       <td><a href="#updateModal<?=$row['id']?>" class="modal-trigger"><?=$row['title']?></a></td>                 
                       <td><a href="#updateModal<?=$row['id']?>" class="modal-trigger"><?=$row['code']?></a></td>                 
-                      <td><a href="#updateModal<?=$row['id']?>" class="modal-trigger"><?=$row['amount']?></a></td>    
-                      <td><a href="#deleteModal<?=$row['id']?>" class="modal-trigger btn waves-effect red"><i class="mdi-action-delete"></i></a></td>                        
+                      <td><a href="#updateModal<?=$row['id']?>" class="modal-trigger"><?=$row['amount']?></a></td> 
+                      <td>   
+                      <?php if (!$row['is_constant']): ?>
+                      <a href="#deleteModal<?=$row['id']?>" class="modal-trigger btn waves-effect red"><i class="mdi-action-delete"></i></a>
+                      <?php endif ?>
+                      </td>
                     </tr> 
                     <?php endforeach; 
                       endif; ?>            
@@ -152,6 +156,7 @@
 
 
            <?php foreach ($results as $row): ?>
+             <?php if (!$row['is_constant']): ?>
              <div id="deleteModal<?=$row['id']?>" class="modal">
               <?=form_open('services/delete')?>
                 <div class="modal-content red darken-4 white-text">
@@ -165,6 +170,7 @@
                   </div>
               <?=form_close()?>
             </div>
+             <?php endif ?>
 
             <div id="updateModal<?=$row['id']?>" class="modal">
               <?=form_open('services/update')?>

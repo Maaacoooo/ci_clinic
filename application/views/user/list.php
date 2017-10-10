@@ -174,7 +174,7 @@
                        </div><!-- /.row -->     
                        <div class="row">
                          <div class="input-field col s12">
-                            <input id="lic" name="lic" type="text" class="validate" value="<?=set_value('lic')?>" required>
+                            <input id="lic" name="lic" type="text" class="validate" value="<?=set_value('lic')?>">
                             <label for="lic">License No.</label>
                          </div>                         
                        </div><!-- /.row -->    

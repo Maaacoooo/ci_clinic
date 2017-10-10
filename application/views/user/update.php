@@ -134,7 +134,7 @@
                        </div><!-- /.row -->
                       <div class="row">
                          <div class="input-field col s12">
-                            <input id="lic" name="lic" type="text" class="validate" value="<?=$info['lic_no']?>" required>
+                            <input id="lic" name="lic" type="text" class="validate" value="<?=$info['lic_no']?>">
                             <label for="lic">License No.</label>
                          </div>                         
                        </div><!-- /.row -->

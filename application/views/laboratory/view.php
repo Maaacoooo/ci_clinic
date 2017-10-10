@@ -142,7 +142,7 @@
                  <?php endif ?>
 
                  <hr />
-                 <?php if ($lab_report): ?>
+                 <?php if ($lab_report && $labreq['is_constant']): ?>
                    <?php if (!$labreq['status']): ?>
                     <table class="table-report">
                      <?=form_open('laboratory/update_report')?>

@@ -188,6 +188,10 @@ Class Laboratory_model extends CI_Model
         $this->db->where('service_examinations.service_exam_cat', NULL);
         $query_exams = $this->db->get('service_examinations');
 
+        if ($query_exams->num_rows() < 0) {
+            return FALSE;
+        }
+
         $dataset = NULL;
 
         $result['exam_cat'] = NULL;
@@ -231,6 +235,8 @@ Class Laboratory_model extends CI_Model
             ');        
             $this->db->where('service_examinations.service_exam_cat', $cat['title']);
             $query_exams = $this->db->get('service_examinations');
+
+            
 
             foreach($query_exams->result_array() as $exams) {
 

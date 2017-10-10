@@ -174,6 +174,21 @@ class Cases extends CI_Controller {
 						);
 				}
 
+
+				if($this->input->post('generateBilling'))	{
+					if(!$this->billing_model->get_Open_Billing($case_id)) {
+						//generate queue
+						$this->billing_model->create($case_id, $userdata['username']);
+						// Save Log Data ///////////////////
+						$log[] = array(
+							'user' 		=> 	$userdata['username'],
+							'tag' 		=> 	'case',
+							'tag_id'	=> 	$case_id,
+							'action' 	=> 	'Generated a new Billing Record'
+							);
+					}
+				}
+
 				//proceed action
 				if($this->case_model->update_status($case_id, $status)) {
 

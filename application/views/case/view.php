@@ -20,10 +20,13 @@
 
           if(document.getElementById("pending").checked == true) {
             document.getElementById("generatequeue").checked = true;
+            document.getElementById("generateBilling").checked = true;          
           } 
 
           if(document.getElementById("cancel").checked == true) {
             document.getElementById("clearqueue").checked = true;
+            document.getElementById("generateBilling").checked = false;          
+            document.getElementById("generatequeue").checked = false;      
           } 
 
       }
@@ -490,6 +493,10 @@
                             <p>
                               <input type="checkbox" id="nextqueue" name="nextqueue" checked>
                               <label for="nextqueue">Proceed to the Next Queue</label>
+                            </p>
+                            <p>
+                              <input type="checkbox" id="generateBilling" name="generateBilling">
+                              <label for="generateBilling">Generate New Billing Queue</label>
                             </p>
                           </div><!-- /.card-content -->
                         </div><!-- /.card -->

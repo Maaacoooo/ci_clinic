@@ -1,0 +1,25 @@
+/* ************************************************************************************** */
+ul .removeBullet {
+	list-style-type: none;
+}
+ul{
+	padding:0;
+}
+.checkbox label, .radio label {
+  padding-top: 20px;
+}
+.strong {
+  border-top: solid #3c8dbc 2px;
+  border-radius: 3px;
+}
+.strong-down{
+  border-top: solid #e5e5e5 1px;
+  border-bottom: solid #3c8dbc 1px;
+  border-radius: 3px;
+}
+check-label{
+	font-weight: normal;
+	font-size: 15px ;
+	font-style: normal;
+}
+/* ************************************************************************************** */

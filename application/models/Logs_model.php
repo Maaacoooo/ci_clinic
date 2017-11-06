@@ -55,7 +55,20 @@ Class Logs_model extends CI_Model
           
     }
 
+    function fetch_user_logs($user, $limit) {
 
+            if($limit) {
+                $this->db->limit($limit);
+            }
+
+            $this->db->where('user', $user);;
+            $this->db->order_by('date_time', 'DESC');
+
+            $query = $this->db->get("logs");
+
+            return $query->result_array();
+          
+    }
 
 
 }

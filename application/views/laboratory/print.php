@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title><?=$title?> &middot; <?=$site_title?></title>
-	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
+	<link rel="stylesheet" href="<?=base_url('assets/custom/css/print.css')?>" />
 	<style type="text/css">
 		table.items {
 			font-size: 12px;
@@ -23,11 +23,11 @@
 		<div class="content">
 			<span class="content-title">Sex:</span>
 			<span class="content-detail">
-				<?php if ($info['sex'] == 0): ?>
-                   Female    
-               	<?php else: ?>
-                   Male
-               	<?php endif ?>
+    <?php if ($info['sex'] == 0): ?>
+       Female    
+   	<?php else: ?>
+       Male
+   	<?php endif ?>
 			</span>
 		</div><!-- /.content -->
 
@@ -54,13 +54,13 @@
 		<div class="content">
 			<span class="content-title">Request Status</span>
 			<span class="content-detail">
-				<?php if ($labreq['status'] == 3): ?>
-                  <span class="badge-label grey">Cancelled</span>     
-                <?php elseif($labreq['status'] == 1): ?>
-                  <span class="badge-label green">Served</span>                                   
-                <?php else: ?> 
-                  <span class="badge-label red">Pending</span> 
-                <?php endif ?>
+      <?php if ($labreq['status'] == 3): ?>
+        <span class="badge-label grey">Cancelled</span>     
+      <?php elseif($labreq['status'] == 1): ?>
+        <span class="badge-label green">Served</span>                                   
+      <?php else: ?> 
+        <span class="badge-label red">Pending</span> 
+      <?php endif ?>
 			</span>
 		</div><!-- /.content -->
 

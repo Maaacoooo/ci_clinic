@@ -2,12 +2,12 @@
 <html>
 <head>
 	<title><?=$title?> &middot; <?=$site_title?></title>
-	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
+	<link rel="stylesheet" href="<?=base_url('assets/custom/css/print.css')?>" />
 	<style type="text/css">
 		table.items {
 			font-size: 12px;
 		}
-	</style>
+	</style>	
 </head>
 <body onload="window.print()">
 	<a href="#" class="right print" onclick="print()">[ Print ]</a>

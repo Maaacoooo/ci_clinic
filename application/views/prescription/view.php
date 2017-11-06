@@ -136,7 +136,7 @@
                                 <?=form_close()?>
                               <?php else: ?>
                                 <tr>
-                                  <td colspan="4">No items found!</td>
+                                  <td colspan="4">No items found! qweqwe</td>
                                 </tr>
                               <?php endif ?>
                             </tbody>

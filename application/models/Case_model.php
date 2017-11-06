@@ -130,7 +130,16 @@ Class Case_model extends CI_Model
      * @param  int      $id         the Page ID of the request. 
      * @return Array        The array of returned rows 
      */
-    function fetch_pending_cases($limit, $id) {
+    function fetch_pending_cases($limit, $id, $search) {
+      
+          if ($search) {
+            $this->db->group_start();
+            $this->db->like('patients.lastname', $search);
+            $this->db->or_like('patients.fullname', $search);
+            $this->db->or_like('title', $search);
+            $this->db->group_end();
+          }
+
             $this->db->select('
             patients.id as patient_id,
             CONCAT(patients.fullname, " ", patients.lastname) as patient_name,
@@ -158,7 +167,16 @@ Class Case_model extends CI_Model
      * Returns the total number of rows of users
      * @return int       the total rows
      */
-    function count_pending_cases() {
+    function count_pending_cases($search) {
+
+      if($search) {
+        $this->db->group_start();
+        $this->db->like('patients.lastname', $search);
+        $this->db->or_like('patients.fullname', $search);
+        $this->db->or_like('title', $search);
+        $this->db->group_end();
+      }
+        $this->db->join('patients', 'patients.id = cases.patient_id', 'left');
         $this->db->where('status', 0);
         return $this->db->count_all_results("cases");
     }

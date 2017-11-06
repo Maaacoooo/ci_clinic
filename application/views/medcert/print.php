@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title><?=$title?> &middot; <?=$site_title?></title>
-	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
+	<link rel="stylesheet" href="<?=base_url('assets/custom/css/print.css')?>" />
 </head>
 <body onload="window.print()">
 	

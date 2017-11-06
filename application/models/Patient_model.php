@@ -115,7 +115,13 @@ Class Patient_model extends CI_Model
      * @param  int      $id         the Page ID of the request. 
      * @return Array        The array of returned rows 
      */
-    function fetch_patients($limit, $id) {
+    function fetch_patients($limit, $id, $search) {
+          if($search) {
+            $this->db->like('patients.fullname', $search);
+            $this->db->or_like('patients.middlename', $search);
+            $this->db->or_like('patients.lastname', $search);
+          }
+
             $this->db->select('
               patients.id,
               patients.fullname,
@@ -147,7 +153,15 @@ Class Patient_model extends CI_Model
      * Returns the total number of rows of users
      * @return int       the total rows
      */
-    function count_patients() {
+    function count_patients($search) {
+      if ($search) {
+        $this->db->group_start();
+        $this->db->like('fullname', $search);
+        $this->db->or_like('middlename', $search);
+        $this->db->or_like('lastname', $search);
+        $this->db->or_like('id', $search);
+        $this->db->group_end();
+      }
         $this->db->where('is_deleted', 0);
         return $this->db->count_all_results("patients");
     }

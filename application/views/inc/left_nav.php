@@ -1,70 +1,51 @@
+  <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <?php if (filexist($user['img']) && $user['img']): ?>
+            <img src="<?=base_url('uploads/'.$user['img'])?>" class="img-circle" alt="User Image">
+          <?php else: ?>
+            <img src="<?=base_url('assets/img/no_image.gif')?>" class="img-circle" alt="User Image">                
+          <?php endif ?>
+        </div>
+        <div class="pull-left info">
+          <p><?=$user['name']?></p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
 
-<!-- START LEFT SIDEBAR NAV -->
-      <aside id="left-sidebar-nav">
-          <ul id="slide-out" class="side-nav fixed leftside-navigation">
-              <li class="user-details grey lighten-5">
-                  <div class="row">
-                      <div class="col col s4 m4 l4">
-                        <?php
-                        //USER PROFILE IMG                          
-                          if($user['img'] != NULL)    {
-                            echo '<img src="'.base_url('uploads/'.$user['img']).'" alt="" class="circle responsive-img valign profile-image">';
-                          } else {
-                            echo '<i class="mdi-social-person medium grey lighten-2 circle"></i>';
-                          }
-                        ?>
-                          
-
-                          
-                      </div>
-                      <div class="col col s8 m8 l8">
-                          <ul id="profile-dropdown" class="dropdown-content">                    
-                              <li><a href="<?=base_url('settings/profile')?>"><i class="mdi-action-settings"></i>Profile</a>
-                              </li>                              
-                              <li class="divider"></li>                              
-                              <li><a href="<?=base_url('dashboard/logout')?>"><i class="mdi-hardware-keyboard-tab"></i>Logout</a>
-                              </li>
-                          </ul>
-                          <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown"><?=$user['name']?><i class="mdi-navigation-arrow-drop-down right"></i></a>
-                          <p class="user-roal"><?=$user['usertype']?></p>
-                      </div>
-                  </div>
-              </li>
-              <li class="bold"><a href="<?=base_url('dashboard')?>" class="waves-effect waves-cyan"><i class="mdi-action-dashboard"></i> Dashboard</a></li>             
-              <li class="li-hover"><div class="divider"></div></li>
-              <?php if($user['usertype'] == 'Doctor'): ?>     
-              <li class="li-hover"><p class="ultra-small margin more-text">ADMIN OPTIONS</p></li>       
-              <li class="bold"><a href="<?=base_url('users/')?>" class="waves-effect waves-cyan"><i class="mdi-action-account-child"></i> System Users</a></li>  
-              <li class="li-hover"><div class="divider"></div></li>     
-              <?php endif; ?> 
-              <li class="li-hover"><p class="ultra-small margin more-text">PATIENTS OPTIONS</p></li>       
-              <li class="no-padding">
-                  <ul class="collapsible collapsible-accordion">
-                      <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-face-unlock"></i> Patients</a>
-                          <div class="collapsible-body" style="">
-                              <ul>
-                                  <li><a href="<?=base_url('patients/create')?>">Register New Patient</a></li>
-                                  <li><a href="<?=base_url('patients/')?>">Patient List</a></li>
-                              </ul>
-                          </div>
-                      </li>                     
-                  </ul>
-              </li>  
-              <li class="bold"><a href="<?=base_url('billing')?>" class="waves-effect waves-cyan"><i class="mdi-action-credit-card"></i> Billing</a></li> 
-              <li class="bold"><a href="<?=base_url('cases')?>" class="waves-effect waves-cyan"><i class="mdi-action-assignment"></i> Cases</a></li> 
-              <li class="bold"><a href="<?=base_url('laboratory')?>" class="waves-effect waves-cyan"><i class="mdi-action-accessibility"></i> Laboratory Requests</a></li> 
-              <li class="bold"><a href="<?=base_url('immunization')?>" class="waves-effect waves-cyan"><i class="mdi-action-favorite"></i> Immunization Requests</a></li> 
-              <li class="bold"><a href="<?=base_url('queues')?>" class="waves-effect waves-cyan" target="_blank"><i class="mdi-action-label"></i> Queues</a></li> 
-              <li class="li-hover"><div class="divider"></div></li>     
-              <li class="li-hover"><p class="ultra-small margin more-text">CLINIC DATA</p></li>       
-              <li class="bold"><a href="<?=base_url('services/clinic')?>" class="waves-effect waves-cyan">Clinic Services and Fees</a></li>  
-              <li class="bold"><a href="<?=base_url('services/laboratory')?>" class="waves-effect waves-cyan">Laboratory Services</a></li>  
-              <li class="bold"><a href="<?=base_url('services/immunization')?>" class="waves-effect waves-cyan">Immunization Services</a></li>  
-              <li class="li-hover"><div class="divider"></div></li>            
-          </ul>         
-          <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only grey darken-4"><i class="mdi-navigation-menu" ></i></a>
-      </aside> 
-      <!-- END LEFT SIDEBAR NAV-->
-
-
-     
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        <li><a href="<?=base_url('dashboard')?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>  
+        <?php if($user['usertype'] == 'Doctor'): ?>       
+        <li class="header">ADMIN OPTIONS</li>
+        <li><a href="<?=base_url('users/')?>"><i class="fa fa-users"></i> <span>System Users</span></a></li>   
+        <?php endif; ?>  
+        <li class="header">PATIENTS OPTIONS</li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-child"></i> <span>Patients</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?=base_url('patients/create')?>"><i class="fa fa-user-plus"></i> <span>Register New Patient</span></a></li>
+            <li><a href="<?=base_url('patients/')?>"><i class="fa fa-list-alt"></i> <span>Patient List</span></a></li>
+          </ul>
+        </li>   
+        <li><a href="<?=base_url('billing')?>"><i class="fa fa-credit-card"></i> <span>Billing</span></a></li>  
+        <li><a href="<?=base_url('cases')?>"><i class="fa fa-book"></i> <span>Cases</span></a></li>
+        <li><a href="<?=base_url('laboratory')?>"><i class="fa fa-flask"></i> <span>Laboratory Requests</span></a></li>
+        <li><a href="<?=base_url('immunization')?>"><i class="fa fa-heart"></i> <span>Immunization Requests</span></a></li>
+        <li><a href="<?=base_url('queues')?>"><i class="fa fa-bookmark"></i> <span>Queues</span></a></li>
+        <li class="header">CLINIC DATA</li>
+        <li><a href="<?=base_url('services/clinic')?>"><i class="fa fa-circle-o text-red"></i> <span>Clinic Services and Fees</span></a></li> 
+        <li><a href="<?=base_url('services/laboratory')?>"><i class="fa fa-circle-o text-yellow"></i> <span>Laboratory Services</span></a></li> 
+        <li><a href="<?=base_url('services/immunization')?>"><i class="fa fa-circle-o text-aqua"></i> <span>Immunization Services</span></a></li> 
+ 
+      </ul>
+    </section>
+    <!-- /.sidebar -->

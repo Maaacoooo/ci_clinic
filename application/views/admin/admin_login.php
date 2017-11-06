@@ -1,110 +1,102 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="msapplication-tap-highlight" content="no">
-  <title><?=$title?> &middot; <?=$site_title?> </title>
+  <title><?=$title?> &middot; <?=$site_title?></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="<?=base_url('assets/bower_components/bootstrap/dist/css/bootstrap.min.css')?>">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<?=base_url('assets/bower_components/font-awesome/css/font-awesome.min.css')?>">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="<?=base_url('assets/bower_components/Ionicons/css/ionicons.min.css')?>">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?=base_url('assets/dist/css/AdminLTE.min.css')?>">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="<?=base_url('assets/plugins/iCheck/square/blue.css')?>">
 
-   <!-- Favicons-->
-  <link rel="icon" href="<?=base_url('assets/images/favicon/sti.png')?>" sizes="32x32">
-  <!-- Favicons-->
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
-  <link href="<?=base_url('assets/css/page.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
-
-  <!-- CORE CSS-->
-
-  <link href="<?=base_url('assets/css/materialize.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
-  <link href="<?=base_url('assets/css/style.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
-  <link href="<?=base_url('assets/css/page-center.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
-
-  <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
-  <link href="<?=base_url('assets/css/prism.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
-  <link href="<?=base_url('assets/js/plugins/perfect-scrollbar/perfect-scrollbar.css')?>" type="text/css" rel="stylesheet" media="screen,projection">
-  
+  <!-- Google Font -->
+  <link rel="stylesheet" href="#https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-
-<body class="light-blue lighten-5">
-  <!-- Start Page Loading -->
-  <div id="loader-wrapper">
-      <div id="loader"></div>        
-      <div class="loader-section section-left"></div>
-      <div class="loader-section section-right"></div>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <?=$site_title?>
   </div>
-  <!-- End Page Loading -->
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in to start your session</p>
 
+    
 
+    <?php
+        //ALERT / NOTIFICATION
+        //ERROR ACTION                          
+        if($this->session->flashdata('error')): ?>
 
-  <div id="login-page" class="row">
-    <div class="col s12 z-depth-4 card-panel login-border">
-
-      <?=form_open('dashboard/login', array('class' => 'login-form'))?>
-        <div class="row">
-          <div class="input-field col s12 center">
-            <img src="<?=base_url()?>assets/images/health_logo.png" alt="" class="responsive-img valign">
-            <p class="center login-form-text"><?=$site_title?></p>
-          </div>
+        <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-ban"></i> Oops!</h4>
+          <?=$this->session->flashdata('error')?>
         </div>
-        <div class="row margin center">  
-          <?php if($this->session->flashdata('success')): //SUCCESS ACTION  ?>
-              <div class="card-panel green">
-                 <span class="white-text"><i class="mdi-action-done tiny"></i> <?php echo $this->session->flashdata('success'); ?></span>
-              </div>
-          <?php endif; ?> 
-          <?php if($this->session->flashdata('error')): //SUCCESS ACTION  ?>
-              <div class="card-panel red">
-                 <span class="white-text"><i class="mdi-alert-warning tiny"></i> <?php echo $this->session->flashdata('error'); ?></span>
-              </div>
-          <?php endif; ?>   
-          <?php   
-             $this->form_validation->set_error_delimiters('', '');          
-            if(validation_errors()): ?>
-              <div class="card-panel red">              
-                 <span class="white-text"><i class="mdi-alert-warning tiny"></i> <?php echo validation_errors(); ?></span> 
-              </div>               
-          <?php endif; ?> 
+                   
+    <?php 
+        endif; //error end
+        //SUCCESS ACTION                          
+        if($this->session->flashdata('success')): ?>
+        <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-check"></i> Success!</h4>
+          <?=$this->session->flashdata('success')?>
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-social-person-outline prefix"></i>
-            <input id="username" type="text" name="username" class="validate" autocomplete="off" required>
-            <label for="username" class="center-align">Username</label>
-          </div>
+    <?php 
+        endif; //success end
+        //FORM VALIDATION ERROR
+        $this->form_validation->set_error_delimiters('<li>', '</li>');
+        if(validation_errors()): ?>
+        <div class="alert alert-warning alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-warning"></i> Warning!</h4>         
+          <?=validation_errors()?>         
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-action-lock-outline prefix"></i>
-            <input id="password" type="password" name="password" class="validate" required>
-            <label for="password">Password</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <button type="submit" class="btn waves-effect grey darken-3 col s12">Login</button>
-          </div>
-        </div>        
-      </form>
+    <?php endif; //formval end ?> 
 
-      <?php $this->load->view('inc/copy_footer');?>
-    </div>
+    <?=form_open('dashboard/login')?>
+      <div class="form-group has-feedback">
+        <input type="text"  name="username" class="form-control" placeholder="Username" required="">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" name="password"  class="form-control" placeholder="Password" required="">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <!-- /.col -->
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-primary btn-block btn-flat center">Sign In</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    <?=form_close()?>
   </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
 
-    <!-- ================================================
-    Scripts
-    ================================================ -->
-
-    <!-- jQuery Library -->
-    <script type="text/javascript" src="<?=base_url('assets/js/jquery-1.11.2.min.js')?>"></script>
-    <!--materialize js-->
-    <script type="text/javascript" src="<?=base_url('assets/js/materialize.js')?>"></script>
-    <!--prism-->
-    <script type="text/javascript" src="<?=base_url('assets/js/prism.js')?>"></script>
-    <!--scrollbar-->
-    <script type="text/javascript" src="<?=base_url('assets/js/plugins/perfect-scrollbar/perfect-scrollbar.min.js')?>"></script>
-
-    <!--plugins.js - Some Specific JS codes for Plugin Settings-->
-    <script type="text/javascript" src="<?=base_url('assets/js/plugins.js')?>"></script>
+<!-- jQuery 3 -->
+<script src="<?=base_url('assets/bower_components/jquery/dist/jquery.min.js')?>"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="<?=base_url('assets/bower_components/bootstrap/dist/js/bootstrap.min.js')?>"></script>
 
 </body>
 </html>

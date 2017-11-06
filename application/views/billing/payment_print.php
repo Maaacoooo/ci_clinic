@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?=$title?> &middot; <?=$site_title?></title>
-	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
+  <title><?=$title?> &middot; <?=$site_title?></title>
+  <link rel="stylesheet" href="<?=base_url('assets/custom/css/print.css')?>" />
 </head>
 <body>
-	<a href="#" class="right print" onclick="print()">[ Print ]</a>
-	<div class="page">
+  <a href="#" class="right print" onclick="print()">[ Print ]</a>
+  <div class="page">
    <?php $this->load->view('inc/print_header');?>  
     <h5>Customer's Copy | PAY #<?=prettyID($payment['id'])?> <span class="right"><?=nice_date($payment['created_at'], 'M. d, Y | h:m A')?></span></h5><!-- /.text-right -->
     <div class="container">

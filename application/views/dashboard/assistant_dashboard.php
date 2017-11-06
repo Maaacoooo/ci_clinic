@@ -1,28 +1,31 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="msapplication-tap-highlight" content="no">
-    <title><?=$title?> &middot; <?=$site_title?></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><?=$title?> &middot; <?=$site_title?></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <?php $this->load->view('inc/css')?>
+  <!-- Custom -->
+  <link rel="stylesheet" href="<?=base_url('assets/custom/css/custom.css')?>">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="<?=base_url('assets/plugins/iCheck/square/blue.css')?>">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="<?=base_url('assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')?>">
+  <!-- -->
+  <link rel="stylesheet" href="<?=base_url('assets/custom/css/jquery-ui.min.css')?>">
 
-    <?php $this->load->view('inc/css'); ?>
-    <link href="<?php echo base_url();?>assets/css/jquery-ui.min.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/css/jquery-ui.theme.min.css" rel="stylesheet">
 
-    <script type="text/javascript">
-      function enablenewpatient() {
-        if(document.getElementById("newpatient").checked == true) {
-          document.getElementById("field_newpatient").setAttribute("class", "row");
-          document.getElementById("submit_case").setAttribute("class", "row hide");
-          document.getElementById("patient_id").disabled = true;
-
+  <script type="text/javascript">
+    function enablenewpatient() {
+      if(document.getElementById("addPatient").checked == true) {
           document.getElementById("lname").disabled = false;
           document.getElementById("fname").disabled = false;
           document.getElementById("mname").disabled = false;
           document.getElementById("sex").disabled = false;
-          document.getElementById("bdate").disabled = false;
+          document.getElementById("datepicker").disabled = false;
           document.getElementById("contactno").disabled = false;
           document.getElementById("email").disabled = false;
 
@@ -42,20 +45,14 @@
           document.getElementById("bplace_zip").disabled = false;
           document.getElementById("bplace_country").disabled = false;
 
-
-        } else {
-          document.getElementById("field_newpatient").setAttribute("class", "row hide");     
-          document.getElementById("submit_case").setAttribute("class", "row");           
-          document.getElementById("patient_id").disabled = false;         
-
+      } else {
           document.getElementById("lname").disabled = true;
           document.getElementById("fname").disabled = true;
           document.getElementById("mname").disabled = true;
           document.getElementById("sex").disabled = true;
-          document.getElementById("bdate").disabled = true;
+          document.getElementById("datepicker").disabled = true;
           document.getElementById("contactno").disabled = true;
           document.getElementById("email").disabled = true;
-
 
           document.getElementById("addr_bldg").disabled = true;
           document.getElementById("addr_strt").disabled = true;
@@ -72,389 +69,438 @@
           document.getElementById("bplace_prov").disabled = true;
           document.getElementById("bplace_zip").disabled = true;
           document.getElementById("bplace_country").disabled = true;
-        }
-
 
       }
+    }
 
+    function copyToPresentAddress() {
+      // get data
+      var bplace_bldg = document.getElementById("bplace_bldg").value;
+      var bplace_strt = document.getElementById("bplace_strt").value;
+      var bplace_brgy = document.getElementById("bplace_brgy").value;
+      var bplace_city = document.getElementById("bplace_city").value;
+      var bplace_prov = document.getElementById("bplace_prov").value;
+      var bplace_zip = document.getElementById("bplace_zip").value;
+      var bplace_country = document.getElementById("bplace_country").value;
 
-      function sameAdd() {
-        //get data 
-        var bplace_bldg = document.getElementById("bplace_bldg").value;
-        var bplace_strt = document.getElementById("bplace_strt").value;
-        var bplace_brgy = document.getElementById("bplace_brgy").value;
-        var bplace_city = document.getElementById("bplace_city").value;
-        var bplace_prov = document.getElementById("bplace_prov").value;
-        var bplace_zip = document.getElementById("bplace_zip").value;
-        var bplace_country = document.getElementById("bplace_country").value;
+      var checkbx = document.getElementById("checkAdd").checked;
 
-        var checkbx = document.getElementById("checkAdd").checked;
+      if(checkbx  == true) {
 
-        if(checkbx == true) {
-          document.getElementById("addr_bldg").value = bplace_bldg;
-          document.getElementById("addr_strt").value = bplace_strt;
-          document.getElementById("addr_brgy").value = bplace_brgy;
-          document.getElementById("addr_city").value = bplace_city;
-          document.getElementById("addr_prov").value = bplace_prov;
-          document.getElementById("addr_zip").value = bplace_zip;
-          document.getElementById("addr_country").value = bplace_country;
+        document.getElementById("addr_bldg").value = bplace_bldg;
+        document.getElementById("addr_strt").value = bplace_strt;
+        document.getElementById("addr_brgy").value = bplace_brgy;
+        document.getElementById("addr_city").value = bplace_city;
+        document.getElementById("addr_prov").value = bplace_prov;
+        document.getElementById("addr_zip").value = bplace_zip;
+        document.getElementById("addr_country").value = bplace_country;
 
-          document.getElementById("lbl_addr_bldg").className = "active";
-          document.getElementById("lbl_addr_strt").className = "active";
-          document.getElementById("lbl_addr_brgy").className = "active";
-          document.getElementById("lbl_addr_city").className = "active";
-          document.getElementById("lbl_addr_prov").className = "active";
-          document.getElementById("lbl_addr_zip").className = "active";
-          document.getElementById("lbl_addr_country").className = "active";
+      } else {
+        document.getElementById("addr_bldg").value = "";
+        document.getElementById("addr_strt").value = "";
+        document.getElementById("addr_brgy").value = "";
+        document.getElementById("addr_city").value = "";
+        document.getElementById("addr_prov").value = "";
+        document.getElementById("addr_zip").value = "";
+        document.getElementById("addr_country").value = "Philippines";
 
-        } else {
-          document.getElementById("addr_bldg").value = "";
-          document.getElementById("addr_strt").value = "";
-          document.getElementById("addr_brgy").value = "";
-          document.getElementById("addr_city").value = "";
-          document.getElementById("addr_prov").value = "";
-          document.getElementById("addr_zip").value = "";
-          document.getElementById("addr_country").value = "Philippines";
-
-          document.getElementById("lbl_addr_bldg").className = "";
-          document.getElementById("lbl_addr_strt").className = "";
-          document.getElementById("lbl_addr_brgy").className = "";
-          document.getElementById("lbl_addr_city").className = "";
-          document.getElementById("lbl_addr_prov").className = "";
-          document.getElementById("lbl_addr_zip").className = "";
-        }
       }
-    </script>
-
+    }
+  </script>
 </head>
+<body class="hold-transition skin-black sidebar-mini" onload="enablenewpatient()">
+<!-- Site wrapper -->
+<div class="wrapper">
 
-<body onload="enablenewpatient()">
-    
-    <?php $this->load->view('inc/header'); ?>
+  <header class="main-header">
+    <?php $this->load->view('inc/header')?>
+  </header>
 
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
+  <!-- =============================================== -->
 
+  <!-- Left side column. contains the sidebar -->
+  <aside class="main-sidebar">
+    <?php $this->load->view('inc/left_nav')?>    
+  </aside>
 
-  <!-- START MAIN -->
-  <div id="main">
-    <!-- START WRAPPER -->
-    <div class="wrapper">
+  <!-- =============================================== -->
 
-      <?php $this->load->view('inc/left_nav'); ?>
-
-      <!-- //////////////////////////////////////////////////////////////////////////// -->
-
-      <!-- START CONTENT -->
-      <section id="content">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <?=$title?>        
+      </h1>
+      <ol class="breadcrumb">
         
-        <!--breadcrumbs start-->
-        <div id="breadcrumbs-wrapper" class=" grey lighten-3">
-          <div class="container">
-            <div class="row">
-              <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title"><?=$title?></h5>
-                <ol class="breadcrumb">
-                    <li class="active"><?=$title?></li>
-                </ol>
-              </div>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      
+      <div class="row">
+        <div class="col-xs-12">
+          <?php
+            //ALERT / NOTIFICATION
+            //ERROR ACTION                          
+            if($this->session->flashdata('error')): ?>
+
+            <div class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <h4><i class="icon fa fa-ban"></i> Oops!</h4>
+              <?=$this->session->flashdata('error')?>
             </div>
+                       
+        <?php 
+            endif; //error end
+            //SUCCESS ACTION                          
+            if($this->session->flashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <h4><i class="icon fa fa-check"></i> Success!</h4>
+              <?=$this->session->flashdata('success')?>
+            </div>
+        <?php 
+            endif; //success end
+            //FORM VALIDATION ERROR
+            $this->form_validation->set_error_delimiters('<li>', '</li>');
+            if(validation_errors()): ?>
+            <div class="alert alert-warning alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <h4><i class="icon fa fa-warning"></i> Warning!</h4>         
+              <?=validation_errors()?>         
+            </div>
+        <?php endif; //formval end ?> 
+        </div><!-- /.col-xs-12 -->
+      </div><!-- /.row -->
+
+    <?php if($passwordverify): ?>
+      <div class="callout callout-danger">
+        <h4><i class="fa fa-warning"></i> Update your Password!</h4>
+        <p>Welcome to <?=$site_title?> System!</p>
+        <p>We have detected that your current account doesn't have an updated password. </p>
+        <p>To help you protected, please update your account password. <a href="<?=base_url('settings/profile')?>">Update Password</a></p>
+      </div>
+    <?php endif ?>
+
+      <!-- New Case box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">New Case</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
+              <i class="fa fa-minus"></i></button>      
           </div>
         </div>
-        <!--breadcrumbs end-->
-        
+        <div class="box-body">
+          <?=form_open_multipart('dashboard')?>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="col-sm-10">
+                  <div class="form-group">
+                    <label for="patient_id">Patient</label>
+                    <input type="text" name="patient_id" class="form-control" id="patient_id" placeholder="Patient..." value="<?=set_value('patient_id')?>" required/>
+                  </div>
+                </div><!-- /.col-sm-10 -->
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="addPatient">
+                        <input type="checkbox" name="newpatient" id="addPatient" onclick="enablenewpatient()" <?php if(set_value('newpatient'))echo'checked';?>> New Patient
+                      </label>
+                    </div>
+                  </div>
+                </div><!-- /.col-sm-2 -->
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="weight">Weight(kg)</label>
+                    <input type="text" name="weight" class="form-control" id="weight" placeholder="Weight(kg)..." value="<?=set_value('weight')?>" required/>
+                  </div>
+                </div><!-- /.col-sm-6 -->
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="height">Height(cm)</label>
+                    <input type="text" name="height" class="form-control" id="height" placeholder="Height(cm)..." value="<?=set_value('weight')?>" required/>
+                  </div>
+                </div><!-- /.col-sm-6 -->
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="title">Case Title</label>
+                    <input type="text" name="title" class="form-control" id="title" placeholder="Case Title..." value="<?=set_value('title')?>" required/>
+                  </div>
+                </div><!-- /.col-sm-12 -->
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="profile_image">Profile Image</label>
+                    <input type="file" class="form-control" id="profile_image"/>
+                  </div>
+                </div><!-- /.col-sm-12 -->
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="profile_image">Case Description</label>
+                      <textarea name="description" id="editor1" rows="10" cols="80" placeholder="Place some text here..."><?=set_value('description')?></textarea>
+                  </div>
+                </div><!-- /.col-sm-12 -->
+                <div class="col-sm-12" id="submit_case">
+                  <div class="form-group pull-right">
+                    <div class="icheck">
+                      <label for="generateQueue">
+                        <input type="checkbox" name="generateQueue" id="generateQueue" <?php if(set_value('generateQueue'))echo'checked';?>> Generate Queue
+                      </label>
+                      <button type="submit" class="btn btn-success" id="btnCase">Submit Case</button>
+                    </div>
+                  </div>
+                </div><!-- /.col-sm-12 -->
+              </div><!-- /.col-sm-12 -->
+            </div><!--  /.row -->
+          <?=form_close()?>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
 
-        <!--start container-->
-        <div class="container">
-          <div class="section">
-            <div class="row">
-              <div class="col s12">
-                <?php
-                //ERROR ACTION                          
-                  if($this->session->flashdata('error')) { ?>
-                    <div class="card-panel deep-orange darken-3">
-                        <span class="white-text"><i class="mdi-alert-warning tiny"></i> <?php echo $this->session->flashdata('error'); ?></span>
-                    </div>
-              <?php } ?> 
-              <?php
-                //SUCCESS ACTION                          
-                  if($this->session->flashdata('success')) { ?>
-                    <div class="card-panel green">
-                        <span class="white-text"><i class="mdi-action-done tiny"></i> <?php echo $this->session->flashdata('success'); ?></span>
-                    </div>
-              <?php } ?>             
-              <?php
-                //FORM VALIDATION ERROR
-                    $this->form_validation->set_error_delimiters('<p><i class="mdi-alert-warning tiny"></i> ', '</p>');
-                      if(validation_errors()) { ?>
-                    <div class="card-panel yellow amber">
-                        <span class="white-text"> <?php echo validation_errors(); ?></span>
-                    </div>
-              <?php } ?> 
+      <!-- New Case box -->
+      <div class="box box-default" id="field_newpatient" hidden>
+        <div class="box-header with-border">
+          <h3 class="box-title">New Patient</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
+              <i class="fa fa-minus"></i></button>      
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-sm-12">
+
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="lname">Last Name</label>
+                  <input type="text" name="lname" class="form-control" id="lname" placeholder="Last Name..." value="<?=set_value('lname')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-4 -->
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="fname">First Name</label>
+                  <input type="text" name="fname" class="form-control" id="fname" placeholder="First Name..." value="<?=set_value('fname')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-4 -->
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="mname">Middle Name</label>
+                  <input type="text" name="mname" class="form-control" id="mname" placeholder="Middle Name..." value="<?=set_value('mname')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-4 -->
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label for="sex">Sex</label>
+                  <select name="sex" class="form-control" id="sex" required disabled>
+                    <option value="" disabled="" selected="">Sex</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                  </select>
+                </div>
+              </div><!-- /.col-sm-4 -->
+              <div class="col-sm-7">
+                <div class="form-group">
+                  <label for="datepicker">Birthdate</label>
+                  <input type="text" name="bdate" class="form-control" id="datepicker" placeholder="Birthdate..." value="<?=set_value('bdate')?>" required disabled>
+                </div>
               </div>
-            </div>
-            
-          <?php if($passwordverify): ?>
-            <div class="row">
-              <div class="col s12">
-                <div class="card red darken-4">
-                  <div class="card-content white-text">
-                    <span class="card-title">Update your Password!</span>
-                    <p>Welcome to <?=$site_title?> System!</p>
-                    <p>We have detected that your current account doesn't have an updated password. </p>
-                    <p>To help you protected, please update your account password.</p>
-                  </div><!-- /.card-content white-text -->
-                  <div class="card-action">
-                    <div class="row">
-                      <div class="col s12">
-                        <div class="right">
-                          <a href="<?=base_url('settings/profile')?>">Update Password</a>
-                        </div><!-- /.right -->
-                      </div><!-- /.col s12 -->
-                    </div><!-- /.row -->
-                  </div><!-- /.card-action -->
-                </div><!-- /.card red darken-4 -->
-              </div><!-- /.col s12 -->
-            </div><!-- /.row -->
-           <?php endif; ?>
+
+              <!-- Birthplace -->
+              <legend class="strong">Birthplace</legend>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label for="bplace_bldg">Building / Block / House</label>
+                  <input type="text" name="bplace_bldg" class="form-control" id="bplace_bldg" placeholder="Building / Block / House..." value="<?=set_value('bplace_bldg')?>" disabled/>
+                </div>
+              </div><!-- /.col-sm-5 -->
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="bplace_strt">Street</label>
+                  <input type="text" name="bplace_strt" class="form-control" id="bplace_strt" placeholder="Street..." value="<?=set_value('bplace_strt')?>" disabled/>
+                </div>
+              </div><!-- /.col-sm-4 -->
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label for="bplace_brgy">Barangay</label>
+                  <input type="text" name="bplace_brgy" class="form-control" id="bplace_brgy" placeholder="Barangay" value="<?=set_value('bplace_brgy')?>" disabled/>
+                </div>
+              </div><!-- /.col-sm-3 -->
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label for="bplace_city">City / Municipality</label>
+                  <input type="text" name="bplace_city" class="form-control" id="bplace_city" placeholder="City / Municipality..." value="<?=set_value('bplace_city')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-3 -->
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label for="bplace_prov">Province / Region</label>
+                  <input type="text" name="bplace_prov" class="form-control" id="bplace_prov" placeholder="Province / Region..." value="<?=set_value('bplace_prov')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-3 -->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="bplace_zip">Zip Code</label>
+                  <input type="text" name="bplace_zip" class="form-control" id="bplace_zip" placeholder="Zip Code..." value="<?=set_value('bplace_zip')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-2 -->
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="bplace_country">Country</label>
+                  <input type="text" name="bplace_country" class="form-control" id="bplace_country" placeholder="Country" value="<?php if(set_value('bplace_country'))echo set_value('bplace_country'); else echo 'Philippines';?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-4 -->
            
-           <?=form_open_multipart('dashboard')?>
-           <div class="row">
-             <div class="col s12">
-               <div class="card">
-                 <div class="card-content">
-                   <h5 class="header">New Case</h5>
-                   <div class="row">
-                     <div class="input-field col s6 l10">
-                       <input type="text" name="patient_id" id="patient_id" class="validate" value="<?=set_value('patient_id')?>" required/>
-                       <label for="">Patient</label>
-                     </div><!-- /.input-field col s6 l10 -->
-                     <div class="input-field col s6 l2">                  
-                        <input type="checkbox" id="newpatient" name="newpatient" onclick="enablenewpatient()" <?php if(set_value('newpatient'))echo'checked';?>>
-                        <label for="newpatient">New Patient</label>                      
-                     </div><!-- /.input-field col s6 l2 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s6">
-                        <input type="number" name="weight" id="weight" class="validate" value="<?=set_value('weight')?>" required/>
-                        <label for="weight">Weight (kg)</label>
-                      </div><!-- /.input-field col s6 -->
-                     <div class="input-field col s6">
-                        <input type="number" name="height" id="height" class="validate" value="<?=set_value('height')?>" required/>
-                        <label for="height">Height (cm)</label>
-                      </div><!-- /.input-field col s6 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s12">
-                       <input type="text" name="title" id="title" class="validate" value="<?=set_value('title')?>" required/>
-                       <label for="title">Case Title</label>
-                     </div><!-- /.input-field col s12 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                         <div class="input-field col s12">
-                           <div class="file-field input-field">
-                            <div class="btn">
-                              <span>IMG</span>
-                              <input type="file" name="img">
-                            </div>
-                            <div class="file-path-wrapper">
-                              <input class="file-path validate" type="text">
-                            </div>
-                          </div>
-                  </div><!-- /.input-field col s12 l3 -->
-                  </div><!-- /.row -->
-                   <div class="row">
-                     <div class="col s12">
-                        <p>Case Description</p> <br />
-                        <textarea name="description" id="" class="ckeditor"><?=set_value('description')?></textarea>                       
-                     </div><!-- /.col-s12 -->
-                   </div><!-- /.row -->
-                   <div class="row" id="submit_case">
-                     <div class="input-field col s12">
-                          <div class="right">
-                            <div class="col">
-                              <input type="checkbox" id="generateQueue" name="generateQueue" <?php if(set_value('generateQueue'))echo'checked';?>>
-                              <label for="generateQueue">Generate Queue</label> 
-                            </div><!-- /.col -->
-                            <div class="col">
-                              <button type="submit" class="btn waves-effect amber">Submit Case</button>                            
-                            </div><!-- /.col -->
-                          </div><!-- /.right -->   
-                     </div><!-- /.input-field col s12 -->    
-
-                   </div><!-- /.row -->
-                 </div><!-- /.card-content -->
-               </div><!-- /.card -->
-             </div><!-- /.col s12 -->
-           </div><!-- /.row -->
-
-           <div class="row hide" id="field_newpatient">
-             <div class="col s12">
-               <div class="card">
-                 <div class="card-content">
-                   <h5 class="header">New Patient</h5><!-- /.header -->
-                   <div class="row">
-                     <div class="input-field col s4 l4">
-                        <input type="text" name="lname" id="lname" class="validate" value="<?=set_value('lname')?>" required disabled/>
-                        <label for="lname">Last Name</label>
-                     </div><!-- /.input-field col s4 l4 -->                   
-                     <div class="input-field col s4 l4">
-                        <input type="text" name="fname" id="fname" class="validate" value="<?=set_value('fname')?>" required disabled/>
-                        <label for="fname">First Name</label>
-                     </div><!-- /.input-field col s4 l4 -->                   
-                     <div class="input-field col s4 l4">
-                        <input type="text" name="mname" id="mname" class="validate" value="<?=set_value('mname')?>" required disabled/>
-                        <label for="mname">Middle Name</label>
-                     </div><!-- /.input-field col s4 l4 -->
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s5">
-                        <small>Sex</small>
-                        <select class="browser-default" name="sex" id="sex" required disabled>
-                          <option value="" disabled="" selected="">Sex</option>
-                          <option value="1">Male</option>
-                          <option value="0">Female</option>                       
-                        </select>
-                     </div><!-- /.input-field col s8 -->
-                     <div class="input-field col s7">
-                        <small>Birthdate</small>
-                        <input type="date" name="bdate" id="bdate" value="<?=set_value('bdate')?>" required disabled/>                        
-                     </div><!-- /.input-field col s4 -->
-                   </div><!-- /.row -->            
-                   <div class="row">                     
-                     <fieldset class="blue lighten-5">
-                        <legend class="strong">Birthplace</legend>
-                          <div class="input-field col s12 l5">
-                           <input type="text" name="bplace_bldg" id="bplace_bldg" class="validate" value="<?=set_value('bplace_bldg')?>" disabled />
-                           <label for="bplace_bldg">Building / Block / House</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l4">
-                           <input type="text" name="bplace_strt" id="bplace_strt" class="validate" value="<?=set_value('bplace_strt')?>" disabled />
-                           <label for="bplace_strt">Street</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l3">
-                           <input type="text" name="bplace_brgy" id="bplace_brgy" class="validate" value="<?=set_value('bplace_brgy')?>" disabled />
-                           <label for="bplace_brgy">Barangay</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l3">
-                           <input type="text" name="bplace_city" id="bplace_city" class="validate" value="<?=set_value('bplace_city')?>" required disabled/>
-                           <label for="bplace_city">City / Municipality</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l3">
-                           <input type="text" name="bplace_prov" id="bplace_prov" class="validate" value="<?=set_value('bplace_prov')?>" required disabled/>
-                           <label for="bplace_prov">Province / Region</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l2">
-                           <input type="text" name="bplace_zip" id="bplace_zip" class="validate" value="<?=set_value('bplace_zip')?>" required disabled/>
-                           <label for="bplace_zip">ZIP Code</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l4">
-                           <input type="text" name="bplace_country" id="bplace_country" class="validate" value="<?php if(set_value('bplace_country'))echo set_value('bplace_country'); else echo 'Philippines';?>" required disabled/>
-                           <label for="bplace_country">Country</label>
-                         </div><!-- /.input-field col s12 -->
-                     </fieldset>
-                   </div><!-- /.row -->         
-                   <div class="row">
-                          <div class="col s12">
-                            <div class="checkbox right">
-                              <input type="checkbox" id="checkAdd" onclick="sameAdd()">
-                              <label for="checkAdd">Present Address same with Birthplace</label>  
-                            </div><!-- /.checkbox -->
-                          </div><!-- /.col s12 -->
-                    </div><!-- /.row -->     
-                   <div class="row">                     
-                     <fieldset class=" green lighten-5">
-                        <legend class="strong">Present Address</legend>
-                          <div class="input-field col s12 l5">
-                           <input type="text" name="addr_bldg" id="addr_bldg" class="validate" value="<?=set_value('addr_bldg')?>" required disabled/>
-                           <label for="addr_bldg" id="lbl_addr_bldg">Building / Block / House</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l4">
-                           <input type="text" name="addr_strt" id="addr_strt" class="validate" value="<?=set_value('addr_strt')?>" required disabled/>
-                           <label for="addr_strt" id="lbl_addr_strt">Street</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l3">
-                           <input type="text" name="addr_brgy" id="addr_brgy" class="validate" value="<?=set_value('addr_brgy')?>" required disabled/>
-                           <label for="addr_brgy" id="lbl_addr_brgy">Barangay</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l3">
-                           <input type="text" name="addr_city" id="addr_city" class="validate" value="<?=set_value('addr_city')?>" required disabled/>
-                           <label for="addr_city" id="lbl_addr_city">City / Municipality</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l3">
-                           <input type="text" name="addr_prov" id="addr_prov" class="validate" value="<?=set_value('addr_prov')?>" required disabled/>
-                           <label for="addr_prov" id="lbl_addr_prov">Province / Region</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l2">
-                           <input type="text" name="addr_zip" id="addr_zip" class="validate" value="<?=set_value('addr_zip')?>" required disabled/>
-                           <label for="addr_zip" id="lbl_addr_zip">ZIP Code</label>
-                         </div><!-- /.input-field col s12 -->
-                         <div class="input-field col s12 l4">
-                           <input type="text" name="addr_country" id="addr_country" class="validate" value="<?php if(set_value('addr_country'))echo set_value('addr_country'); else echo 'Philippines';?>" required disabled/>
-                           <label for="addr_country" id="lbl_addr_country">Country</label>
-                         </div><!-- /.input-field col s12 -->
-                     </fieldset>
-                   </div><!-- /.row -->
-                   <div class="row">
-                     <div class="input-field col s6">
-                       <input type="text" name="contactno" id="contactno" class="validate" value="<?=set_value('contactno')?>" required disabled/>
-                       <label for="contactno">Contact Number</label>
-                     </div><!-- /.input-field col s6 -->
-                     <div class="input-field col s6">
-                       <input type="text" name="email" id="email" class="validate" value="<?=set_value('email')?>" required disabled/>
-                       <label for="email">Email Address</label>
-                     </div><!-- /.input-field col s6 -->
-                   </div><!-- /.row -->    
-                   <div class="row" id="submit_patient">
-                     <div class="input-field col s12">
-                          <div class="right">
-                            <div class="col">
-                              <input type="checkbox" id="generateQueues" name="generateQueue" <?php if(set_value('generateQueue'))echo'checked';?>>
-                              <label for="generateQueues">Generate Queue</label> 
-                            </div><!-- /.col -->
-                            <div class="col">
-                              <button type="submit" class="btn waves-effect green right">Register New Patient & Submit Case</button>                      
-                            </div><!-- /.col -->
-                          </div><!-- /.right -->
-                     </div><!-- /.input-field col s12 -->
-                   </div><!-- /.row -->
-                 </div><!-- /.card-content -->
-               </div><!-- /.card -->
-             </div><!-- /.col s12 -->
-           </div><!-- /.row -->
-           <?=form_close()?>
-
-
-             
-         
-          </div>
+              <!-- Present Address -->
+              <legend class="strong">Present Address
+                <div class="pull-right">
+                  <label for="checkAdd">
+                    <input type="checkbox" id="checkAdd" onclick="copyToPresentAddress()"> <check-label>Present Address same with Birthplace</check-label>
+                  </label>
+                </div>   
+              </legend>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label for="addr_bldg">Building / Block / House</label>
+                  <input type="text" name="addr_bldg" class="form-control" id="addr_bldg" placeholder="Building / Block / House..." value="<?=set_value('addr_bldg')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-5 -->
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="addr_strt">Street</label>
+                  <input type="text" name="addr_strt" class="form-control" id="addr_strt" placeholder="Street..." value="<?=set_value('addr_strt')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-4 -->
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label for="addr_brgy">Barangay</label>
+                  <input type="text" name="addr_brgy" class="form-control" id="addr_brgy" placeholder="Barangay..." value="<?=set_value('addr_brgy')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-3 -->
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label for="addr_city">City / Municipality</label>
+                  <input type="text" name="addr_city" class="form-control" id="addr_city" placeholder="City / Municipality..." value="<?=set_value('addr_city')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-3 -->
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label for="addr_prov">Province / Region</label>
+                  <input type="text" name="addr_prov" class="form-control" id="addr_prov" placeholder="Province / Region..." value="<?=set_value('addr_prov')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-3 -->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="addr_zip">Zip Code</label>
+                  <input type="text" name="addr_zip" class="form-control" id="addr_zip" placeholder="Zip Code..." value="<?=set_value('addr_zip')?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-2 -->
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="addr_country">Country</label>
+                  <input type="text" name="addr_country" class="form-control" id="addr_country" placeholder="Country" value="<?php if(set_value('addr_country'))echo set_value('addr_country'); else echo 'Philippines';?>" required disabled/>
+                </div>
+              </div><!-- /.col-sm-4 -->
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="contactno">Contact Number</label>
+                  <input type="text" class="form-control" id="contactno" placeholder="Contact Number..." disabled/>
+                </div>
+              </div><!-- /.col-sm-6 -->
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input type="text" class="form-control" id="email" placeholder="Email Address..." disabled/>
+                </div>
+              </div><!-- /.col-sm-6 -->
+              <div class="col-sm-12">
+                <div class="form-group pull-right">
+                  <div class="icheck">
+                    <label for="generateQueues">
+                      <input type="checkbox" name="generateQueue" id="generateQueues" <?php if(set_value('generateQueue'))echo'checked';?>> Generate Queue
+                    </label>
+                    <button type="submit" class="btn btn-success">Register New Patient & Submit Case</button>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.col-sm-12 -->
+          </div><!--  /.row -->
         </div>
-        <!--end container-->
-      </section>
-      <!-- END CONTENT -->
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
 
-    </div>
-    <!-- END WRAPPER -->
-
+    </section>
+    <!-- /.content -->
   </div>
-  <!-- END MAIN -->
+  <!-- /.content-wrapper -->
 
+  <footer class="main-footer">    
+    <?php $this->load->view('inc/footer')?>    
+  </footer>
 
+</div>
+<!-- ./wrapper -->
 
-     <!-- //////////////////////////////////////////////////////////////////////////// -->
+<?php $this->load->view('inc/js')?>
+<!-- CK Editor -->
+<script src="<?=base_url('assets/bower_components/ckeditor/ckeditor.js')?>"></script>
+<!-- iCheck -->
+<script src="<?=base_url('assets/plugins/iCheck/icheck.min.js')?>"></script>
+<!-- bootstrap datepicker -->
+<script src="<?=base_url('assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')?>"></script>
+<!--  -->
+<script src="<?=base_url('assets/custom/js/jquery-ui.js')?>"></script>
 
-    <script type="text/javascript" src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>  
-    <?php $this->load->view('inc/footer'); ?>
-
-    <?php $this->load->view('inc/js'); ?>
-    <script src="<?php echo base_url();?>assets/js/jquery-ui.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
-    
-    <script type="text/javascript">
-      $(function(){
+<!-- Page Script -->
+<script type="text/javascript">
+    $(function(){
       $("#patient_id").autocomplete({    
         source: "<?php echo base_url('index.php/dashboard/autocomplete');?>" // path to the get_birds method
       });
     });
-    </script>
-   
+
+  $(function () {
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor1')
+    //bootstrap WYSIHTML5 - text editor
+    $('.textarea').wysihtml5()
+  })
+
+  //Date picker
+  $('#datepicker').datepicker({
+    autoclose: true
+  }) 
+
+  // ///////////////////////////////////////////////////////
+  $('#addPatient').change(function(){
+    var checked_status = this.checked;
+      if(checked_status == true) {
+        $('#field_newpatient').show();
+        $('#submit_case').hide();
+        $('#generateQueue').prop('disabled', true);
+        $('#btnCase').prop('disabled', true);
+      }
+      else {
+        $('#field_newpatient').hide(); 
+        $('#submit_case').show();
+        $('#generateQueue').prop('disabled', false);
+        $('#btnCase').prop('disabled', false);
+      }
+  });
+</script>
+
+<!-- SELECT2 -->
+<script type="text/javascript" src="<?=base_url('assets/custom/js/jquery-1.11.2.min.js')?>"></script> 
+<script src="<?=base_url('assets/custom/js/jquery-ui.js')?>" type="text/javascript" language="javascript" charset="UTF-8"></script>
+
 </body>
 </html>

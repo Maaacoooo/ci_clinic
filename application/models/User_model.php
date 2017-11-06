@@ -236,7 +236,8 @@ Class User_model extends CI_Model
             }
       
             $data = array(           
-                'name'      => $this->input->post('name'),                
+                'name'      => $this->input->post('name'),   
+                'lic_no'    => $this->input->post('lic'),               
                 'img'       => $filename  
              );
             

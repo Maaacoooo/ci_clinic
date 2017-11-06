@@ -100,7 +100,7 @@ class Users extends CI_Controller {
 
 			//Page Data 
 			$data['usertypes']		= $this->user_model->usertypes();			
-
+			$data['logs']		= $this->logs_model->fetch_user_logs($id, 50);
 			$data['info']		= $this->user_model->userdetails($id);
 
 			//Validate if record exist

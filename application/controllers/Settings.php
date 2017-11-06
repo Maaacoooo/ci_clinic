@@ -19,7 +19,7 @@ class Settings extends CI_Controller {
 			$data['site_title'] = APP_NAME;
 			$data['user'] = $this->user_model->userdetails($userdata['username']); //fetches users record
 			$data['title'] = 'Profile : ' . $data['user']['name'];
-
+			$data['logs'] = $this->logs_model->fetch_user_logs($data['user']['username'], 50);
 			
 
 			//FORM VALIDATION

@@ -61,7 +61,14 @@ Class Services_model extends CI_Model
      * @param  int      $id         the Page ID of the request. 
      * @return Array        The array of returned rows 
      */
-    function fetch_services($limit, $id, $category) {
+    function fetch_services($limit, $id, $category, $search) {
+
+            if ($search) {
+                $this->db->like('title', $search);
+                $this->db->or_like('code', $search);
+                $this->db->or_like('description', $search);
+            }
+
             $this->db->where('is_deleted', 0);
             $this->db->where('service_cat', $category);
             $this->db->limit($limit, (($id-1)*$limit));           
@@ -80,7 +87,14 @@ Class Services_model extends CI_Model
      * Returns the total number of rows of users
      * @return int       the total rows
      */
-    function count_services($category) {
+    function count_services($category ,$search) {
+
+        if ($search) {
+            $this->db->like('title', $search);
+            $this->db->or_like('code', $search);
+            $this->db->or_like('description', $search);
+        }
+
         $this->db->where('service_cat', $category);
         $this->db->where('is_deleted', 0);
         return $this->db->count_all_results("services");

@@ -21,12 +21,18 @@ class Services extends CI_Controller {
 			$data['site_title'] = APP_NAME;
 			$data['user'] 		= $this->user_model->userdetails($userdata['username']); //fetches users record
 
+			//Search
+			$search = '';
+			if(isset($_GET['search'])) {
+				$search = $_GET['search'];
+			}
+
 			$data['tag'] = 'clinic';
 
 			//Paginated data		            
 	   		$config['num_links'] = 5;
 			$config['base_url'] = base_url('/services/'.$data['tag']);
-			$config["total_rows"] = $this->services_model->count_services($data['tag']);
+			$config["total_rows"] = $this->services_model->count_services($data['tag'], $search);
 			$config['per_page'] = 20;		
 
 			$this->load->config('pagination'); //LOAD PAGINATION CONFIG
@@ -38,7 +44,7 @@ class Services extends CI_Controller {
 		       $page = 1;		               
 		    }
 
-		    $data["results"] = $this->services_model->fetch_services($config["per_page"], $page, $data['tag']);
+		    $data["results"] = $this->services_model->fetch_services($config["per_page"], $page, $data['tag'], $search);
 		    $str_links = $this->pagination->create_links();
 		    $data["links"] = explode('&nbsp;',$str_links );
 

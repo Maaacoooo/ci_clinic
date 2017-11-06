@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title><?=$title?> &middot; <?=$site_title?></title>
-	<link rel="stylesheet" href="<?=base_url('assets/css/print.css')?>" />
+	<link rel="stylesheet" href="<?=base_url('assets/custom/css/print.css')?>" />
 </head>
 <body onload="window.print()">
 	
@@ -37,29 +37,29 @@
 					</tr>
 				</thead>
 				<tbody>
-                              <?php if ($items): $x=1; ?>
-                                <?=form_open('prescription/update_items')?>
-                                <?php foreach ($items as $item): ?>
-                                  <tr>
-                                    <td class="text-center"><?=$x++?>.</td>
-                                    <td>
-                                  <?=$item['item']?>
-                                    </td>
-                                    <td class="text-center">
-                                      <?=$item['qty']?>
-                                    </td>
-                                    <td>
-                                     <?=$item['remark']?>
-                                    </td>                                    
-                                  </tr>                                  
-                                <?php endforeach ?>                               
-                                <?=form_close()?>
-                              <?php else: ?>
-                                <tr>
-                                  <td colspan="4">No items found!</td>
-                                </tr>
-                              <?php endif ?>
-                            </tbody>
+                  <?php if ($items): $x=1; ?>
+                    <?=form_open('prescription/update_items')?>
+                    <?php foreach ($items as $item): ?>
+                      <tr>
+                        <td class="text-center"><?=$x++?>.</td>
+                        <td>
+                      <?=$item['item']?>
+                        </td>
+                        <td class="text-center">
+                          <?=$item['qty']?>
+                        </td>
+                        <td>
+                         <?=$item['remark']?>
+                        </td>                                    
+                      </tr>                                  
+                    <?php endforeach ?>                               
+                    <?=form_close()?>
+                  <?php else: ?>
+                    <tr>
+                      <td colspan="4">No items found!</td>
+                    </tr>
+                  <?php endif ?>
+                </tbody>
 			</table><!-- /.items -->
 		</div><!-- /.content -->
 

@@ -24,11 +24,16 @@ class Cases extends CI_Controller {
 			$data['site_title'] = APP_NAME;
 			$data['user'] 		= $this->user_model->userdetails($userdata['username']); //fetches users record
 
+			//Search
+			$search = '';
+			if(isset($_GET['search'])) {
+				$search = $_GET['search'];
+			}
 
 			//Paginated data		            
 	   		$config['num_links'] = 5;
 			$config['base_url'] = base_url('cases/index');
-			$config["total_rows"] = $this->case_model->count_pending_cases();
+			$config["total_rows"] = $this->case_model->count_pending_cases($search);
 			$config['per_page'] = 20;		
 
 			$this->load->config('pagination'); //LOAD PAGINATION CONFIG
@@ -40,7 +45,7 @@ class Cases extends CI_Controller {
 		       $page = 1;		               
 		    }
 
-		    $data["results"] = $this->case_model->fetch_pending_cases($config["per_page"], $page);
+		    $data["results"] = $this->case_model->fetch_pending_cases($config["per_page"], $page, $search);
 		    $str_links = $this->pagination->create_links();
 		    $data["links"] = explode('&nbsp;',$str_links );
 
